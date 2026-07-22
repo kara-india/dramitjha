@@ -1,12 +1,17 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey =
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
 export async function createSupabaseServerClient() {
   const cookieStore = await cookies();
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl!,
+    supabaseKey!,
     {
       cookies: {
         getAll() {
@@ -36,8 +41,8 @@ export async function createSupabaseAdminClient() {
   const cookieStore = await cookies();
 
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    supabaseUrl!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseKey!,
     {
       cookies: {
         getAll() {
