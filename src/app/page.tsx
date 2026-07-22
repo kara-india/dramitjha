@@ -32,7 +32,13 @@ import {
   Trophy,
   Navigation,
   Compass,
-  ArrowUpRight
+  ArrowUpRight,
+  MessageCircle,
+  Play,
+  RotateCcw,
+  CheckCircle,
+  HelpCircle,
+  ChevronDown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,20 +47,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-// HSS-Grade Body Part Injury Navigator Data
+// 1. HSS-Grade Body Part Injury Selector Data
 const BODY_PARTS = [
   {
     id: "knee",
     name: "Knee Joint",
     icon: Flame,
     subtitle: "ACL, Meniscus & Cartilage",
-    commonConditions: [
-      "ACL / PCL Ligament Tear",
-      "Meniscus Tear (Bucket Handle & Radial)",
+    conditions: [
+      "ACL & PCL Ligament Tears",
+      "Meniscus Radial & Bucket-Handle Tears",
       "Cartilage Defect & Osteochondritis",
-      "Patellar Instability & Knee Osteoarthritis"
+      "Knee Osteoarthritis & Patellar Instability"
     ],
-    solutions: "Anatomic Reconstruction, Keyhole Arthroscopy, HTO Joint Preservation",
+    solution: "Anatomic Single/Double Bundle Reconstruction, Keyhole Arthroscopy, HTO Joint Preservation",
     recovery: "Return to Sport in 6-9 Months"
   },
   {
@@ -62,60 +68,114 @@ const BODY_PARTS = [
     name: "Shoulder Joint",
     icon: Zap,
     subtitle: "Instability, Labrum & Rotator Cuff",
-    commonConditions: [
+    conditions: [
       "Recurrent Shoulder Dislocation (Bankart Lesion)",
       "Rotator Cuff Tear & Tendonitis",
-      "SLAP Lesion & Frozen Shoulder",
-      "Acromioclavicular (AC) Joint Sprain"
+      "SLAP Tear & Frozen Shoulder",
+      "Acromioclavicular (AC) Joint Sprains"
     ],
-    solutions: "Arthroscopic Bankart Repair, Rotator Cuff Anchoring, Capsular Shift",
+    solution: "Arthroscopic Bankart Repair, Rotator Cuff Anchoring, Capsular Shift",
     recovery: "Full Overhead Motion in 3-4 Months"
   },
   {
-    id: "general",
-    name: "General Joints & Checkup",
-    icon: Stethoscope,
-    subtitle: "Arthritis, Joint Pain & Bone Health",
-    commonConditions: [
-      "Early & Advanced Knee Osteoarthritis",
-      "Chronic Joint Stiffness & Swelling",
-      "Postural Deformity & Gait Misalignment",
-      "Bone Density Loss & Osteoporosis"
+    id: "elbow-wrist",
+    name: "Elbow & Wrist",
+    icon: Target,
+    subtitle: "Tennis Elbow & Tendon Injuries",
+    conditions: [
+      "Lateral Epicondylitis (Tennis Elbow)",
+      "Golfer's Elbow & UCL Tears",
+      "TFCC Wrist Complex Tears",
+      "Carpal Tunnel Syndrome"
     ],
-    solutions: "Comprehensive Checkup, Biological Injections, Joint Preservation",
-    recovery: "Same-Day Relief & Guided Care"
+    solution: "Biological Injections, Tendon Release, Arthroscopic Wrist Debridement",
+    recovery: "Functional Mobility in 4-6 Weeks"
   },
   {
-    id: "trauma",
-    name: "Fracture & Trauma",
-    icon: ShieldAlert,
-    subtitle: "Emergency Bone & Joint Injury",
-    commonConditions: [
-      "Complex Bone Fractures & Dislocations",
-      "Sports Impact Fractures & Stress Fractures",
-      "Ligament Avulsion Fractures",
-      "Soft Tissue Emergency Injuries"
+    id: "hip-spine",
+    name: "Hip & Spine",
+    icon: Bone,
+    subtitle: "Joint Pain & Core Misalignment",
+    conditions: [
+      "Femoroacetabular Impingement (FAI)",
+      "Hip Labral Tears & Bursitis",
+      "Lumbar Strain & Lower Back Pain",
+      "Sacroiliac (SI) Joint Dysfunction"
     ],
-    solutions: "Urgent Rigid Splinting, Plastering, ORIF Surgical Fixation",
-    recovery: "Immediate Emergency Triage"
+    solution: "Hip Arthroscopy, Core Biomechanical Realignment, Targeted Rehab",
+    recovery: "Pain-Free Activity"
+  },
+  {
+    id: "ankle-foot",
+    name: "Ankle & Foot",
+    icon: Compass,
+    subtitle: "Ligament Sprains & Achilles Care",
+    conditions: [
+      "ATFL / CFL Ankle Ligament Sprains",
+      "Achilles Tendon Rupture & Tendonitis",
+      "Plantar Fasciitis & Heel Spurs",
+      "Ankle Impingement & Instability"
+    ],
+    solution: "Ankle Arthroscopy, Ligament Reconstruction, Achilles Repair",
+    recovery: "Impact Readiness in 8-12 Weeks"
   },
   {
     id: "pediatric",
-    name: "Pediatric Orthopedics",
+    name: "Pediatric & Growth Plate",
     icon: Users,
-    subtitle: "Growth Plate & Child Bone Care",
-    commonConditions: [
+    subtitle: "Child Bone & Deformity Care",
+    conditions: [
       "Pediatric Ligament Injuries",
-      "Knock Knees & Bow Legs (Genu Valgum/Varum)",
-      "Flat Feet & Clubfoot Deformities",
+      "Knock Knees (Genu Valgum) & Bow Legs",
+      "Flat Feet & Clubfoot Deformity",
       "Growth Plate Fractures & Alignment Issues"
     ],
-    solutions: "Growth-Plate Sparing Repair, Deformity Correction, Custom Bracing",
+    solution: "Growth-Plate Sparing Repair, Deformity Correction, Custom Bracing",
     recovery: "Child-Safe Protocol"
   }
 ];
 
-// Dual Spectrum Services: Athlete Sports Medicine + General Patient Orthopedic Care
+// 2. Sports We Treat Cards (Nike-Inspired Performance Section)
+const SPORTS_WE_TREAT = [
+  {
+    sport: "Cricket",
+    icon: Trophy,
+    injuries: "Rotator Cuff Tears, ACL Twists, Lumbar Stress Fractures",
+    approach: "Fast-bowling biomechanics review & shoulder labral repair."
+  },
+  {
+    sport: "Football",
+    icon: Flame,
+    injuries: "ACL/PCL Tears, Meniscus Injuries, Hamstring Pulls",
+    approach: "High-impact pivot stabilization & anatomic autograft reconstruction."
+  },
+  {
+    sport: "Running & Marathons",
+    icon: Activity,
+    injuries: "Runner's Knee, IT Band Syndrome, Achilles Tendonitis",
+    approach: "Gait bio-feedback, footwear alignment & tendon shockwave care."
+  },
+  {
+    sport: "Gym & CrossFit",
+    icon: Dumbbell,
+    injuries: "Shoulder Impingement, Meniscus Flaps, Lower Back Strain",
+    approach: "Joint-sparing lifting protocols & arthroscopic repairs."
+  },
+  {
+    sport: "Badminton & Tennis",
+    icon: Zap,
+    injuries: "Tennis Elbow, Shoulder SLAP Tears, Ankle Sprains",
+    approach: "Overhead racquet arm biomechanics & ligament bracing."
+  },
+  {
+    sport: "Cycling",
+    icon: Compass,
+    injuries: "Patellofemoral Pain, Collarbone Fractures, Hip Bursitis",
+    approach: "Saddle-height joint mechanics & trauma fracture fixation."
+  }
+];
+
+// 3. Dual Spectrum Services Data (General Patients & Athletes)
 const SERVICES = [
   {
     id: "general-checkup",
@@ -124,7 +184,6 @@ const SERVICES = [
     title: "General Orthopedic Checkup & Joint Consultation",
     desc: "Comprehensive evaluation of joint health, arthritis risk assessment, bone density review, and personalized non-surgical or surgical care plans.",
     stats: "Same-Day OPD Appointment",
-    gradient: "from-emerald-500/20 via-teal-500/10 to-transparent",
     icon: Stethoscope
   },
   {
@@ -134,7 +193,6 @@ const SERVICES = [
     title: "ACL & Multiligament Reconstruction",
     desc: "Anatomic single and double-bundle ACL & PCL reconstruction using biological autografts engineered for elite athletes and active individuals.",
     stats: "98.5% Return-to-Play Rate",
-    gradient: "from-teal-500/20 via-cyan-500/10 to-transparent",
     icon: Flame
   },
   {
@@ -144,7 +202,6 @@ const SERVICES = [
     title: "Knee & Shoulder Arthroscopy",
     desc: "Ultra-precise keyhole procedures for meniscus repair, cartilage restoration, Bankart repair, and shoulder stabilization with minimal tissue trauma.",
     stats: "24-Hour Hospital Discharge",
-    gradient: "from-cyan-500/20 via-blue-500/10 to-transparent",
     icon: Zap
   },
   {
@@ -154,7 +211,6 @@ const SERVICES = [
     title: "Emergency Fracture & Trauma Management",
     desc: "Urgent emergency triage for bone fractures, dislocations, rigid immobilization, plaster casting, and ORIF surgical fixation.",
     stats: "Priority Triage Available",
-    gradient: "from-amber-500/20 via-orange-500/10 to-transparent",
     icon: ShieldAlert
   },
   {
@@ -164,7 +220,6 @@ const SERVICES = [
     title: "Joint Preservation & Realignment (HTO/OATS)",
     desc: "High Tibial Osteotomy (HTO), OATS, and biological cartilage restoration designed to preserve the native knee and prevent total joint replacement.",
     stats: "Delays Joint Replacement",
-    gradient: "from-teal-600/20 via-emerald-600/10 to-transparent",
     icon: Bone
   },
   {
@@ -174,7 +229,6 @@ const SERVICES = [
     title: "Pediatric Growth Plate & Deformity Correction",
     desc: "Specialized pediatric care for growth-plate injuries, knock knees, bow legs, flat feet, and pediatric sports injuries.",
     stats: "Child-Safe Protocols",
-    gradient: "from-purple-500/20 via-indigo-500/10 to-transparent",
     icon: Users
   },
   {
@@ -184,12 +238,21 @@ const SERVICES = [
     title: "Physiotherapy & Athlete Performance Rehab",
     desc: "Dedicated 30-minute private slots (11:00 AM – 1:30 PM & 3:30 PM – 8:30 PM IST) for 5-phase ACL rehab, electrotherapy, and return-to-sport testing.",
     stats: "Dedicated 30-min Slots",
-    gradient: "from-emerald-600/20 via-teal-500/10 to-transparent",
     icon: Dumbbell
   }
 ];
 
-// Patient Stories & Testimonials
+// 4. Recovery Journey Timeline (Andrews Sports Medicine Style)
+const RECOVERY_STAGES = [
+  { stage: "01", name: "Symptom & Pain Assessment", desc: "Initial physical examination, range of motion & joint stability testing." },
+  { stage: "02", name: "Precision Bio-Imaging", desc: "High-resolution MRI & digital X-ray review for exact anatomical mapping." },
+  { stage: "03", name: "Targeted Treatment Plan", desc: "Tailored choice between biological preservation or keyhole surgery." },
+  { stage: "04", name: "Minimally Invasive Surgery", desc: "Keyhole arthroscopy with 24-hr discharge and minimal tissue disruption." },
+  { stage: "05", name: "Guided 5-Phase Physiotherapy", desc: "Private 30-min rehab slots, ROM expansion & progressive muscle building." },
+  { stage: "06", name: "Return to Sport Clearance", desc: "Biomechanical testing and athletic clearance for 100% field readiness." }
+];
+
+// 5. Patient Reviews
 const TESTIMONIALS = [
   {
     name: "Rajesh K. Verma",
@@ -221,7 +284,7 @@ const TIME_SLOTS = [
 
 export default function LandingPage() {
   const [selectedBodyPart, setSelectedBodyPart] = useState(BODY_PARTS[0]);
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeServiceTab, setActiveServiceTab] = useState("all");
 
   // Booking Form State
   const [bookingStep, setBookingStep] = useState(1);
@@ -233,9 +296,9 @@ export default function LandingPage() {
   const [complaint, setComplaint] = useState("");
   const [isBooked, setIsBooked] = useState(false);
 
-  const filteredServices = activeTab === "all"
+  const filteredServices = activeServiceTab === "all"
     ? SERVICES
-    : SERVICES.filter((s) => s.type === activeTab);
+    : SERVICES.filter((s) => s.type === activeServiceTab);
 
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -269,29 +332,35 @@ export default function LandingPage() {
           </div>
 
           <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-300">
-            <a href="#about" className="hover:text-teal-400 transition-colors">About Dr. Jha</a>
-            <a href="#navigator" className="hover:text-teal-400 transition-colors">Injury Navigator</a>
-            <a href="#services" className="hover:text-teal-400 transition-colors">Services & Checkups</a>
-            <a href="#testimonials" className="hover:text-teal-400 transition-colors">Patient Reviews</a>
-            <a href="#booking" className="hover:text-teal-400 transition-colors">Book Appointment</a>
+            <a href="#about" className="hover:text-teal-400 transition-colors">About</a>
+            <a href="#navigator" className="hover:text-teal-400 transition-colors">Body Navigator</a>
+            <a href="#sports" className="hover:text-teal-400 transition-colors">Sports We Treat</a>
+            <a href="#services" className="hover:text-teal-400 transition-colors">Services</a>
+            <a href="#doctor-signature" className="hover:text-teal-400 transition-colors">Dr. Amit Jha</a>
+            <a href="#booking" className="hover:text-teal-400 transition-colors">Book OPD</a>
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="hidden sm:inline-flex">
+              <Button variant="outline" className="border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/40">
+                <MessageCircle className="mr-2 h-4 w-4 fill-emerald-400/20" /> WhatsApp
+              </Button>
+            </a>
             <Link href="/login">
               <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900 border border-slate-800">
-                Staff ERP Login
+                Staff ERP
               </Button>
             </Link>
             <a href="#booking">
               <Button className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-black shadow-xl shadow-teal-500/30">
-                <Calendar className="mr-2 h-4 w-4" /> Book Consultation
+                <Calendar className="mr-2 h-4 w-4" /> Book Appointment
               </Button>
             </a>
           </div>
         </div>
       </header>
 
-      {/* HERO SECTION — Featuring Dr. Amit Jha's Photo & Nike/Steadman Athletic Luxury */}
+      {/* HERO SECTION — Cinematic Headline & Performance Energy */}
       <section id="about" className="relative py-20 lg:py-28 overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-b border-teal-900/30">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(20,184,166,0.18),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(16,185,129,0.12),transparent_60%)]" />
@@ -303,77 +372,80 @@ export default function LandingPage() {
               <Award className="h-4 w-4 text-teal-400" /> FNB Sports Medicine (Ganga Hospital, Coimbatore) • MS & DNB Ortho
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08]">
-              Peak Athletic Performance & <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-emerald-400 to-teal-100">World-Class Joint Restoration</span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05]">
+              Recover Faster. <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-emerald-400 to-teal-100">
+                Move Better.
+              </span> <br />
+              Return Stronger.
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal">
-              Consult <strong className="text-white font-bold">Dr. Amit Kumar Jha</strong> in Varanasi for advanced General Orthopedic Checkups, Knee & Shoulder Arthroscopy, ACL Ligament Surgery, Emergency Trauma Fixation, and Dedicated Sports Rehabilitation.
+            <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal max-w-2xl">
+              Specialized Sports Medicine & Orthopedic Care led by <strong className="text-white font-bold">Dr. Amit Kumar Jha</strong> in Varanasi. Providing expert General Checkups, ACL Reconstruction, Arthroscopic Surgery, Fracture Care, and Dedicated Sports Rehabilitation.
             </p>
 
-            {/* Target Audience Chips (Nike/Steadman athletic & general focus) */}
+            {/* Target Audience Badges */}
             <div className="flex flex-wrap gap-2 pt-2">
-              <span className="px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs text-teal-300 font-semibold">⚡ Professional Athletes</span>
-              <span className="px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs text-teal-300 font-semibold">🏃 Marathon Runners & Footballers</span>
+              <span className="px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs text-teal-300 font-semibold">⚡ Professional & Amateur Athletes</span>
+              <span className="px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs text-teal-300 font-semibold">🏃 Marathoners & Cricketers</span>
               <span className="px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs text-teal-300 font-semibold">🦵 Knee & Joint Pain Patients</span>
               <span className="px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs text-teal-300 font-semibold">🩺 General Checkups & Trauma</span>
             </div>
 
-            {/* Key Clinical Credentials & Numbers */}
-            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-slate-800/80">
-              <div>
-                <div className="text-3xl sm:text-4xl font-black text-white">10+ Yrs</div>
-                <div className="text-xs text-slate-400 font-semibold">Surgical Expertise</div>
-              </div>
-              <div>
-                <div className="text-3xl sm:text-4xl font-black text-teal-400">5,000+</div>
-                <div className="text-xs text-slate-400 font-semibold">Successful Surgeries</div>
-              </div>
-              <div>
-                <div className="text-3xl sm:text-4xl font-black text-emerald-400">98.5%</div>
-                <div className="text-xs text-slate-400 font-semibold">Return-to-Sport Rate</div>
-              </div>
-            </div>
-
+            {/* Hero CTAs */}
             <div className="pt-4 flex flex-wrap gap-4">
               <a href="#booking">
                 <Button size="lg" className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-black text-base px-8 h-12 shadow-2xl shadow-teal-500/30">
-                  <Calendar className="mr-2 h-5 w-5" /> Book OPD Consultation
+                  <Calendar className="mr-2 h-5 w-5" /> Book Appointment
                 </Button>
               </a>
-              <a href="#navigator">
-                <Button size="lg" variant="outline" className="border-slate-800 text-slate-200 hover:bg-slate-900 hover:text-white h-12 px-6">
-                  <Compass className="mr-2 h-5 w-5 text-teal-400" /> Interactive Injury Navigator
+              <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer">
+                <Button size="lg" variant="outline" className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-950/40 h-12 px-6">
+                  <MessageCircle className="mr-2 h-5 w-5 fill-emerald-400/20" /> WhatsApp Consultation
                 </Button>
               </a>
             </div>
           </div>
 
-          {/* Right Column — Dr. Amit Jha Photo Container */}
+          {/* Right Column Image Banner */}
           <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md rounded-3xl bg-gradient-to-br from-teal-500/40 via-slate-900 to-slate-950 border-2 border-teal-500/50 p-4 shadow-2xl shadow-teal-500/25">
-              <div className="relative rounded-2xl overflow-hidden bg-slate-950 min-h-[480px] flex items-end justify-center">
-                {/* Standard HTML img tag for 100% reliable rendering */}
+            <div className="relative mx-auto max-w-md rounded-3xl bg-gradient-to-br from-teal-500/30 via-slate-900 to-slate-950 border-2 border-teal-500/40 p-4 shadow-2xl shadow-teal-500/20">
+              <div className="relative rounded-2xl overflow-hidden bg-slate-950 min-h-[460px] flex items-end justify-center">
                 <img
-                  src="/dr-amit-jha-hero.png"
-                  alt="Dr. Amit Kumar Jha - Fellowship Trained Sports Medicine & Orthopedic Surgeon"
+                  src="/dr-amit-jha-cutout.png"
+                  alt="Dr. Amit Kumar Jha"
                   className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
                 />
-
-                {/* Profile Floating Badge */}
                 <div className="absolute bottom-4 left-4 right-4 backdrop-blur-xl bg-slate-950/90 border border-teal-500/50 rounded-xl p-4 shadow-2xl">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-extrabold text-white text-base">Dr. Amit Kumar Jha</h3>
-                      <p className="text-xs text-teal-400 font-semibold">Orthopedic & Sports Medicine Surgeon</p>
-                    </div>
-                    <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold">
-                      OPD Active Today
-                    </Badge>
-                  </div>
+                  <h3 className="font-extrabold text-white text-base">Dr. Amit Kumar Jha</h3>
+                  <p className="text-xs text-teal-400 font-semibold">Orthopedic & Sports Medicine Surgeon</p>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST BAR — Key Credentials & Statistics */}
+      <section className="py-8 bg-slate-900/90 border-b border-teal-900/30 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
+            <div className="text-3xl sm:text-4xl font-black text-white">10+ Yrs</div>
+            <div className="text-xs text-slate-400 font-semibold mt-1">Surgical Experience</div>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
+            <div className="text-3xl sm:text-4xl font-black text-teal-400">5,000+</div>
+            <div className="text-xs text-slate-400 font-semibold mt-1">Successful Surgeries</div>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
+            <div className="text-3xl sm:text-4xl font-black text-emerald-400">98.5%</div>
+            <div className="text-xs text-slate-400 font-semibold mt-1">Return-to-Sport Rate</div>
+          </div>
+          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
+            <div className="text-3xl sm:text-4xl font-black text-amber-400 flex items-center justify-center gap-1">
+              4.9 <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
+            </div>
+            <div className="text-xs text-slate-400 font-semibold mt-1">Google Patient Rating</div>
           </div>
         </div>
       </section>
@@ -383,18 +455,18 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center space-y-4 mb-12">
             <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
-              Interactive Diagnostic Tool
+              HSS Clinical Diagnostic Tool
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              HSS-Grade Joint & Injury Navigator
+              Interactive Body-Part Injury Selector
             </h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm">
-              Select your affected joint or injury area to explore common conditions, diagnostic tests, and Dr. Amit Jha&apos;s surgical and non-surgical solutions.
+              Click on an affected joint or anatomical area to explore common conditions, symptoms, and targeted treatment solutions.
             </p>
           </div>
 
           <div className="grid lg:grid-cols-12 gap-8 items-start">
-            {/* Left Selector List */}
+            {/* Left Body Part List */}
             <div className="lg:col-span-5 space-y-3">
               {BODY_PARTS.map((bp) => {
                 const Icon = bp.icon;
@@ -426,15 +498,15 @@ export default function LandingPage() {
               })}
             </div>
 
-            {/* Right Interactive Detail Card */}
+            {/* Right Injury Details Display */}
             <div className="lg:col-span-7">
-              <Card className="bg-slate-900/90 border border-teal-500/30 shadow-2xl p-6 space-y-6">
+              <Card className="bg-slate-900/90 border border-teal-500/40 shadow-2xl p-6 space-y-6">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-4">
                   <div>
                     <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 mb-2">
-                      Focused Clinical Protocol
+                      Clinical Focus
                     </Badge>
-                    <h3 className="text-2xl font-black text-white">{selectedBodyPart.name} Overview</h3>
+                    <h3 className="text-2xl font-black text-white">{selectedBodyPart.name} Conditions</h3>
                   </div>
                   <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-xs">
                     {selectedBodyPart.recovery}
@@ -444,7 +516,7 @@ export default function LandingPage() {
                 <div className="space-y-4">
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Commonly Diagnosed Conditions</h4>
                   <div className="grid sm:grid-cols-2 gap-3">
-                    {selectedBodyPart.commonConditions.map((cond, i) => (
+                    {selectedBodyPart.conditions.map((cond, i) => (
                       <div key={i} className="flex items-center gap-2.5 bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-200">
                         <CheckCircle2 className="h-4 w-4 text-teal-400 shrink-0" />
                         <span>{cond}</span>
@@ -454,14 +526,14 @@ export default function LandingPage() {
                 </div>
 
                 <div className="pt-4 border-t border-slate-800 space-y-2">
-                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Recommended Treatment Approach</h4>
-                  <p className="text-sm text-teal-300 font-semibold">{selectedBodyPart.solutions}</p>
+                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Treatment & Procedure Approach</h4>
+                  <p className="text-sm text-teal-300 font-semibold">{selectedBodyPart.solution}</p>
                 </div>
 
                 <div className="pt-4 flex justify-end">
                   <a href="#booking">
                     <Button className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-bold">
-                      Book Consultation for {selectedBodyPart.name} <ArrowRight className="ml-2 h-4 w-4" />
+                      Book OPD for {selectedBodyPart.name} <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </a>
                 </div>
@@ -471,99 +543,110 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 3-PHASE RECOVERY CONTINUUM (Andrews Sports Medicine Style) */}
-      <section className="py-20 bg-slate-900 border-b border-teal-900/30">
+      {/* NIKE-INSPIRED SPORTS WE TREAT SECTION */}
+      <section id="sports" className="py-20 bg-slate-900 border-b border-teal-900/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center space-y-4 mb-16">
             <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
-              Scientific Patient Journey
+              Athletic Performance Medicine
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              The 3-Phase Athlete & Patient Care Continuum
+              Sports We Treat & Biomechanical Protocols
             </h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm">
-              Structured from initial clinical assessment to minimally invasive keyhole treatment and 5-stage return-to-play rehabilitation.
+              Tailored orthopedic care and return-to-sport testing customized for specific athletic disciplines.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-slate-950 border-slate-800 hover:border-teal-500/40 transition-all">
-              <CardHeader>
-                <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 font-black text-xl mb-4">
-                  01
-                </div>
-                <CardTitle className="text-xl text-white font-bold">Precision Diagnosis & Bio-Imaging</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 text-xs text-slate-400 leading-relaxed">
-                <p>High-resolution MRI review, joint stability testing (Lachman, Drawer, Bankart tests), gait analysis, and physical checkup.</p>
-              </CardContent>
-            </Card>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {SPORTS_WE_TREAT.map((item, idx) => {
+              const Icon = item.icon;
+              return (
+                <Card key={idx} className="bg-slate-950 border-slate-800 hover:border-teal-500/40 transition-all flex flex-col justify-between">
+                  <CardHeader>
+                    <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 mb-4">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <CardTitle className="text-xl text-white font-bold">{item.sport}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <p className="text-xs text-slate-300"><strong>Common Injuries:</strong> {item.injuries}</p>
+                    <p className="text-xs text-teal-400 font-semibold pt-2 border-t border-slate-800">
+                      <strong>Care Approach:</strong> {item.approach}
+                    </p>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </section>
 
-            <Card className="bg-slate-950 border-slate-800 hover:border-teal-500/40 transition-all">
-              <CardHeader>
-                <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 font-black text-xl mb-4">
-                  02
-                </div>
-                <CardTitle className="text-xl text-white font-bold">Minimally Invasive Keyhole / Preservation</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 text-xs text-slate-400 leading-relaxed">
-                <p>Anatomic ACL reconstruction, arthroscopic meniscus repair, Bankart repair, or non-surgical joint preservation injections.</p>
-              </CardContent>
-            </Card>
+      {/* RECOVERY JOURNEY TIMELINE (Andrews Sports Medicine Style) */}
+      <section className="py-20 bg-slate-950 border-b border-teal-900/30">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center space-y-4 mb-16">
+            <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
+              Patient Care Continuum
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+              The 6-Stage Recovery Journey
+            </h2>
+            <p className="text-slate-400 max-w-2xl mx-auto text-sm">
+              From your initial symptom assessment to 100% athletic clearance and pain-free living.
+            </p>
+          </div>
 
-            <Card className="bg-slate-950 border-slate-800 hover:border-teal-500/40 transition-all">
-              <CardHeader>
-                <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 font-black text-xl mb-4">
-                  03
-                </div>
-                <CardTitle className="text-xl text-white font-bold">5-Phase Rehab & Return-to-Play Testing</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 text-xs text-slate-400 leading-relaxed">
-                <p>Dedicated 30-min physio slots, bio-feedback, goniometric ROM tracking, muscle strengthening, and sports field clearance.</p>
-              </CardContent>
-            </Card>
+          <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {RECOVERY_STAGES.map((stg, i) => (
+              <div key={i} className="bg-slate-900 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between hover:border-teal-500/50 transition-all">
+                <div className="text-2xl font-black text-teal-400 mb-2">{stg.stage}</div>
+                <h4 className="font-bold text-sm text-white mb-1">{stg.name}</h4>
+                <p className="text-xs text-slate-400 leading-relaxed">{stg.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* DUAL SPECTRUM SERVICES SECTION */}
-      <section id="services" className="py-20 bg-slate-950 border-b border-teal-900/30">
+      <section id="services" className="py-20 bg-slate-900 border-b border-teal-900/30">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center space-y-4 mb-12">
             <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
               Complete Clinical Spectrum
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              Specialized Services for General Patients & Athletes
+              General Orthopedics, Trauma & Sports Medicine
             </h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm">
-              Explore our full range of general orthopedic checkups, joint pain treatments, fracture care, and elite sports medicine procedures.
+              Comprehensive care for joint pain, general checkups, fractures, pediatric deformities, keyhole surgeries, and specialized rehab.
             </p>
           </div>
 
           {/* Filter Category Tabs */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
             <button
-              onClick={() => setActiveTab("all")}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeTab === "all" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"}`}
+              onClick={() => setActiveServiceTab("all")}
+              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeServiceTab === "all" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-950 border border-slate-800 text-slate-400 hover:text-white"}`}
             >
               All Clinical Services
             </button>
             <button
-              onClick={() => setActiveTab("general")}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeTab === "general" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"}`}
+              onClick={() => setActiveServiceTab("general")}
+              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeServiceTab === "general" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-950 border border-slate-800 text-slate-400 hover:text-white"}`}
             >
               General Orthopedics & Checkups
             </button>
             <button
-              onClick={() => setActiveTab("sports")}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeTab === "sports" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"}`}
+              onClick={() => setActiveServiceTab("sports")}
+              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeServiceTab === "sports" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-950 border border-slate-800 text-slate-400 hover:text-white"}`}
             >
               Athlete Sports & Ligament Surgery
             </button>
             <button
-              onClick={() => setActiveTab("rehab")}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeTab === "rehab" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"}`}
+              onClick={() => setActiveServiceTab("rehab")}
+              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeServiceTab === "rehab" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-950 border border-slate-800 text-slate-400 hover:text-white"}`}
             >
               Physiotherapy & Rehab
             </button>
@@ -574,13 +657,13 @@ export default function LandingPage() {
             {filteredServices.map((s) => {
               const Icon = s.icon;
               return (
-                <Card key={s.id} className="bg-slate-900/90 border border-slate-800 hover:border-teal-400/60 transition-all group flex flex-col justify-between">
+                <Card key={s.id} className="bg-slate-950 border border-slate-800 hover:border-teal-400/60 transition-all group flex flex-col justify-between">
                   <CardHeader>
                     <div className="flex justify-between items-start mb-3">
                       <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-300 group-hover:scale-110 transition-transform">
                         <Icon className="h-6 w-6" />
                       </div>
-                      <Badge variant="outline" className="bg-slate-800 border-slate-700 text-teal-300 text-[11px]">
+                      <Badge variant="outline" className="bg-slate-900 border-slate-700 text-teal-300 text-[11px]">
                         {s.badge}
                       </Badge>
                     </div>
@@ -598,6 +681,72 @@ export default function LandingPage() {
                 </Card>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* DOCTOR SIGNATURE BANNER — "Meet Dr. Amit Jha" (The Emotional Trust Anchor) */}
+      <section id="doctor-signature" className="py-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-b border-teal-900/30 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 items-center">
+          {/* Doctor Portrait Column (Transparent PNG Cutout) */}
+          <div className="lg:col-span-5 relative order-2 lg:order-1 flex justify-center">
+            <div className="relative max-w-sm w-full">
+              <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-teal-500/10 via-slate-900 to-slate-950 border border-teal-500/30 p-2 shadow-2xl">
+                <img
+                  src="/dr-amit-jha-cutout.png"
+                  alt="Dr. Amit Kumar Jha - Senior Orthopedic & Sports Medicine Surgeon"
+                  className="w-full h-auto object-cover object-top hover:scale-105 transition-transform duration-500 filter drop-shadow-2xl"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Doctor Bio & Credentials */}
+          <div className="lg:col-span-7 space-y-6 order-1 lg:order-2">
+            <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
+              Meet Your Surgeon
+            </Badge>
+
+            <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+              Dr. Amit Kumar Jha
+            </h2>
+
+            <p className="text-base text-teal-300 font-semibold">
+              Senior Sports Injury Specialist • Keyhole Arthroscopy & Joint Preservation Surgeon
+            </p>
+
+            <blockquote className="italic text-slate-300 text-sm border-l-4 border-teal-400 pl-4 py-1 leading-relaxed bg-slate-900/50 rounded-r-xl">
+              &ldquo;My commitment is to provide evidence-based orthopedic care that restores full joint stability, eliminates pain, and enables every patient—from professional athletes to active individuals—to return confidently to the activities they love.&rdquo;
+            </blockquote>
+
+            {/* Verified Qualifications & Memberships */}
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center gap-3 bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs">
+                <Award className="h-5 w-5 text-teal-400 shrink-0" />
+                <span><strong>FNB Sports Medicine:</strong> Fellowship Trained at Ganga Hospital & Medical Centre, Coimbatore</span>
+              </div>
+              <div className="flex items-center gap-3 bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs">
+                <Award className="h-5 w-5 text-teal-400 shrink-0" />
+                <span><strong>Postgraduate Degrees:</strong> MS Orthopaedics & DNB Orthopaedics (National Board of Examination)</span>
+              </div>
+              <div className="flex items-center gap-3 bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs">
+                <Building2 className="h-5 w-5 text-teal-400 shrink-0" />
+                <span><strong>Hospital Affiliations:</strong> Apex Super Specialty Hospital & Dr. Amit Jha Sports Clinic, Varanasi</span>
+              </div>
+            </div>
+
+            <div className="pt-4 flex flex-wrap gap-4">
+              <a href="#booking">
+                <Button size="lg" className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-extrabold px-8 h-12 shadow-xl shadow-teal-500/25">
+                  <Calendar className="mr-2 h-5 w-5" /> Book Consultation with Dr. Jha
+                </Button>
+              </a>
+              <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer">
+                <Button size="lg" variant="outline" className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-950/40 h-12 px-6">
+                  <MessageCircle className="mr-2 h-5 w-5 fill-emerald-400/20" /> WhatsApp Dr. Jha&apos;s Team
+                </Button>
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -645,7 +794,7 @@ export default function LandingPage() {
                   <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-md mx-auto text-left space-y-3">
                     <div className="flex justify-between border-b border-slate-800 pb-2">
                       <span className="text-slate-400 text-xs">Token Number</span>
-                      <span className="text-teal-400 font-mono font-bold text-sm">KH-2026-0845</span>
+                      <span className="text-teal-400 font-mono font-bold text-sm">KH-2026-0850</span>
                     </div>
                     <div className="flex justify-between border-b border-slate-800 pb-2">
                       <span className="text-slate-400 text-xs">Patient Name</span>
@@ -847,6 +996,20 @@ export default function LandingPage() {
           © 2026 KrishnaHealth ERP — Dr. Amit Jha Sports Injury & Orthopedic Clinic. All rights reserved.
         </div>
       </footer>
+
+      {/* MOBILE FLOATING STICKY CTA BAR */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 p-3 flex gap-3">
+        <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="flex-1">
+          <Button variant="outline" className="w-full border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/40 text-xs font-bold h-11">
+            <MessageCircle className="mr-1.5 h-4 w-4 fill-emerald-400/20" /> WhatsApp
+          </Button>
+        </a>
+        <a href="#booking" className="flex-1">
+          <Button className="w-full bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-black text-xs h-11">
+            <Calendar className="mr-1.5 h-4 w-4" /> Book Appointment
+          </Button>
+        </a>
+      </div>
     </div>
   );
 }
