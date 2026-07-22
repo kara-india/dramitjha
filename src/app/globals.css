@@ -1,0 +1,376 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* ============================================================
+   KRISHNAHEALTH ERP — Global Styles
+   Dr. Amit Jha Sports Injury Clinic, Varanasi
+   ============================================================ */
+
+@custom-variant dark (&:is(.dark *));
+
+/* Google Fonts are loaded via next/font — no @import needed */
+
+/* ============================================================
+   CSS CUSTOM PROPERTIES — Design Tokens
+   ============================================================ */
+
+:root {
+  /* Spacing */
+  --radius: 0.625rem;
+
+  /* KrishnaHealth Brand Colors (HSL) */
+  --brand-teal: 177 87% 32%;       /* #0d9488 */
+  --brand-blue: 221 83% 53%;       /* #2563eb */
+  --brand-amber: 33 93% 45%;       /* #d97706 */
+  --brand-rose: 350 91% 49%;       /* #e11d48 */
+
+  /* Light mode semantic tokens */
+  --background: 210 20% 98%;       /* #f8fafc */
+  --foreground: 222 47% 11%;       /* #0f172a */
+
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+
+  --primary: 177 87% 32%;          /* Teal #0d9488 */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 214 32% 91%;        /* Light blue-gray */
+  --secondary-foreground: 222 47% 11%;
+
+  --muted: 214 32% 95%;
+  --muted-foreground: 215 16% 47%;
+
+  --accent: 177 87% 96%;           /* Very light teal */
+  --accent-foreground: 177 87% 25%;
+
+  --destructive: 350 91% 49%;      /* Rose */
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 177 87% 32%;
+
+  /* Sidebar */
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 222 47% 11%;
+  --sidebar-primary: 177 87% 32%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 177 87% 96%;
+  --sidebar-accent-foreground: 177 87% 25%;
+  --sidebar-border: 214 32% 91%;
+  --sidebar-ring: 177 87% 32%;
+
+  /* Status colors */
+  --status-success: 143 72% 40%;
+  --status-warning: 38 92% 50%;
+  --status-error: 350 91% 49%;
+  --status-info: 221 83% 53%;
+}
+
+.dark {
+  --background: 222 47% 7%;        /* #0b0f1a */
+  --foreground: 210 20% 98%;       /* #f8fafc */
+
+  --card: 222 47% 10%;             /* #10172a */
+  --card-foreground: 210 20% 98%;
+
+  --popover: 222 47% 10%;
+  --popover-foreground: 210 20% 98%;
+
+  --primary: 177 71% 45%;          /* Lighter teal for dark mode */
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 217 33% 17%;
+  --secondary-foreground: 210 20% 98%;
+
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+
+  --accent: 177 40% 17%;
+  --accent-foreground: 177 71% 75%;
+
+  --destructive: 350 75% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 217 33% 20%;
+  --input: 217 33% 20%;
+  --ring: 177 71% 45%;
+
+  --sidebar-background: 222 47% 8%;
+  --sidebar-foreground: 210 20% 92%;
+  --sidebar-primary: 177 71% 45%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 177 40% 15%;
+  --sidebar-accent-foreground: 177 71% 75%;
+  --sidebar-border: 217 33% 18%;
+  --sidebar-ring: 177 71% 45%;
+}
+
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+
+* {
+  border-color: hsl(var(--border));
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* ============================================================
+   FOCUS STYLES
+   ============================================================ */
+
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   SELECTION
+   ============================================================ */
+
+::selection {
+  background: hsl(var(--primary) / 0.2);
+  color: hsl(var(--primary-foreground));
+}
+
+/* ============================================================
+   CUSTOM COMPONENT STYLES
+   ============================================================ */
+
+/* Glassmorphism card */
+.glass-card {
+  background: hsl(var(--card) / 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid hsl(var(--border) / 0.5);
+}
+
+/* KPI stat card gradient */
+.stat-card-gradient {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--card)) 0%,
+    hsl(var(--accent) / 0.3) 100%
+  );
+}
+
+/* Status indicator pulse */
+.status-live {
+  position: relative;
+}
+.status-live::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.3;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Shimmer loading skeleton */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--muted-foreground) / 0.1) 50%,
+    hsl(var(--muted)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
+
+/* Queue status badge */
+.queue-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* Print styles for invoices */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  body {
+    background: white;
+    color: black;
+  }
+}
+
+/* ============================================================
+   RECHARTS CUSTOMIZATION
+   ============================================================ */
+
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
+.recharts-default-tooltip {
+  border-radius: 8px !important;
+  border: 1px solid hsl(var(--border)) !important;
+  background: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+  font-family: var(--font-inter), system-ui, sans-serif !important;
+  font-size: 13px !important;
+}
+
+/* ============================================================
+   FULLCALENDAR CUSTOMIZATION
+   ============================================================ */
+
+.fc {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 13px;
+}
+
+.fc-theme-standard .fc-scrollgrid {
+  border-color: hsl(var(--border));
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border-color: hsl(var(--border));
+}
+
+.fc .fc-button-primary {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+}
+
+.fc .fc-button-primary:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: hsl(var(--primary) / 0.8);
+}
+
+.fc .fc-today-button {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border-color: hsl(var(--border));
+}
+
+.fc .fc-daygrid-day.fc-day-today {
+  background-color: hsl(var(--accent));
+}
+
+.fc .fc-col-header-cell {
+  background-color: hsl(var(--muted));
+  padding: 8px 0;
+  font-weight: 600;
+  color: hsl(var(--muted-foreground));
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+}
+
+.fc-event {
+  border-radius: 4px !important;
+  padding: 2px 4px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+}
+
+/* Dark mode adjustments for FullCalendar */
+.dark .fc .fc-col-header-cell {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+}
+
+.dark .fc .fc-daygrid-day-number,
+.dark .fc .fc-daygrid-day-top {
+  color: hsl(var(--foreground));
+}
+
+/* ============================================================
+   ANIMATION UTILITIES
+   ============================================================ */
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Page transition */
+.page-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 200ms ease, transform 200ms ease;
+}
