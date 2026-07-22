@@ -61,7 +61,7 @@ export function LoginForm() {
           title: "Welcome back!",
           description: "You have successfully logged in.",
         });
-        router.push("/dashboard");
+        router.push("/doctor");
         router.refresh();
       }
     });

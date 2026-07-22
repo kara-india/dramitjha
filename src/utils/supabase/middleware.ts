@@ -6,13 +6,12 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
-  const supabaseUrl =
-    process.env.NEXT_PUBLIC_SUPABASE_URL ||
-    "https://djtqtsthnmeecxnvtcvr.supabase.co";
-  const supabaseKey =
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-    "sb_publishable_cQYdTekrVZkK3jvI7-uWYg_6pn4lVFr";
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    return supabaseResponse;
+  }
 
   try {
     const supabase = createServerClient(supabaseUrl, supabaseKey, {
@@ -55,12 +54,6 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    // Redirect root to dashboard or login
-    if (pathname === "/") {
-      const url = request.nextUrl.clone();
-      url.pathname = user ? "/dashboard" : "/login";
-      return NextResponse.redirect(url);
-    }
   } catch (error) {
     console.error("Supabase middleware error:", error);
   }

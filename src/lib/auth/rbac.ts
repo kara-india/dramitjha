@@ -202,12 +202,12 @@ export function getRolePermissions(role: UserRole): Permission[] {
  * Dashboard route per role.
  */
 export const ROLE_DASHBOARD: Record<UserRole, string> = {
-  ADMIN: "/dashboard/admin",
-  RECEPTIONIST: "/dashboard/reception",
-  DOCTOR: "/dashboard/doctor",
-  PHYSIOTHERAPIST: "/dashboard/physio",
-  PHARMACIST: "/dashboard/pharmacy",
-  ACCOUNTANT: "/dashboard/accounts",
+  ADMIN: "/admin",
+  RECEPTIONIST: "/reception",
+  DOCTOR: "/doctor",
+  PHYSIOTHERAPIST: "/physio",
+  PHARMACIST: "/pharmacy",
+  ACCOUNTANT: "/accounts",
 };
 
 /**
@@ -226,54 +226,54 @@ export type NavItem = {
 export const NAV_ITEMS: NavItem[] = [
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/doctor",
     icon: "LayoutDashboard",
   },
   {
     title: "Patients",
-    href: "/dashboard/patients",
+    href: "/patients",
     icon: "Users",
     permission: "patients:read",
   },
   {
     title: "Appointments",
-    href: "/dashboard/appointments",
+    href: "/appointments",
     icon: "Calendar",
     permission: "appointments:read",
   },
   {
     title: "OT Schedule",
-    href: "/dashboard/ot",
+    href: "/ot",
     icon: "Stethoscope",
     permission: "ot:read",
   },
   {
     title: "Consultations",
-    href: "/dashboard/consultations",
+    href: "/consultations",
     icon: "ClipboardList",
     permission: "consultations:read",
   },
   {
     title: "Departments",
-    href: "/dashboard/departments",
+    href: "/doctor",
     icon: "Building2",
     permission: "emr:read",
     children: [
       {
         title: "Orthopedic",
-        href: "/dashboard/departments/orthopedic",
+        href: "/doctor",
         icon: "Bone",
         permission: "emr:read",
       },
       {
         title: "Pediatrics",
-        href: "/dashboard/departments/pediatrics",
+        href: "/doctor",
         icon: "Baby",
         permission: "emr:read",
       },
       {
         title: "Physiotherapy",
-        href: "/dashboard/departments/physiotherapy",
+        href: "/physio",
         icon: "Activity",
         permission: "emr:read",
       },
@@ -281,19 +281,19 @@ export const NAV_ITEMS: NavItem[] = [
   },
   {
     title: "Inventory",
-    href: "/dashboard/inventory",
+    href: "/pharmacy",
     icon: "Package",
     permission: "inventory:read",
   },
   {
     title: "Billing",
-    href: "/dashboard/billing",
+    href: "/accounts",
     icon: "Receipt",
     permission: "billing:read",
   },
   {
     title: "Accounting",
-    href: "/dashboard/accounting",
+    href: "/accounts",
     icon: "BookOpen",
     permission: "accounting:read",
   },
