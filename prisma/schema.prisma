@@ -7,9 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
 }
 
 // ============================================================
@@ -793,10 +791,11 @@ model Prescription {
 }
 
 model PrescriptionItem {
-  id              String       @id @default(cuid())
+  id              String        @id @default(cuid())
   prescriptionId  String
-  prescription    Prescription @relation(fields: [prescriptionId], references: [id])
-  inventoryItemId String?      // Links to inventory
+  prescription    Prescription  @relation(fields: [prescriptionId], references: [id])
+  inventoryItemId String?       // Links to inventory
+  inventoryItem   InventoryItem? @relation(fields: [inventoryItemId], references: [id])
   
   medicineName    String
   genericName     String?
@@ -815,6 +814,7 @@ model PrescriptionItem {
   maxDosePerDay   Float?
 
   @@index([prescriptionId])
+
   @@map("prescription_items")
 }
 
