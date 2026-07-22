@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { getCurrentUser as getUser } from "@/lib/auth/get-user";
+export type { ActionResult } from "@/types/actions";
 
 export async function loginAction(formData: FormData) {
   const email = formData.get("email") as string;

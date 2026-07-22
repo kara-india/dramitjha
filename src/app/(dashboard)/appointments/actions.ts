@@ -105,7 +105,7 @@ export async function createAppointment(
   if (!parsed.success) {
     return {
       success: false,
-      error: parsed.error.errors[0].message,
+      error: parsed.error.issues[0]?.message || "Validation error",
       code: "VALIDATION_ERROR",
     };
   }
@@ -223,7 +223,7 @@ export async function updateAppointmentStatus(input: {
   if (!parsed.success) {
     return {
       success: false,
-      error: parsed.error.errors[0].message,
+      error: parsed.error.issues[0]?.message || "Validation error",
       code: "VALIDATION_ERROR",
     };
   }

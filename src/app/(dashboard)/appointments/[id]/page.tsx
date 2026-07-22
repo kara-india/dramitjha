@@ -193,9 +193,10 @@ export default function AppointmentDetailPage() {
                   <Button className="w-full bg-teal-600 hover:bg-teal-700">
                     <CheckCircle2 className="w-4 h-4 mr-2" /> Check-In Patient
                   </Button>
-                  <Button variant="destructive" className="w-full" variant="outline">
+                  <Button variant="destructive" className="w-full">
                     <XCircle className="w-4 h-4 mr-2" /> Cancel Appointment
                   </Button>
+
                 </>
               )}
               {appointment.status === 'CHECKED_IN' && (

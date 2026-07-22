@@ -27,12 +27,13 @@ export default function PatientsListPage() {
   const limit = 10;
 
   const { data, isLoading } = usePatients({ search, page, limit });
+  const patientsList = ((data as any)?.data?.patients || (data as any)?.patients || (data as any)?.data || []) as any[];
 
   const exportToCsv = () => {
-    if (!data?.data) return;
+    if (!patientsList.length) return;
     const headers = ["MRN", "First Name", "Last Name", "Gender", "DOB", "Phone", "Status"];
-    const rows = data.data.map(p => [
-      p.mrn, p.firstName, p.lastName, p.gender, p.dob, p.phone, p.status
+    const rows = patientsList.map(p => [
+      p.mrn, p.firstName, p.lastName, p.gender, p.dateOfBirth || p.dob, p.phone, p.status || "Active"
     ]);
     const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -54,7 +55,7 @@ export default function PatientsListPage() {
             <Download className="mr-2 h-4 w-4" />
             Export CSV
           </Button>
-          <Link href="/patients/new">
+          <Link href="/dashboard/patients/new">
             <Button className="bg-teal-600 hover:bg-teal-700">
               <Plus className="mr-2 h-4 w-4" /> Register New Patient
             </Button>
@@ -62,12 +63,11 @@ export default function PatientsListPage() {
         </div>
       </div>
 
-      <div className="flex items-center space-x-2 mb-4">
-        <div className="relative w-full max-w-sm">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+      <div className="flex items-center justify-between">
+        <div className="relative w-72">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
-            type="search"
-            placeholder="Search by MRN, Name, Phone..."
+            placeholder="Search MRN, Name, Phone..."
             className="pl-8"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -101,7 +101,7 @@ export default function PatientsListPage() {
                   <TableCell><Skeleton className="h-4 w-[60px]" /></TableCell>
                 </TableRow>
               ))
-            ) : data?.data.length === 0 ? (
+            ) : patientsList.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="h-24 text-center">
                   <div className="flex flex-col items-center justify-center text-gray-500">
@@ -111,8 +111,9 @@ export default function PatientsListPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              data?.data.map((patient, index) => {
-                const age = new Date().getFullYear() - new Date(patient.dob).getFullYear();
+              patientsList.map((patient, index) => {
+                const dob = patient.dateOfBirth || patient.dob;
+                const age = dob ? new Date().getFullYear() - new Date(dob).getFullYear() : 0;
                 return (
                   <motion.tr
                     key={patient.id}
@@ -122,7 +123,7 @@ export default function PatientsListPage() {
                     className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
                   >
                     <TableCell className="font-medium text-teal-600">
-                      <Link href={`/patients/${patient.id}`}>
+                      <Link href={`/dashboard/patients/${patient.id}`}>
                         {patient.mrn}
                       </Link>
                     </TableCell>
@@ -130,7 +131,7 @@ export default function PatientsListPage() {
                       {patient.firstName} {patient.lastName}
                     </TableCell>
                     <TableCell>
-                      {age} Y / {patient.gender.charAt(0)}
+                      {age} Y / {patient.gender?.charAt(0) || "M"}
                     </TableCell>
                     <TableCell>{patient.phone}</TableCell>
                     <TableCell>
@@ -155,27 +156,35 @@ export default function PatientsListPage() {
       </div>
 
       <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setPage(p => Math.max(1, p - 1))}
-          disabled={page === 1 || isLoading}
-        >
-          <ChevronLeft className="h-4 w-4" />
-          Previous
-        </Button>
-        <span className="text-sm text-gray-500">
-          Page {data?.page || 1} of {data?.totalPages || 1}
-        </span>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setPage(p => p + 1)}
-          disabled={!data || page >= data.totalPages || isLoading}
-        >
-          Next
-          <ChevronRight className="h-4 w-4" />
-        </Button>
+        {(() => {
+          const totalCount = (data as any)?.data?.total || (data as any)?.total || 0;
+          const totalPages = Math.max(1, Math.ceil(totalCount / limit));
+          return (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={page === 1 || isLoading}
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Button>
+              <span className="text-sm text-gray-500">
+                Page {page} of {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage(p => p + 1)}
+                disabled={page >= totalPages || isLoading}
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </>
+          );
+        })()}
       </div>
     </div>
   );

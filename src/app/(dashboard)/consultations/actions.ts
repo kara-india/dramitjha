@@ -101,7 +101,7 @@ const PrescriptionItemSchema = z.object({
 });
 
 const OrthoSchema = z.object({
-  specialTests: z.record(z.enum(["POSITIVE", "NEGATIVE", "NOT_DONE"])).optional(),
+  specialTests: z.record(z.string(), z.enum(["POSITIVE", "NEGATIVE", "NOT_DONE"])).optional(),
   romInputs: z.string().optional(),
   affectedJoint: z.string().optional(),
   affectedSide: z.enum(["LEFT", "RIGHT", "BILATERAL", "NA"]).optional(),
@@ -111,7 +111,8 @@ const OrthoSchema = z.object({
 
 const PediatricSchema = z.object({
   headCircumference: z.number().optional(),
-  milestones: z.record(z.boolean()).optional(),
+  milestones: z.record(z.string(), z.boolean()).optional(),
+
   vaccinationsGiven: z.array(z.string()).optional(),
 });
 

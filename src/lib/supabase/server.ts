@@ -32,6 +32,9 @@ export async function createSupabaseServerClient() {
   );
 }
 
+export const createClient = createSupabaseServerClient;
+
+
 /**
  * Server client with admin privileges (service role).
  * NEVER expose this to the client side.

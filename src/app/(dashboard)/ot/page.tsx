@@ -14,7 +14,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
 
 export default function OTSchedulePage() {
   const router = useRouter();
@@ -25,17 +24,16 @@ export default function OTSchedulePage() {
 
   useEffect(() => {
     async function loadData() {
-      // In a real app we would pass current date range, but here we'll load all or current month
       const allSchedules = await getOTSchedules({});
       const formattedEvents = allSchedules.map((s: any) => ({
         id: s.id,
-        title: \`\${s.patient.name} - \${s.surgeryType}\`,
+        title: `${s.patient?.firstName || 'Patient'} ${s.patient?.lastName || ''} - ${s.surgeryType}`,
         start: s.startTime,
-        end: new Date(new Date(s.startTime).getTime() + s.durationMins * 60000),
+        end: new Date(new Date(s.startTime).getTime() + (s.estimatedDurationMins || 60) * 60000),
         backgroundColor: getStatusColor(s.status),
         borderColor: getStatusColor(s.status),
         extendedProps: {
-          surgeon: s.surgeon?.name,
+          surgeon: `${s.surgeon?.firstName || ''} ${s.surgeon?.lastName || ''}`,
           room: s.otRoom,
           status: s.status,
           patientId: s.patientId,
@@ -52,11 +50,11 @@ export default function OTSchedulePage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'SCHEDULED': return '#3b82f6'; // blue
-      case 'CONFIRMED': return '#8b5cf6'; // purple
-      case 'IN_PROGRESS': return '#f59e0b'; // amber
-      case 'COMPLETED': return '#10b981'; // green
-      case 'CANCELLED': return '#ef4444'; // red
+      case 'SCHEDULED': return '#3b82f6';
+      case 'CONFIRMED': return '#8b5cf6';
+      case 'IN_PROGRESS': return '#f59e0b';
+      case 'COMPLETED': return '#10b981';
+      case 'CANCELLED': return '#ef4444';
       default: return '#6b7280';
     }
   };
@@ -75,7 +73,7 @@ export default function OTSchedulePage() {
   };
 
   const handleEventClick = (info: any) => {
-    router.push(\`/ot/\${info.event.id}\`);
+    router.push(`/dashboard/ot/${info.event.id}`);
   };
 
   return (
@@ -85,7 +83,7 @@ export default function OTSchedulePage() {
           <h1 className="text-3xl font-bold tracking-tight">Operation Theatre</h1>
           <p className="text-muted-foreground">Manage surgery schedules and OT room allocations</p>
         </div>
-        <Link href="/ot/new">
+        <Link href="/dashboard/ot/new">
           <Button className="bg-teal-600 hover:bg-teal-700">
             <Plus className="mr-2 h-4 w-4" />
             Schedule Surgery
@@ -180,14 +178,14 @@ export default function OTSchedulePage() {
               </div>
             ) : (
               todayList.map((schedule, i) => (
-                <Link key={i} href={\`/ot/\${schedule.id}\`} className="block">
+                <Link key={i} href={`/dashboard/ot/${schedule.id}`} className="block">
                   <div className="flex items-start justify-between rounded-lg border p-3 hover:bg-muted/50 transition-colors">
                     <div className="space-y-1">
-                      <p className="text-sm font-medium leading-none">{schedule.patient?.name || 'Unknown Patient'}</p>
+                      <p className="text-sm font-medium leading-none">{schedule.patient?.firstName ? `${schedule.patient.firstName} ${schedule.patient.lastName || ''}` : 'Patient'}</p>
                       <p className="text-xs text-muted-foreground">{schedule.surgeryType}</p>
                       <div className="flex items-center text-xs text-muted-foreground pt-1">
                         <Clock className="mr-1 h-3 w-3" />
-                        {format(new Date(schedule.startTime), 'HH:mm')} ({schedule.durationMins}m) • {schedule.otRoom}
+                        {schedule.startTime} ({schedule.estimatedDurationMins || 60}m) • {schedule.otRoom}
                       </div>
                     </div>
                     <Badge variant="outline" style={{ borderColor: getStatusColor(schedule.status), color: getStatusColor(schedule.status) }}>

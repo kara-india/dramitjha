@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useForm, FormProvider } from "react-form-hooks"; // wait, usually I'd use react-hook-form, I'll fix this
-import { useForm as useHookForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { patientSchema, PatientFormValues } from "../schema";
@@ -36,7 +36,7 @@ export default function NewPatientRegistration() {
   const { mutateAsync: createPatient, isPending } = useCreatePatient();
   const [successData, setSuccessData] = useState<any>(null);
 
-  const methods = useHookForm<PatientFormValues>({
+  const methods = useForm<PatientFormValues>({
     resolver: zodResolver(patientSchema),
     defaultValues: {
       firstName: "",
@@ -85,7 +85,11 @@ export default function NewPatientRegistration() {
   const onSubmit = async (data: PatientFormValues) => {
     try {
       const res = await createPatient(data);
-      setSuccessData(res.patient);
+      const sData = (res as any)?.data || (res as any)?.patient || res;
+      setSuccessData({
+        ...data,
+        ...sData,
+      });
     } catch (err) {
       // Error is handled by mutation
     }

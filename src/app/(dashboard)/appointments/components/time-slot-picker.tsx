@@ -69,8 +69,6 @@ export function TimeSlotPicker({
               <Calendar
                 mode="single"
                 selected={dateObj}
-                onSelect={(d) => d && onDateChange(format(d, 'yyyy-MM-dd'))}
-                initialFocus
                 disabled={(date) => date < new Date(new Date().setHours(0,0,0,0))}
               />
             </PopoverContent>

@@ -1,10 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable React compiler for optimization
-  experimental: {
-    reactCompiler: false, // Enable when stable
-  },
+
 
   // Security headers
   async headers() {

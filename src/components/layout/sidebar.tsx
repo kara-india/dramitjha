@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Activity, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
+import { Activity, LogOut, ChevronLeft, ChevronRight, LayoutDashboard, Users, Calendar, Stethoscope, ClipboardList, Building2, Package, Receipt, FileText, Settings } from "lucide-react";
 import { cn, initials } from "@/lib/utils";
-import { ROLE_CONFIG, NAV_ITEMS } from "@/lib/auth/rbac";
+import { NAV_ITEMS, hasPermission } from "@/lib/auth/rbac";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DashboardUser } from "./dashboard-layout";
@@ -21,10 +21,22 @@ const itemVariants = {
   closed: { opacity: 0, x: -20 },
 };
 
+const iconMap: Record<string, any> = {
+  LayoutDashboard,
+  Users,
+  Calendar,
+  Stethoscope,
+  ClipboardList,
+  Building2,
+  Package,
+  Receipt,
+  FileText,
+  Settings,
+};
+
 export function Sidebar({ isCollapsed, setIsCollapsed, user }: SidebarProps) {
   const pathname = usePathname();
-  const allowedNavIds = ROLE_CONFIG[user.role]?.navItems || [];
-  const navItems = NAV_ITEMS.filter((item) => allowedNavIds.includes(item.id));
+  const navItems = NAV_ITEMS.filter((item) => !item.permission || hasPermission(user.role, item.permission));
 
   const handleLogout = () => {
     window.location.href = "/api/auth/logout";
@@ -38,25 +50,27 @@ export function Sidebar({ isCollapsed, setIsCollapsed, user }: SidebarProps) {
       className="relative flex flex-col h-full border-r bg-card/50 backdrop-blur-xl z-20 hidden lg:flex"
     >
       {/* Header */}
-      <div className="flex items-center justify-between h-16 px-4 border-b">
-        <div className="flex items-center gap-3 overflow-hidden whitespace-nowrap">
-          <Activity className="h-8 w-8 text-teal-600 shrink-0" />
+      <div className="h-16 flex items-center justify-between px-4 border-b border-border/50">
+        <Link href="/dashboard" className="flex items-center gap-3">
+          <div className="h-9 w-9 bg-teal-600 rounded-lg flex items-center justify-center text-white shrink-0">
+            <Activity className="h-5 w-5" />
+          </div>
           {!isCollapsed && (
-            <motion.span 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="font-outfit font-bold text-lg text-primary truncate"
-            >
-              KrishnaHealth
-            </motion.span>
+            <div className="flex flex-col">
+              <span className="font-bold text-sm tracking-tight text-teal-800 dark:text-teal-400 leading-none">
+                KrishnaHealth
+              </span>
+              <span className="text-[10px] text-muted-foreground leading-tight">
+                Dr. Amit Jha Clinic
+              </span>
+            </div>
           )}
-        </div>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="shrink-0 text-muted-foreground hover:text-foreground"
+        </Link>
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => setIsCollapsed(!isCollapsed)}
+          className="h-8 w-8 text-muted-foreground hover:text-foreground"
         >
           {isCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </Button>
@@ -66,10 +80,10 @@ export function Sidebar({ isCollapsed, setIsCollapsed, user }: SidebarProps) {
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1 scrollbar-hide">
         {navItems.map((item, i) => {
           const isActive = pathname.startsWith(item.href);
-          const Icon = item.icon as any;
+          const Icon = iconMap[item.icon] || Activity;
           
           return (
-            <Link key={item.id} href={item.href}>
+            <Link key={item.href} href={item.href}>
               <motion.div
                 custom={i}
                 initial="closed"
@@ -107,7 +121,7 @@ export function Sidebar({ isCollapsed, setIsCollapsed, user }: SidebarProps) {
         <div className={cn("flex items-center gap-3", isCollapsed ? "justify-center" : "")}>
           <Avatar className="h-9 w-9 border border-teal-100 dark:border-teal-900 shrink-0">
             <AvatarImage src={user.avatar} alt={user.name} />
-            <AvatarFallback className="bg-teal-100 text-teal-700 font-medium">{initials(user.name)}</AvatarFallback>
+            <AvatarFallback className="bg-teal-100 text-teal-700 font-medium">{initials(user.name, "")}</AvatarFallback>
           </Avatar>
           {!isCollapsed && (
             <div className="flex-1 min-w-0 overflow-hidden">

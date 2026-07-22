@@ -141,7 +141,7 @@ export function Topbar({ user, toggleSidebar }: TopbarProps) {
                 <span className="sr-only">Open user menu</span>
                 <Avatar className="h-8 w-8 border border-border">
                   <AvatarImage src={user.avatar} alt={user.name} />
-                  <AvatarFallback className="bg-teal-100 text-teal-700">{initials(user.name)}</AvatarFallback>
+                  <AvatarFallback className="bg-teal-100 text-teal-700">{initials(user.name, "")}</AvatarFallback>
                 </Avatar>
                 <div className="hidden lg:flex lg:items-center">
                   <Badge variant="secondary" className="ml-2 text-[10px] uppercase bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 border-none font-bold">

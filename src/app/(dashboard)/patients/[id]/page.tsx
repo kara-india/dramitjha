@@ -46,7 +46,9 @@ export default function PatientDetailPage({ params }: { params: Promise<{ id: st
     );
   }
 
-  const age = new Date().getFullYear() - new Date(patient.dob).getFullYear();
+  const p = ((patient as any)?.data || patient) as any;
+  const dob = p?.dateOfBirth || p?.dob;
+  const age = dob ? new Date().getFullYear() - new Date(dob).getFullYear() : 0;
 
   return (
     <div className="flex-1 p-8 space-y-6">
@@ -61,19 +63,19 @@ export default function PatientDetailPage({ params }: { params: Promise<{ id: st
               <div className="space-y-1">
                 <div className="flex items-center gap-3">
                   <h1 className="text-3xl font-bold text-gray-900">
-                    {patient.firstName} {patient.lastName}
+                    {p.firstName} {p.lastName}
                   </h1>
-                  <Badge variant={patient.status === "Active" ? "default" : "secondary"} className="bg-teal-100 text-teal-800">
-                    {patient.status}
+                  <Badge variant={p.status === "Active" ? "default" : "secondary"} className="bg-teal-100 text-teal-800">
+                    {p.status || "Active"}
                   </Badge>
                 </div>
-                <div className="text-lg font-mono text-gray-500 font-medium">{patient.mrn}</div>
+                <div className="text-lg font-mono text-gray-500 font-medium">{p.mrn}</div>
                 
                 <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-600">
-                  <div className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {age} Years • {patient.gender}</div>
-                  <div className="flex items-center gap-1"><Droplets className="h-4 w-4 text-red-500" /> {patient.bloodGroup}</div>
-                  <div className="flex items-center gap-1"><Phone className="h-4 w-4" /> {patient.phone}</div>
-                  <div className="flex items-center gap-1"><MapPin className="h-4 w-4" /> {patient.city}, {patient.state}</div>
+                  <div className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {age} Years • {p.gender}</div>
+                  <div className="flex items-center gap-1"><Droplets className="h-4 w-4 text-red-500" /> {p.bloodGroup}</div>
+                  <div className="flex items-center gap-1"><Phone className="h-4 w-4" /> {p.phone}</div>
+                  <div className="flex items-center gap-1"><MapPin className="h-4 w-4" /> {p.city}, {p.state}</div>
                 </div>
               </div>
             </div>
@@ -83,7 +85,7 @@ export default function PatientDetailPage({ params }: { params: Promise<{ id: st
                 <Calendar className="h-4 w-4 mr-2" /> Book Appointment
               </Button>
               <div className="flex gap-2">
-                <Link href={`/patients/${patient.id}/edit`} className="flex-1">
+                <Link href={`/dashboard/patients/${p.id || resolvedParams.id}/edit`} className="flex-1">
                   <Button variant="outline" className="w-full">
                     <Edit className="h-4 w-4 mr-2" /> Edit
                   </Button>
@@ -118,11 +120,11 @@ export default function PatientDetailPage({ params }: { params: Promise<{ id: st
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {patient.allergies?.length ? (
+                    {p.allergies?.length ? (
                       <div className="flex flex-wrap gap-2 mb-4">
-                        {patient.allergies.map((a: any, i: number) => (
+                        {p.allergies.map((a: any, i: number) => (
                           <Badge key={i} variant="outline" className="bg-red-50 text-red-700 border-red-200">
-                            {a.name} ({a.severity})
+                            {a.allergen || a.name} ({a.severity})
                           </Badge>
                         ))}
                       </div>
@@ -131,9 +133,9 @@ export default function PatientDetailPage({ params }: { params: Promise<{ id: st
                     )}
 
                     <h4 className="text-sm font-semibold mb-2">Existing Conditions</h4>
-                    {patient.existingConditions?.length ? (
+                    {p.existingConditions?.length ? (
                       <ul className="list-disc pl-5 text-sm text-gray-700">
-                        {patient.existingConditions.map((c: string, i: number) => <li key={i}>{c}</li>)}
+                        {p.existingConditions.map((c: string, i: number) => <li key={i}>{c}</li>)}
                       </ul>
                     ) : (
                       <p className="text-sm text-gray-500">No existing conditions reported.</p>
@@ -148,15 +150,15 @@ export default function PatientDetailPage({ params }: { params: Promise<{ id: st
                   <CardContent className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <p className="text-gray-500">Email</p>
-                      <p className="font-medium">{patient.email || "N/A"}</p>
+                      <p className="font-medium">{p.email || "N/A"}</p>
                     </div>
                     <div>
                       <p className="text-gray-500">Alternate Phone</p>
-                      <p className="font-medium">{patient.altPhone || "N/A"}</p>
+                      <p className="font-medium">{p.altPhone || "N/A"}</p>
                     </div>
                     <div className="col-span-2">
                       <p className="text-gray-500">Full Address</p>
-                      <p className="font-medium">{patient.address}, {patient.city}, {patient.state} - {patient.pincode}</p>
+                      <p className="font-medium">{p.addressLine1 || p.address}, {p.city}, {p.state} - {p.pincode}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -168,7 +170,7 @@ export default function PatientDetailPage({ params }: { params: Promise<{ id: st
                     <CardTitle className="text-lg text-teal-800">Emergency Contacts</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {patient.emergencyContacts?.map((ec: any, idx: number) => (
+                    {p.emergencyContacts?.map((ec: any, idx: number) => (
                       <div key={idx} className="mb-3 last:mb-0 pb-3 last:pb-0 border-b last:border-0 text-sm">
                         <p className="font-semibold">{ec.name}</p>
                         <p className="text-gray-500">{ec.relationship}</p>
@@ -183,12 +185,12 @@ export default function PatientDetailPage({ params }: { params: Promise<{ id: st
                     <CardTitle className="text-lg text-teal-800">Insurance Info</CardTitle>
                   </CardHeader>
                   <CardContent className="text-sm">
-                    {patient.insuranceProvider ? (
+                    {p.insuranceName || p.insuranceProvider ? (
                       <>
                         <p className="text-gray-500">Provider</p>
-                        <p className="font-semibold mb-2">{patient.insuranceProvider}</p>
+                        <p className="font-semibold mb-2">{p.insuranceName || p.insuranceProvider}</p>
                         <p className="text-gray-500">Policy ID</p>
-                        <p className="font-mono">{patient.insuranceId}</p>
+                        <p className="font-mono">{p.policyNumber || p.insuranceId}</p>
                       </>
                     ) : (
                       <p className="text-gray-500">No insurance details provided.</p>

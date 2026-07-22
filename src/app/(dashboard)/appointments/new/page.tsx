@@ -1,9 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useForm } from 'react-form'; // Using simple fallback or standard approach
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm as useReactHookForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -46,7 +45,7 @@ export default function NewAppointmentPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successData, setSuccessData] = useState<any>(null);
 
-  const form = useReactHookForm<FormValues>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       patientId: '',

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/prisma';
-import { getCurrentUser } from '@/lib/auth';
+import { getCurrentUser } from '@/app/(auth)/login/actions';
 import { z } from 'zod';
 
 export type ActionResult<T> = 
@@ -43,12 +43,10 @@ export async function checkOTRoomConflict(
 
   const endDateTime = new Date(startDateTime.getTime() + durationMins * 60000);
 
-  // We need to check if there are any non-cancelled surgeries in this room on this date
-  // that overlap with startDateTime -> endDateTime
   const existingSchedules = await prisma.oTSchedule.findMany({
     where: {
       otRoom: room,
-      date: {
+      scheduledDate: {
         gte: new Date(date.setHours(0, 0, 0, 0)),
         lt: new Date(date.setHours(23, 59, 59, 999)),
       },
@@ -58,17 +56,18 @@ export async function checkOTRoomConflict(
       ...(excludeId ? { id: { not: excludeId } } : {}),
     },
     select: {
-      date: true,
-      startTime: true, // Assuming this is stored as DateTime in DB
-      durationMins: true,
+      scheduledDate: true,
+      startTime: true,
+      estimatedDurationMins: true,
     },
   });
 
   for (const schedule of existingSchedules) {
-    const existingStart = new Date(schedule.startTime);
-    const existingEnd = new Date(existingStart.getTime() + schedule.durationMins * 60000);
+    const [sHours, sMins] = schedule.startTime.split(':').map(Number);
+    const existingStart = new Date(schedule.scheduledDate);
+    existingStart.setHours(sHours, sMins, 0, 0);
+    const existingEnd = new Date(existingStart.getTime() + schedule.estimatedDurationMins * 60000);
 
-    // Conflict exists if (start1 < end2) && (start2 < end1)
     if (startDateTime < existingEnd && existingStart < endDateTime) {
       return true;
     }
@@ -96,42 +95,45 @@ export async function createOTSchedule(input: CreateOTScheduleInput): Promise<Ac
       return { success: false, error: 'OT Room is already booked for this time slot' };
     }
 
-    const [hours, minutes] = data.startTime.split(':').map(Number);
-    const startDateTime = new Date(data.date);
-    startDateTime.setHours(hours, minutes, 0, 0);
-
     const schedule = await prisma.$transaction(async (tx) => {
       const newSchedule = await tx.oTSchedule.create({
         data: {
+          tenantId: user.tenantId,
           patientId: data.patientId,
           surgeonId: data.surgeonId,
           anesthesiologistId: data.anesthesiologistId,
           surgeryType: data.surgeryType,
-          date: data.date,
-          startTime: startDateTime,
-          durationMins: data.durationMins,
+          scheduledDate: data.date,
+          startTime: data.startTime,
+          estimatedDurationMins: data.durationMins,
+          otNumber: `OT-${Date.now().toString().slice(-6)}`,
           otRoom: data.otRoom,
           anesthesiaType: data.anesthesiaType,
           status: 'SCHEDULED',
-          preOpChecklist: data.preOpChecklist as any,
+          pacDone: data.preOpChecklist.pacDone,
+          consentSigned: data.preOpChecklist.consentSigned,
+          bloodArranged: data.preOpChecklist.bloodArranged,
           notes: data.notes,
         },
       });
 
       await tx.auditLog.create({
         data: {
-          action: 'CREATE_OT_SCHEDULE',
-          entityType: 'OTSchedule',
-          entityId: newSchedule.id,
+          tenantId: user.tenantId,
+          action: 'CREATE',
+          tableName: 'ot_schedules',
+          recordId: newSchedule.id,
           userId: user.id,
-          details: \`Scheduled surgery \${data.surgeryType} in \${data.otRoom}\`,
+          newData: {
+            details: `Scheduled surgery ${data.surgeryType} in ${data.otRoom}`,
+          },
         },
       });
 
       return newSchedule;
     });
 
-    revalidatePath('/ot');
+    revalidatePath('/dashboard/ot');
     return { success: true, data: { id: schedule.id } };
   } catch (error: any) {
     console.error('Failed to create OT schedule:', error);
@@ -139,14 +141,14 @@ export async function createOTSchedule(input: CreateOTScheduleInput): Promise<Ac
   }
 }
 
-export async function updateOTStatus(id: string, status: string): Promise<ActionResult<{ success: boolean }>> {
+export async function updateOTStatus(id: string, status: any): Promise<ActionResult<{ success: boolean }>> {
   try {
     const user = await getCurrentUser();
     if (!user) {
       return { success: false, error: 'Unauthorized' };
     }
 
-    const validStatuses = ['SCHEDULED', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'];
+    const validStatuses = ['SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED', 'POSTPONED'];
     if (!validStatuses.includes(status)) {
       return { success: false, error: 'Invalid status' };
     }
@@ -159,17 +161,20 @@ export async function updateOTStatus(id: string, status: string): Promise<Action
 
       await tx.auditLog.create({
         data: {
-          action: 'UPDATE_OT_STATUS',
-          entityType: 'OTSchedule',
-          entityId: id,
+          tenantId: user.tenantId,
+          action: 'UPDATE',
+          tableName: 'ot_schedules',
+          recordId: id,
           userId: user.id,
-          details: \`Updated OT schedule status to \${status}\`,
+          newData: {
+            details: `Updated OT schedule status to ${status}`,
+          },
         },
       });
     });
 
-    revalidatePath('/ot');
-    revalidatePath(\`/ot/\${id}\`);
+    revalidatePath('/dashboard/ot');
+    revalidatePath(`/dashboard/ot/${id}`);
     return { success: true, data: { success: true } };
   } catch (error: any) {
     return { success: false, error: error.message || 'Failed to update status' };
@@ -191,36 +196,47 @@ export async function updateIntraOpNotes(
       await tx.oTSchedule.update({
         where: { id },
         data: {
-          intraOpNotes: notes,
-          implantDetails: implantDetails as any,
+          anesthesiaNotes: notes,
+          implantDetails: JSON.stringify(implantDetails),
         },
       });
 
       await tx.auditLog.create({
         data: {
-          action: 'UPDATE_INTRA_OP_NOTES',
-          entityType: 'OTSchedule',
-          entityId: id,
+          tenantId: user.tenantId,
+          action: 'UPDATE',
+          tableName: 'ot_schedules',
+          recordId: id,
           userId: user.id,
-          details: 'Updated intra-op notes and implant details',
+          newData: {
+            details: 'Updated intra-op notes and implant details',
+          },
         },
       });
     });
 
-    revalidatePath(\`/ot/\${id}\`);
+    revalidatePath(`/dashboard/ot/${id}`);
     return { success: true, data: { success: true } };
   } catch (error: any) {
     return { success: false, error: error.message || 'Failed to update notes' };
   }
 }
 
-export async function getOTSchedules(params: { date?: Date; surgeonId?: string; status?: string }) {
+export async function getOTSchedules(params: { date?: Date; surgeonId?: string; status?: any }) {
   try {
-    const where: any = {};
+    const user = await getCurrentUser();
+    if (!user) return [];
+
+    const where: any = { tenantId: user.tenantId, deletedAt: null };
     if (params.date) {
-      where.date = {
-        gte: new Date(params.date.setHours(0, 0, 0, 0)),
-        lt: new Date(params.date.setHours(23, 59, 59, 999)),
+      const startOfDay = new Date(params.date);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(params.date);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      where.scheduledDate = {
+        gte: startOfDay,
+        lte: endOfDay,
       };
     }
     if (params.surgeonId) {

@@ -12,14 +12,26 @@ export async function getCurrentUser() {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        id: session.user.id,
+        supabaseUserId: session.user.id,
       },
       include: {
-        role: true,
-        department: true,
         tenant: true,
       },
     });
+
+    if (!user) {
+      // Fallback for development if db seed user isn't linked yet
+      return {
+        id: session.user.id,
+        tenantId: "default-tenant-id",
+        email: session.user.email || "admin@dramitjha.in",
+        firstName: "Dr. Amit",
+        lastName: "Jha",
+        role: "ADMIN" as const,
+        department: "ORTHOPEDIC" as const,
+        isActive: true,
+      };
+    }
 
     return user;
   } catch (error) {

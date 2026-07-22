@@ -138,7 +138,7 @@ export async function createInvoice(
   if (!parsed.success) {
     return {
       success: false,
-      error: parsed.error.errors[0].message,
+      error: parsed.error.issues[0]?.message || "Validation error",
       code: "VALIDATION_ERROR",
     };
   }
@@ -373,7 +373,7 @@ export async function recordPayment(
   if (!parsed.success) {
     return {
       success: false,
-      error: parsed.error.errors[0].message,
+      error: parsed.error.issues[0]?.message || "Validation error",
       code: "VALIDATION_ERROR",
     };
   }

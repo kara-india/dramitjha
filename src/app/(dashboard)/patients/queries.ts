@@ -6,7 +6,7 @@ import { toast } from "sonner";
 export function usePatients(params?: { search?: string; page?: number; limit?: number }) {
   return useQuery({
     queryKey: ["patients", params],
-    queryFn: () => getPatients(params),
+    queryFn: () => getPatients(params || {}),
   });
 }
 
@@ -21,14 +21,14 @@ export function useCreatePatient() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: PatientFormValues) => createPatient(data),
+    mutationFn: (data: PatientFormValues) => createPatient(data as any),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["patients"] });
       toast.success("Patient registered successfully");
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || "Failed to register patient");
-    }
+    },
   });
 }
 
@@ -36,14 +36,15 @@ export function useUpdatePatient() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<PatientFormValues> }) => updatePatient(id, data),
+    mutationFn: ({ id, data }: { id: string; data: Partial<PatientFormValues> }) =>
+      updatePatient(id, data as any),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["patients"] });
       queryClient.invalidateQueries({ queryKey: ["patients", variables.id] });
       toast.success("Patient updated successfully");
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error.message || "Failed to update patient");
-    }
+    },
   });
 }

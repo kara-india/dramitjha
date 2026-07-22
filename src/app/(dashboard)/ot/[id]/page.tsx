@@ -34,7 +34,7 @@ export default function OTDetailPage() {
       const found = schedules.find((s: any) => s.id === id);
       if (found) {
         setSchedule(found);
-        setIntraOpNotes(found.intraOpNotes || '');
+        setIntraOpNotes(found.anesthesiaNotes || found.notes || '');
       } else {
         // Dummy data for demo if not found in db
         setSchedule({
@@ -106,7 +106,7 @@ export default function OTDetailPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Button variant="outline" size="icon" asChild>
-            <Link href="/ot">
+            <Link href="/dashboard/ot">
               <ArrowLeft className="h-4 w-4" />
             </Link>
           </Button>

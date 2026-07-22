@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useForm } from 'react-form'; // Wait, let's use react-hook-form
-import { useForm as useRHForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
@@ -44,7 +43,7 @@ const formSchema = z.object({
   anesthesiologistId: z.string().optional(),
   surgeryType: z.string().min(1, 'Surgery type is required'),
   date: z.date({
-    required_error: 'A date of surgery is required.',
+    message: 'A date of surgery is required.',
   }),
   startTime: z.string().min(1, 'Start time is required'),
   durationMins: z.number().min(30).max(480),
@@ -73,7 +72,7 @@ export default function NewOTSchedulePage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useRHForm<z.infer<typeof formSchema>>({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       patientId: '',
@@ -103,7 +102,7 @@ export default function NewOTSchedulePage() {
           title: 'Success',
           description: 'Surgery scheduled successfully.',
         });
-        router.push(\`/ot/\${result.data.id}\`);
+        router.push(`/dashboard/ot/${result.data.id}`);
       } else {
         toast({
           title: 'Error',
@@ -285,7 +284,6 @@ export default function NewOTSchedulePage() {
                                 disabled={(date) =>
                                   date < new Date(new Date().setHours(0,0,0,0))
                                 }
-                                initialFocus
                               />
                             </PopoverContent>
                           </Popover>

@@ -21,7 +21,7 @@ export default function EditPatientPage({ params }: { params: Promise<{ id: stri
 
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<PatientFormValues>({
     resolver: zodResolver(patientSchema),
-    values: patient as PatientFormValues,
+    values: (patient as any)?.data ? ((patient as any).data as unknown as PatientFormValues) : (patient as unknown as PatientFormValues),
   });
 
   const onSubmit = async (data: PatientFormValues) => {
@@ -49,7 +49,7 @@ export default function EditPatientPage({ params }: { params: Promise<{ id: stri
     <div className="max-w-3xl mx-auto py-8">
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl text-teal-800">Edit Demographics - {patient.mrn}</CardTitle>
+          <CardTitle className="text-2xl text-teal-800">Edit Demographics - {(patient as any)?.data?.mrn || (patient as any)?.mrn || ""}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

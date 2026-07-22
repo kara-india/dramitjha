@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useState, useEffect } from "react";
-import { useForm, Controller } from "react-form";
+import { useForm, Controller } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangle, Activity, FileText, Pill, Upload, CheckCircle, Save, Stethoscope, Scissors, UserCheck } from "lucide-react";
 import { getConsultation, saveConsultation, signOffConsultation, addOrthopedicData, uploadMedicalFile } from "../actions";
@@ -83,7 +83,10 @@ export default function ConsultationEMRPage({ params }: { params: Promise<{ id: 
       painScore: Number(vitals.painScore) || undefined,
     }, soap);
     if (data?.appointment?.department === "ORTHOPEDIC") {
-      await addOrthopedicData(id, ortho);
+      await addOrthopedicData(id, {
+        ...ortho,
+        affectedSide: (ortho.affectedSide as "LEFT" | "RIGHT" | "BILATERAL" | "NA") || "NA",
+      });
     }
     setSaving(false);
   };

@@ -88,7 +88,7 @@ export async function createInventoryItem(
   if (!parsed.success) {
     return {
       success: false,
-      error: parsed.error.errors[0].message,
+      error: parsed.error.issues[0]?.message || "Validation error",
       code: "VALIDATION_ERROR",
     };
   }
@@ -165,7 +165,7 @@ export async function receiveBatch(
   if (!parsed.success) {
     return {
       success: false,
-      error: parsed.error.errors[0].message,
+      error: parsed.error.issues[0]?.message || "Validation error",
       code: "VALIDATION_ERROR",
     };
   }
@@ -310,7 +310,7 @@ export async function dispenseItems(
   if (!parsed.success) {
     return {
       success: false,
-      error: parsed.error.errors[0].message,
+      error: parsed.error.issues[0]?.message || "Validation error",
       code: "VALIDATION_ERROR",
     };
   }
