@@ -1,65 +1,24 @@
-import Image from "next/image";
+"use client";
+
+import { Activity, ArrowDownRight, ArrowRight, ChevronRight, Menu, MoveRight, Phone, Play, ShieldCheck, Sparkles, Target, X } from "lucide-react";
+import { useState } from "react";
+
+const bodyParts = [["01", "Knee", "ACL, meniscus & patella"], ["02", "Shoulder", "Instability & rotator cuff"], ["03", "Spine", "Back & neck pain"], ["04", "Foot & ankle", "Sprains & tendon pain"], ["05", "Hip", "Groin & joint pain"], ["06", "Elbow & wrist", "Overuse & impact injuries"]];
+const services = [["Sports injury care", "Fast, precise diagnosis and a plan built around your sport.", Activity], ["Keyhole surgery", "Minimally invasive treatment focused on safer, stronger recovery.", Sparkles], ["Return to sport", "Progressive rehabilitation that makes every milestone measurable.", Target]];
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+  const [menuOpen, setMenuOpen] = useState(false);
+  return <main className="site-shell">
+    <div className="utility-bar"><p><span className="live-dot" /> Sports injury appointments available this week</p><div><a href="tel:+919999999999"><Phone size={13} /> +91 99999 99999</a><span className="utility-line" /> Varanasi, India</div></div>
+    <header className="site-header"><a className="brand" href="#top" aria-label="Dr Amit Jha Sports Injury Clinic home"><span className="brand-mark"><i /><i /><i /></span><span>AMIT JHA<small>SPORTS INJURY CLINIC</small></span></a><nav className="desktop-nav" aria-label="Main navigation"><a href="#care">Care</a><a href="#expertise">Expertise</a><a href="#approach">Our approach</a><a href="#stories">Stories</a></nav><a className="nav-cta" href="#appointment">Book an appointment <ArrowRight size={16} /></a><button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label="Toggle navigation">{menuOpen ? <X /> : <Menu />}</button></header>
+    {menuOpen && <nav className="mobile-nav" aria-label="Mobile navigation"><a onClick={() => setMenuOpen(false)} href="#care">Care</a><a onClick={() => setMenuOpen(false)} href="#expertise">Expertise</a><a onClick={() => setMenuOpen(false)} href="#approach">Our approach</a><a onClick={() => setMenuOpen(false)} href="#appointment">Book an appointment</a></nav>}
+    <section id="top" className="hero"><div className="hero-grain" /><div className="hero-content"><p className="eyebrow"><span /> SPORTS MEDICINE, WITHOUT COMPROMISE</p><h1>Built for your <em>comeback.</em></h1><p className="hero-copy">Specialist sports injury care for people who want more from recovery—whether that means a podium, a personal best, or simply moving without hesitation.</p><div className="hero-actions"><a className="button button-lime" href="#appointment">Start your recovery <MoveRight size={18} /></a><a className="text-link light" href="#approach"><span className="play"><Play size={12} fill="currentColor" /></span> Explore our approach</a></div></div><aside className="hero-panel"><span>YOUR FIRST STEP</span><h2>See the right specialist, sooner.</h2><p>Request an appointment in under two minutes. Our team will call you back to confirm.</p><a href="#appointment">Request appointment <ArrowDownRight size={18} /></a></aside><div className="hero-meta"><span>ORTHOPAEDICS · SPORTS MEDICINE · REHABILITATION</span><span>01 / 04</span></div></section>
+    <section className="confidence-strip" aria-label="Clinic highlights"><div><strong>Evidence-led</strong><span>Modern treatment. Clear decisions.</span></div><div><strong>Athlete-first</strong><span>For every level of movement.</span></div><div><strong>One coordinated team</strong><span>From diagnosis to return.</span></div></section>
+    <section id="care" className="section body-section"><div className="section-heading split-heading"><div><p className="eyebrow dark"><span /> FIND YOUR FOCUS</p><h2>Where does it <em>hurt?</em></h2></div><p>Start with the part of your body that needs attention. Then we&apos;ll help you understand the next best move.</p></div><div className="body-grid">{bodyParts.map(([number, title, description]) => <a className="body-card" key={title} href="#appointment"><span className="body-index">{number}</span><ArrowDownRight /><h3>{title}</h3><p>{description}</p></a>)}</div></section>
+    <section id="expertise" className="section feature-section"><div className="feature-image"><div className="image-caption"><span>THE STANDARD</span><p>Precision in the clinic.<br />Confidence on the field.</p></div></div><div className="feature-content"><p className="eyebrow dark"><span /> CARE THAT KEEPS UP</p><h2>Nothing generic about your <em>recovery.</em></h2><p className="lead">Your injury has a story. Your care should too. We combine expert assessment, progressive treatment and sport-specific rehabilitation in one considered pathway.</p><div className="service-list">{services.map(([title, description, Icon]) => { const ServiceIcon = Icon as typeof Activity; return <a href="#appointment" key={title as string}><span className="service-icon"><ServiceIcon size={20} /></span><span><strong>{title as string}</strong><small>{description as string}</small></span><ChevronRight size={19} /></a>; })}</div><a className="text-link dark-link" href="#appointment">Explore all care <ArrowRight size={17} /></a></div></section>
+    <section id="approach" className="process-section"><div className="process-intro"><p className="eyebrow"><span /> THE PERFORMANCE PATHWAY</p><h2>Recover with a plan<br />made for <em>momentum.</em></h2></div><div className="process-steps"><article><span>01</span><h3>Understand</h3><p>We listen closely, assess precisely and get clear on what is holding you back.</p></article><article><span>02</span><h3>Restore</h3><p>A focused plan that combines the right intervention with progressive rehabilitation.</p></article><article><span>03</span><h3>Return</h3><p>Build strength, confidence and the capacity to move at your level again.</p></article></div></section>
+    <section id="stories" className="section story-section"><div className="section-heading story-heading"><p className="eyebrow dark"><span /> THE PEOPLE WE CARE FOR</p><h2>Every goal deserves a <em>way back.</em></h2></div><div className="story-card"><div className="story-visual"><span>RUN<br />FREE</span></div><div className="story-copy"><span className="quote-mark">“</span><blockquote>After months of knee pain, I finally had a recovery plan that made sense—and the confidence to run again.</blockquote><p>— A runner, Varanasi</p><a className="text-link dark-link" href="#appointment">Read comeback stories <ArrowRight size={17} /></a></div></div></section>
+    <section id="appointment" className="appointment-section"><div><p className="eyebrow"><span /> BEGIN HERE</p><h2>Ready to move <em>forward?</em></h2><p>Tell us what&apos;s holding you back. We&apos;ll make the first step easy.</p></div><form className="appointment-form" onSubmit={(event) => event.preventDefault()}><label>Your name<input required placeholder="Name" /></label><label>Phone number<input required type="tel" placeholder="+91" /></label><label className="select-label">I need help with<select defaultValue=""><option value="" disabled>Select an area</option><option>Knee</option><option>Shoulder</option><option>Back or neck</option><option>Other injury</option></select></label><button className="button button-lime" type="submit">Request a call <ArrowRight size={18} /></button><p className="form-note"><ShieldCheck size={14} /> Your information stays private.</p></form></section>
+    <footer className="site-footer"><a className="brand footer-brand" href="#top"><span className="brand-mark"><i /><i /><i /></span><span>AMIT JHA<small>SPORTS INJURY CLINIC</small></span></a><p>Sports medicine with the clarity to move forward.</p><div><a href="#care">Care</a><a href="#appointment">Appointments</a><a href="tel:+919999999999">+91 99999 99999</a></div><small>© {new Date().getFullYear()} Dr. Amit Jha Sports Injury Clinic</small></footer>
+  </main>;
 }
