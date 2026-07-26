@@ -50,7 +50,7 @@ const config: Config = {
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
+          DEFAULT: "hsl(var(--muted-hsl))",
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
@@ -150,6 +150,19 @@ const config: Config = {
         "card-hover": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
         glow: "0 0 0 3px rgba(13, 148, 136, 0.15)",
         "glow-strong": "0 0 0 4px rgba(13, 148, 136, 0.3)",
+        glass: "0 4px 30px rgba(0, 0, 0, 0.1)",
+      },
+      transitionTimingFunction: {
+        "ease-out": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+        spring: "cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+        snappy: "cubic-bezier(0.86, 0, 0.07, 1)",
+      },
+      transitionDuration: {
+        "100": "100ms",
+        "200": "200ms",
+        "300": "300ms",
+        "500": "500ms",
+        "800": "800ms",
       },
     },
   },

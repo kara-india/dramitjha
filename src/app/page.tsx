@@ -441,94 +441,78 @@ export default function LandingPage() {
       {/* ── HERO ───────────────────────────────────────────────────────── */}
       <section
         id="about"
-        className="relative pt-12 pb-20 lg:py-28 overflow-hidden bg-[#102321] border-b border-slate-800"
+        className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden bg-[#102321] border-b border-slate-800"
         aria-labelledby="hero-heading"
       >
-        <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row gap-12 items-center">
-          {/* Doctor Photo — above fold on mobile */}
+        <div className="max-w-4xl mx-auto px-6 relative z-10 text-center lg:text-left space-y-8">
+          <motion.div initial="hidden" animate="visible" variants={fadeUp} className="space-y-4">
+            <Badge className="bg-teal-900/50 text-teal-300 border-teal-700/50 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider">
+              Varanasi&apos;s Premier Sports Medicine & Orthopedic Care
+            </Badge>
+            <h1
+              id="hero-heading"
+              className="text-5xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05]"
+            >
+              Recover Faster.{" "}
+              <br />
+              <span className="text-teal-400">Move Better.</span>
+            </h1>
+            <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+              Specialized keyhole arthroscopy, ACL reconstruction, joint preservation &amp; comprehensive sports rehabilitation tailored to get you back to peak activity safely.
+            </p>
+          </motion.div>
+
+          {/* Trust line — credentials above fold */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={fadeUp}
-            className="w-full lg:w-1/2 flex justify-center lg:order-2"
+            className="flex flex-wrap justify-center lg:justify-start gap-3 pt-1 text-xs sm:text-sm font-bold text-slate-300"
+            aria-label="Dr. Amit Jha credentials"
           >
-            <div className="relative w-full max-w-sm rounded-3xl overflow-hidden bg-gradient-to-b from-teal-900/40 to-[#102321] border border-slate-800 p-2">
-              <Image
-                src="/dr-amit-jha-cutout.png"
-                alt="Dr. Amit Kumar Jha — Senior Sports Injury & Orthopedic Specialist, Varanasi"
-                width={480}
-                height={640}
-                priority
-                quality={90}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 480px"
-                className="w-full h-auto object-cover object-top"
-              />
-            </div>
+            <span className="bg-slate-900/80 px-3.5 py-1.5 rounded-lg border border-slate-800">
+              FNB Sports Medicine (Ganga Hospital)
+            </span>
+            <span className="bg-slate-900/80 px-3.5 py-1.5 rounded-lg border border-slate-800 text-amber-400 flex items-center gap-1.5">
+              4.9{" "}
+              <Star
+                className="h-3.5 w-3.5 fill-amber-400"
+                aria-hidden="true"
+              />{" "}
+              Google Rating
+            </span>
+            <span className="bg-slate-900/80 px-3.5 py-1.5 rounded-lg border border-slate-800 text-teal-400">
+              5,000+ Surgeries
+            </span>
           </motion.div>
 
-          {/* Hero Copy */}
-          <div className="w-full lg:w-1/2 space-y-6 lg:order-1 text-center lg:text-left">
-            <motion.div initial="hidden" animate="visible" variants={fadeUp}>
-              <h1
-                id="hero-heading"
-                className="text-5xl sm:text-6xl font-black text-white tracking-tight leading-[1.05]"
+          {/* CTAs */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+            className="pt-2 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+          >
+            <a href="#booking" className="w-full sm:w-auto">
+              <Button
+                size="lg"
+                className="w-full bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 h-13 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#102321]"
+                aria-label="Book an OPD appointment with Dr. Amit Jha"
               >
-                Recover Faster.{" "}
-                <br />
-                <span className="text-teal-400">Move Better.</span>
-              </h1>
-            </motion.div>
-
-            {/* Trust line — credentials above fold */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              className="flex flex-wrap justify-center lg:justify-start gap-2 pt-2 text-xs font-bold text-slate-300"
-              aria-label="Dr. Amit Jha credentials"
-            >
-              <span>FNB Sports Medicine (Ganga Hospital)</span>
-              <span className="text-slate-600" aria-hidden="true">•</span>
-              <span className="text-amber-400 flex items-center gap-1">
-                4.9{" "}
-                <Star
-                  className="h-3 w-3 fill-amber-400"
-                  aria-hidden="true"
-                />{" "}
-                Google Rating
-              </span>
-              <span className="text-slate-600" aria-hidden="true">•</span>
-              <span className="text-teal-400">5,000+ Surgeries</span>
-            </motion.div>
-
-            {/* CTAs — booking reachable above fold on mobile */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={fadeUp}
-              className="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-            >
-              <a href="#booking" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="w-full bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 h-12 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#102321]"
-                  aria-label="Book an OPD appointment with Dr. Amit Jha"
-                >
-                  Book OPD Appointment
-                </Button>
-              </a>
-              <a href="#doctor-signature" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white h-12 px-6 focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
-                  aria-label="View Dr. Amit Jha's credentials and qualifications"
-                >
-                  View Credentials
-                </Button>
-              </a>
-            </motion.div>
-          </div>
+                Book OPD Appointment
+              </Button>
+            </a>
+            <a href="#doctor-signature" className="w-full sm:w-auto">
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white h-13 px-6 focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
+                aria-label="View Dr. Amit Jha's credentials and qualifications"
+              >
+                View Credentials
+              </Button>
+            </a>
+          </motion.div>
         </div>
       </section>
 
@@ -922,7 +906,7 @@ export default function LandingPage() {
         aria-labelledby="doctor-heading"
       >
         <div className="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 items-center">
-          {/* Photo — below fold, lazy loaded */}
+          {/* Photo — elevated hero-adjacent portrait, lazy loaded */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -930,17 +914,19 @@ export default function LandingPage() {
             variants={fadeUp}
             className="lg:col-span-5 order-2 lg:order-1 flex justify-center"
           >
-            <div className="relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 p-2">
-              <Image
-                src="/dr-amit-jha-cutout.png"
-                alt="Dr. Amit Kumar Jha in clinic"
-                width={480}
-                height={640}
-                loading="lazy"
-                quality={90}
-                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 480px"
-                className="w-full h-auto object-cover"
-              />
+            <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-gradient-to-b from-teal-950/60 via-slate-900 to-slate-950 border border-slate-800/80 p-3 shadow-2xl shadow-teal-950/60 group hover:border-teal-500/40 transition-all duration-300">
+              <div className="relative rounded-2xl overflow-hidden bg-slate-950/40">
+                <Image
+                  src="/dr-amit-jha-portrait.webp"
+                  alt="Dr. Amit Kumar Jha — Senior Sports Injury & Orthopedic Specialist, Varanasi"
+                  width={560}
+                  height={643}
+                  loading="lazy"
+                  quality={95}
+                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 560px"
+                  className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </div>
             </div>
           </motion.div>
 
