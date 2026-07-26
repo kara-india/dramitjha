@@ -2,12 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { motion } from "framer-motion";
 import {
   Activity,
-  Calendar,
   Clock,
-  Phone,
   MapPin,
   CheckCircle2,
   Award,
@@ -17,37 +16,31 @@ import {
   Stethoscope,
   ChevronRight,
   ArrowRight,
-  Sparkles,
-  User,
-  FileText,
-  Building2,
-  HeartPulse,
   Bone,
   Flame,
   Zap,
-  Check,
   ShieldAlert,
   Dumbbell,
   Target,
   Trophy,
-  Navigation,
   Compass,
-  ArrowUpRight,
-  MessageCircle,
-  Play,
-  RotateCcw,
-  CheckCircle,
-  HelpCircle,
-  ChevronDown
+  Menu,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-// 1. HSS-Grade Body Part Injury Selector Data
+// ─── DATA ──────────────────────────────────────────────────────────────────
+
 const BODY_PARTS = [
   {
     id: "knee",
@@ -58,10 +51,11 @@ const BODY_PARTS = [
       "ACL & PCL Ligament Tears",
       "Meniscus Radial & Bucket-Handle Tears",
       "Cartilage Defect & Osteochondritis",
-      "Knee Osteoarthritis & Patellar Instability"
+      "Knee Osteoarthritis & Patellar Instability",
     ],
-    solution: "Anatomic Single/Double Bundle Reconstruction, Keyhole Arthroscopy, HTO Joint Preservation",
-    recovery: "Return to Sport in 6-9 Months"
+    solution:
+      "Anatomic Single/Double Bundle Reconstruction, Keyhole Arthroscopy, HTO Joint Preservation",
+    recovery: "Return to Sport in 6–9 Months",
   },
   {
     id: "shoulder",
@@ -72,10 +66,11 @@ const BODY_PARTS = [
       "Recurrent Shoulder Dislocation (Bankart Lesion)",
       "Rotator Cuff Tear & Tendonitis",
       "SLAP Tear & Frozen Shoulder",
-      "Acromioclavicular (AC) Joint Sprains"
+      "Acromioclavicular (AC) Joint Sprains",
     ],
-    solution: "Arthroscopic Bankart Repair, Rotator Cuff Anchoring, Capsular Shift",
-    recovery: "Full Overhead Motion in 3-4 Months"
+    solution:
+      "Arthroscopic Bankart Repair, Rotator Cuff Anchoring, Capsular Shift",
+    recovery: "Full Overhead Motion in 3–4 Months",
   },
   {
     id: "elbow-wrist",
@@ -86,10 +81,11 @@ const BODY_PARTS = [
       "Lateral Epicondylitis (Tennis Elbow)",
       "Golfer's Elbow & UCL Tears",
       "TFCC Wrist Complex Tears",
-      "Carpal Tunnel Syndrome"
+      "Carpal Tunnel Syndrome",
     ],
-    solution: "Biological Injections, Tendon Release, Arthroscopic Wrist Debridement",
-    recovery: "Functional Mobility in 4-6 Weeks"
+    solution:
+      "Biological Injections, Tendon Release, Arthroscopic Wrist Debridement",
+    recovery: "Functional Mobility in 4–6 Weeks",
   },
   {
     id: "hip-spine",
@@ -100,10 +96,11 @@ const BODY_PARTS = [
       "Femoroacetabular Impingement (FAI)",
       "Hip Labral Tears & Bursitis",
       "Lumbar Strain & Lower Back Pain",
-      "Sacroiliac (SI) Joint Dysfunction"
+      "Sacroiliac (SI) Joint Dysfunction",
     ],
-    solution: "Hip Arthroscopy, Core Biomechanical Realignment, Targeted Rehab",
-    recovery: "Pain-Free Activity"
+    solution:
+      "Hip Arthroscopy, Core Biomechanical Realignment, Targeted Rehab",
+    recovery: "Pain-Free Activity",
   },
   {
     id: "ankle-foot",
@@ -114,10 +111,11 @@ const BODY_PARTS = [
       "ATFL / CFL Ankle Ligament Sprains",
       "Achilles Tendon Rupture & Tendonitis",
       "Plantar Fasciitis & Heel Spurs",
-      "Ankle Impingement & Instability"
+      "Ankle Impingement & Instability",
     ],
-    solution: "Ankle Arthroscopy, Ligament Reconstruction, Achilles Repair",
-    recovery: "Impact Readiness in 8-12 Weeks"
+    solution:
+      "Ankle Arthroscopy, Ligament Reconstruction, Achilles Repair",
+    recovery: "Impact Readiness in 8–12 Weeks",
   },
   {
     id: "pediatric",
@@ -128,54 +126,58 @@ const BODY_PARTS = [
       "Pediatric Ligament Injuries",
       "Knock Knees (Genu Valgum) & Bow Legs",
       "Flat Feet & Clubfoot Deformity",
-      "Growth Plate Fractures & Alignment Issues"
+      "Growth Plate Fractures & Alignment Issues",
     ],
-    solution: "Growth-Plate Sparing Repair, Deformity Correction, Custom Bracing",
-    recovery: "Child-Safe Protocol"
-  }
+    solution:
+      "Growth-Plate Sparing Repair, Deformity Correction, Custom Bracing",
+    recovery: "Child-Safe Protocol",
+  },
 ];
 
-// 2. Sports We Treat Cards (Nike-Inspired Performance Section)
 const SPORTS_WE_TREAT = [
   {
     sport: "Cricket",
     icon: Trophy,
     injuries: "Rotator Cuff Tears, ACL Twists, Lumbar Stress Fractures",
-    approach: "Fast-bowling biomechanics review & shoulder labral repair."
+    approach:
+      "Fast-bowling biomechanics review & shoulder labral repair.",
   },
   {
     sport: "Football",
     icon: Flame,
     injuries: "ACL/PCL Tears, Meniscus Injuries, Hamstring Pulls",
-    approach: "High-impact pivot stabilization & anatomic autograft reconstruction."
+    approach:
+      "High-impact pivot stabilization & anatomic autograft reconstruction.",
   },
   {
     sport: "Running & Marathons",
     icon: Activity,
     injuries: "Runner's Knee, IT Band Syndrome, Achilles Tendonitis",
-    approach: "Gait bio-feedback, footwear alignment & tendon shockwave care."
+    approach:
+      "Gait bio-feedback, footwear alignment & tendon shockwave care.",
   },
   {
     sport: "Gym & CrossFit",
     icon: Dumbbell,
     injuries: "Shoulder Impingement, Meniscus Flaps, Lower Back Strain",
-    approach: "Joint-sparing lifting protocols & arthroscopic repairs."
+    approach: "Joint-sparing lifting protocols & arthroscopic repairs.",
   },
   {
     sport: "Badminton & Tennis",
     icon: Zap,
     injuries: "Tennis Elbow, Shoulder SLAP Tears, Ankle Sprains",
-    approach: "Overhead racquet arm biomechanics & ligament bracing."
+    approach:
+      "Overhead racquet arm biomechanics & ligament bracing.",
   },
   {
     sport: "Cycling",
     icon: Compass,
     injuries: "Patellofemoral Pain, Collarbone Fractures, Hip Bursitis",
-    approach: "Saddle-height joint mechanics & trauma fracture fixation."
-  }
+    approach:
+      "Saddle-height joint mechanics & trauma fracture fixation.",
+  },
 ];
 
-// 3. Dual Spectrum Services Data (General Patients & Athletes)
 const SERVICES = [
   {
     id: "general-checkup",
@@ -184,7 +186,7 @@ const SERVICES = [
     title: "General Orthopedic Checkup & Joint Consultation",
     desc: "Comprehensive evaluation of joint health, arthritis risk assessment, bone density review, and personalized non-surgical or surgical care plans.",
     stats: "Same-Day OPD Appointment",
-    icon: Stethoscope
+    icon: Stethoscope,
   },
   {
     id: "acl-reconstruction",
@@ -193,7 +195,7 @@ const SERVICES = [
     title: "ACL & Multiligament Reconstruction",
     desc: "Anatomic single and double-bundle ACL & PCL reconstruction using biological autografts engineered for elite athletes and active individuals.",
     stats: "98.5% Return-to-Play Rate",
-    icon: Flame
+    icon: Flame,
   },
   {
     id: "arthroscopy",
@@ -202,7 +204,7 @@ const SERVICES = [
     title: "Knee & Shoulder Arthroscopy",
     desc: "Ultra-precise keyhole procedures for meniscus repair, cartilage restoration, Bankart repair, and shoulder stabilization with minimal tissue trauma.",
     stats: "24-Hour Hospital Discharge",
-    icon: Zap
+    icon: Zap,
   },
   {
     id: "trauma-fractures",
@@ -211,7 +213,7 @@ const SERVICES = [
     title: "Emergency Fracture & Trauma Management",
     desc: "Urgent emergency triage for bone fractures, dislocations, rigid immobilization, plaster casting, and ORIF surgical fixation.",
     stats: "Priority Triage Available",
-    icon: ShieldAlert
+    icon: ShieldAlert,
   },
   {
     id: "joint-preservation",
@@ -220,7 +222,7 @@ const SERVICES = [
     title: "Joint Preservation & Realignment (HTO/OATS)",
     desc: "High Tibial Osteotomy (HTO), OATS, and biological cartilage restoration designed to preserve the native knee and prevent total joint replacement.",
     stats: "Delays Joint Replacement",
-    icon: Bone
+    icon: Bone,
   },
   {
     id: "pediatric-ortho",
@@ -229,7 +231,7 @@ const SERVICES = [
     title: "Pediatric Growth Plate & Deformity Correction",
     desc: "Specialized pediatric care for growth-plate injuries, knock knees, bow legs, flat feet, and pediatric sports injuries.",
     stats: "Child-Safe Protocols",
-    icon: Users
+    icon: Users,
   },
   {
     id: "sports-rehab",
@@ -238,67 +240,116 @@ const SERVICES = [
     title: "Physiotherapy & Athlete Performance Rehab",
     desc: "Dedicated 30-minute private slots (11:00 AM – 1:30 PM & 3:30 PM – 8:30 PM IST) for 5-phase ACL rehab, electrotherapy, and return-to-sport testing.",
     stats: "Dedicated 30-min Slots",
-    icon: Dumbbell
-  }
+    icon: Dumbbell,
+  },
 ];
 
-// 4. Recovery Journey Timeline (Andrews Sports Medicine Style)
 const RECOVERY_STAGES = [
-  { stage: "01", name: "Symptom & Pain Assessment", desc: "Initial physical examination, range of motion & joint stability testing." },
-  { stage: "02", name: "Precision Bio-Imaging", desc: "High-resolution MRI & digital X-ray review for exact anatomical mapping." },
-  { stage: "03", name: "Targeted Treatment Plan", desc: "Tailored choice between biological preservation or keyhole surgery." },
-  { stage: "04", name: "Minimally Invasive Surgery", desc: "Keyhole arthroscopy with 24-hr discharge and minimal tissue disruption." },
-  { stage: "05", name: "Guided 5-Phase Physiotherapy", desc: "Private 30-min rehab slots, ROM expansion & progressive muscle building." },
-  { stage: "06", name: "Return to Sport Clearance", desc: "Biomechanical testing and athletic clearance for 100% field readiness." }
+  {
+    stage: "01",
+    name: "Symptom & Pain Assessment",
+    desc: "Initial physical examination, range of motion & joint stability testing.",
+  },
+  {
+    stage: "02",
+    name: "Precision Bio-Imaging",
+    desc: "High-resolution MRI & digital X-ray review for exact anatomical mapping.",
+  },
+  {
+    stage: "03",
+    name: "Targeted Treatment Plan",
+    desc: "Tailored choice between biological preservation or keyhole surgery.",
+  },
+  {
+    stage: "04",
+    name: "Minimally Invasive Surgery",
+    desc: "Keyhole arthroscopy with 24-hr discharge and minimal tissue disruption.",
+  },
+  {
+    stage: "05",
+    name: "Guided 5-Phase Physiotherapy",
+    desc: "Private 30-min rehab slots, ROM expansion & progressive muscle building.",
+  },
+  {
+    stage: "06",
+    name: "Return to Sport Clearance",
+    desc: "Biomechanical testing and athletic clearance for 100% field readiness.",
+  },
 ];
 
-// 5. Patient Reviews
 const TESTIMONIALS = [
   {
     name: "Rajesh K. Verma",
     role: "State Level Footballer",
     type: "ACL Reconstruction",
-    quote: "Dr. Amit Jha diagnosed my ACL tear instantly. The anatomic reconstruction and guided rehab got me back on the pitch in 6 months with 100% knee stability!",
-    rating: 5
+    quote:
+      "Dr. Amit Jha diagnosed my ACL tear instantly. The anatomic reconstruction and guided rehab got me back on the pitch in 6 months with 100% knee stability!",
+    rating: 5,
   },
   {
     name: "Smt. Sunita Devi",
     role: "General Patient (Age 54)",
     type: "Knee Arthritis & Joint Preservation",
-    quote: "I was struggling with severe knee pain for 3 years. Dr. Amit Jha's joint preservation checkup gave me back smooth, painless walking without knee replacement.",
-    rating: 5
+    quote:
+      "I was struggling with severe knee pain for 3 years. Dr. Amit Jha's joint preservation checkup gave me back smooth, painless walking without knee replacement.",
+    rating: 5,
   },
   {
     name: "Vikramaditya Singh",
     role: "Marathon Runner",
     type: "Meniscus Repair & Cartilage Care",
-    quote: "The best sports injury specialist in Poorvanchal. Keyhole surgery, minimal scar, negligible pain, and a highly scientific return-to-running protocol.",
-    rating: 5
-  }
+    quote:
+      "The best sports injury specialist in Poorvanchal. Keyhole surgery, minimal scar, negligible pain, and a highly scientific return-to-running protocol.",
+    rating: 5,
+  },
 ];
 
 const TIME_SLOTS = [
-  "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "01:00 PM",
-  "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM", "06:00 PM", "07:00 PM", "08:00 PM"
+  "11:00 AM",
+  "11:30 AM",
+  "12:00 PM",
+  "12:30 PM",
+  "01:00 PM",
+  "03:30 PM",
+  "04:00 PM",
+  "04:30 PM",
+  "05:00 PM",
+  "05:30 PM",
+  "06:00 PM",
+  "07:00 PM",
+  "08:00 PM",
 ];
+
+// ─── ANIMATION VARIANTS ────────────────────────────────────────────────────
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const } },
+};
+
+const stagger = {
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+// ─── COMPONENT ─────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
   const [selectedBodyPart, setSelectedBodyPart] = useState(BODY_PARTS[0]);
-  const [activeServiceTab, setActiveServiceTab] = useState("all");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
-  // Booking Form State
+  // Booking state
   const [bookingStep, setBookingStep] = useState(1);
-  const [selectedService, setSelectedService] = useState("General Orthopedic Checkup & Joint Consultation");
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+  const [selectedService, setSelectedService] = useState(
+    "General Orthopedic Checkup & Joint Consultation"
+  );
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [selectedSlot, setSelectedSlot] = useState("11:30 AM");
   const [patientName, setPatientName] = useState("");
   const [patientPhone, setPatientPhone] = useState("");
   const [complaint, setComplaint] = useState("");
   const [isBooked, setIsBooked] = useState(false);
-
-  const filteredServices = activeServiceTab === "all"
-    ? SERVICES
-    : SERVICES.filter((s) => s.type === activeServiceTab);
 
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -306,710 +357,1137 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-teal-400 selection:text-slate-950 relative overflow-x-hidden">
-      {/* Top High-Performance Announcement Bar */}
-      <div className="bg-gradient-to-r from-teal-700 via-emerald-600 to-teal-800 text-white text-xs font-bold py-2.5 px-4 text-center flex items-center justify-center gap-2 shadow-lg">
-        <Sparkles className="h-4 w-4 text-teal-200 animate-pulse" />
-        <span>Dr. Amit Jha OPD Timings (Varanasi): Morning 11:00 AM – 1:30 PM | Evening 3:30 PM – 8:30 PM IST</span>
-        <a href="#booking" className="underline font-black hover:text-teal-200 ml-2">Book OPD Slot →</a>
-      </div>
-
-      {/* Navigation Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-2xl bg-slate-950/90 border-b border-teal-900/40">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-teal-400 via-emerald-500 to-teal-600 flex items-center justify-center text-slate-950 font-black shadow-lg shadow-teal-500/25">
+    <div
+      className="min-h-screen bg-[#102321] text-slate-300 font-sans selection:bg-[#d5f14c] selection:text-[#102321] relative overflow-x-hidden"
+      role="main"
+    >
+      {/* ── NAVIGATION ─────────────────────────────────────────────────── */}
+      <header
+        className="sticky top-0 z-50 backdrop-blur-2xl bg-[#102321]/90 border-b border-slate-800"
+        role="banner"
+      >
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          {/* Brand */}
+          <a href="#" className="flex items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">
+            <div
+              className="h-10 w-10 rounded-xl bg-[#d5f14c] flex items-center justify-center text-[#102321] font-black shadow-lg"
+              aria-hidden="true"
+            >
               <Activity className="h-6 w-6" />
             </div>
-            <div>
-              <span className="text-xl font-black tracking-tight text-white block">
-                Dr. Amit Jha
-              </span>
-              <span className="text-[11px] text-teal-400 font-semibold tracking-wide">
-                Sports Injury & Orthopedic Clinic, Varanasi
-              </span>
-            </div>
-          </div>
+            <span className="text-xl font-black tracking-tight text-white">
+              Dr. Amit Jha
+            </span>
+          </a>
 
-          <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-300">
-            <a href="#about" className="hover:text-teal-400 transition-colors">About</a>
-            <a href="#navigator" className="hover:text-teal-400 transition-colors">Body Navigator</a>
-            <a href="#sports" className="hover:text-teal-400 transition-colors">Sports We Treat</a>
-            <a href="#services" className="hover:text-teal-400 transition-colors">Services</a>
-            <a href="#doctor-signature" className="hover:text-teal-400 transition-colors">Dr. Amit Jha</a>
-            <a href="#booking" className="hover:text-teal-400 transition-colors">Book OPD</a>
+          {/* Desktop Nav */}
+          <nav
+            className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-300"
+            aria-label="Primary navigation"
+          >
+            <a href="#about" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">About</a>
+            <a href="#navigator" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Body Navigator</a>
+            <a href="#sports" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Sports We Treat</a>
+            <a href="#services" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Services</a>
+            <a href="#booking" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Book OPD</a>
           </nav>
 
           <div className="flex items-center gap-3">
-            <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="hidden sm:inline-flex">
-              <Button variant="outline" className="border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/40">
-                <MessageCircle className="mr-2 h-4 w-4 fill-emerald-400/20" /> WhatsApp
-              </Button>
-            </a>
             <Link href="/login">
-              <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-900 border border-slate-800">
+              <Button
+                variant="ghost"
+                className="text-slate-300 hover:text-white hover:bg-slate-900 border border-slate-800 focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
+                aria-label="Staff ERP Portal login"
+              >
                 Staff ERP
               </Button>
             </Link>
-            <a href="#booking">
-              <Button className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-black shadow-xl shadow-teal-500/30">
-                <Calendar className="mr-2 h-4 w-4" /> Book Appointment
-              </Button>
-            </a>
+            {/* Mobile hamburger */}
+            <button
+              className="lg:hidden p-2 text-slate-300 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm"
+              onClick={() => setMobileNavOpen(!mobileNavOpen)}
+              aria-expanded={mobileNavOpen}
+              aria-controls="mobile-nav"
+              aria-label={mobileNavOpen ? "Close navigation menu" : "Open navigation menu"}
+            >
+              {mobileNavOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Nav Drawer */}
+        {mobileNavOpen && (
+          <nav
+            id="mobile-nav"
+            className="lg:hidden bg-slate-950 border-t border-slate-800 px-6 py-4 flex flex-col gap-4 text-sm font-semibold"
+            aria-label="Mobile navigation"
+          >
+            {["#about", "#navigator", "#sports", "#services", "#booking"].map(
+              (href) => (
+                <a
+                  key={href}
+                  href={href}
+                  className="text-slate-300 hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm py-1 capitalize"
+                  onClick={() => setMobileNavOpen(false)}
+                >
+                  {href.replace("#", "").replace("-", " ")}
+                </a>
+              )
+            )}
+          </nav>
+        )}
       </header>
 
-      {/* HERO SECTION — Cinematic Headline & Performance Energy */}
-      <section id="about" className="relative py-20 lg:py-28 overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-b border-teal-900/30">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(20,184,166,0.18),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(16,185,129,0.12),transparent_60%)]" />
-
-        <div className="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 items-center">
-          {/* Left Column Content */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-bold backdrop-blur-md">
-              <Award className="h-4 w-4 text-teal-400" /> FNB Sports Medicine (Ganga Hospital, Coimbatore) • MS & DNB Ortho
+      {/* ── HERO ───────────────────────────────────────────────────────── */}
+      <section
+        id="about"
+        className="relative pt-12 pb-20 lg:py-28 overflow-hidden bg-[#102321] border-b border-slate-800"
+        aria-labelledby="hero-heading"
+      >
+        <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col lg:flex-row gap-12 items-center">
+          {/* Doctor Photo — above fold on mobile */}
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeUp}
+            className="w-full lg:w-1/2 flex justify-center lg:order-2"
+          >
+            <div className="relative w-full max-w-sm rounded-3xl overflow-hidden bg-gradient-to-b from-teal-900/40 to-[#102321] border border-slate-800 p-2">
+              <Image
+                src="/dr-amit-jha-cutout.png"
+                alt="Dr. Amit Kumar Jha — Senior Sports Injury & Orthopedic Specialist, Varanasi"
+                width={480}
+                height={640}
+                priority
+                quality={90}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 480px"
+                className="w-full h-auto object-cover object-top"
+              />
             </div>
+          </motion.div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05]">
-              Recover Faster. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-emerald-400 to-teal-100">
-                Move Better.
-              </span> <br />
-              Return Stronger.
-            </h1>
+          {/* Hero Copy */}
+          <div className="w-full lg:w-1/2 space-y-6 lg:order-1 text-center lg:text-left">
+            <motion.div initial="hidden" animate="visible" variants={fadeUp}>
+              <h1
+                id="hero-heading"
+                className="text-5xl sm:text-6xl font-black text-white tracking-tight leading-[1.05]"
+              >
+                Recover Faster.{" "}
+                <br />
+                <span className="text-teal-400">Move Better.</span>
+              </h1>
+            </motion.div>
 
-            <p className="text-base sm:text-lg text-slate-300 leading-relaxed font-normal max-w-2xl">
-              Specialized Sports Medicine & Orthopedic Care led by <strong className="text-white font-bold">Dr. Amit Kumar Jha</strong> in Varanasi. Providing expert General Checkups, ACL Reconstruction, Arthroscopic Surgery, Fracture Care, and Dedicated Sports Rehabilitation.
-            </p>
+            {/* Trust line — credentials above fold */}
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="flex flex-wrap justify-center lg:justify-start gap-2 pt-2 text-xs font-bold text-slate-300"
+              aria-label="Dr. Amit Jha credentials"
+            >
+              <span>FNB Sports Medicine (Ganga Hospital)</span>
+              <span className="text-slate-600" aria-hidden="true">•</span>
+              <span className="text-amber-400 flex items-center gap-1">
+                4.9{" "}
+                <Star
+                  className="h-3 w-3 fill-amber-400"
+                  aria-hidden="true"
+                />{" "}
+                Google Rating
+              </span>
+              <span className="text-slate-600" aria-hidden="true">•</span>
+              <span className="text-teal-400">5,000+ Surgeries</span>
+            </motion.div>
 
-            {/* Target Audience Badges */}
-            <div className="flex flex-wrap gap-2 pt-2">
-              <span className="px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs text-teal-300 font-semibold">⚡ Professional & Amateur Athletes</span>
-              <span className="px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs text-teal-300 font-semibold">🏃 Marathoners & Cricketers</span>
-              <span className="px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs text-teal-300 font-semibold">🦵 Knee & Joint Pain Patients</span>
-              <span className="px-3 py-1 rounded-md bg-slate-900 border border-slate-800 text-xs text-teal-300 font-semibold">🩺 General Checkups & Trauma</span>
-            </div>
-
-            {/* Hero CTAs */}
-            <div className="pt-4 flex flex-wrap gap-4">
-              <a href="#booking">
-                <Button size="lg" className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-black text-base px-8 h-12 shadow-2xl shadow-teal-500/30">
-                  <Calendar className="mr-2 h-5 w-5" /> Book Appointment
+            {/* CTAs — booking reachable above fold on mobile */}
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+            >
+              <a href="#booking" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  className="w-full bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 h-12 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#102321]"
+                  aria-label="Book an OPD appointment with Dr. Amit Jha"
+                >
+                  Book OPD Appointment
                 </Button>
               </a>
-              <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer">
-                <Button size="lg" variant="outline" className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-950/40 h-12 px-6">
-                  <MessageCircle className="mr-2 h-5 w-5 fill-emerald-400/20" /> WhatsApp Consultation
+              <a href="#doctor-signature" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white h-12 px-6 focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
+                  aria-label="View Dr. Amit Jha's credentials and qualifications"
+                >
+                  View Credentials
                 </Button>
               </a>
-            </div>
-          </div>
-
-          {/* Right Column Image Banner */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md rounded-3xl bg-gradient-to-br from-teal-500/30 via-slate-900 to-slate-950 border-2 border-teal-500/40 p-4 shadow-2xl shadow-teal-500/20">
-              <div className="relative rounded-2xl overflow-hidden bg-slate-950 min-h-[460px] flex items-end justify-center">
-                <img
-                  src="/dr-amit-jha-cutout.png"
-                  alt="Dr. Amit Kumar Jha"
-                  className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute bottom-4 left-4 right-4 backdrop-blur-xl bg-slate-950/90 border border-teal-500/50 rounded-xl p-4 shadow-2xl">
-                  <h3 className="font-extrabold text-white text-base">Dr. Amit Kumar Jha</h3>
-                  <p className="text-xs text-teal-400 font-semibold">Orthopedic & Sports Medicine Surgeon</p>
-                </div>
-              </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* TRUST BAR — Key Credentials & Statistics */}
-      <section className="py-8 bg-slate-900/90 border-b border-teal-900/30 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <div className="text-3xl sm:text-4xl font-black text-white">10+ Yrs</div>
-            <div className="text-xs text-slate-400 font-semibold mt-1">Surgical Experience</div>
-          </div>
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <div className="text-3xl sm:text-4xl font-black text-teal-400">5,000+</div>
-            <div className="text-xs text-slate-400 font-semibold mt-1">Successful Surgeries</div>
-          </div>
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <div className="text-3xl sm:text-4xl font-black text-emerald-400">98.5%</div>
-            <div className="text-xs text-slate-400 font-semibold mt-1">Return-to-Sport Rate</div>
-          </div>
-          <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800">
-            <div className="text-3xl sm:text-4xl font-black text-amber-400 flex items-center justify-center gap-1">
-              4.9 <Star className="h-5 w-5 fill-amber-400 text-amber-400" />
-            </div>
-            <div className="text-xs text-slate-400 font-semibold mt-1">Google Patient Rating</div>
-          </div>
-        </div>
-      </section>
-
-      {/* HSS-GRADE INTERACTIVE BODY-PART INJURY NAVIGATOR */}
-      <section id="navigator" className="py-20 bg-slate-950 border-b border-teal-900/30">
+      {/* ── TRUST ANCHORS ──────────────────────────────────────────────── */}
+      <section
+        className="py-8 bg-slate-950 border-b border-slate-800"
+        aria-label="Clinical outcomes and trust statistics"
+      >
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center space-y-4 mb-12">
-            <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
-              HSS Clinical Diagnostic Tool
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              Interactive Body-Part Injury Selector
+          <motion.dl
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+            className="flex flex-wrap justify-center gap-10 text-center"
+          >
+            {[
+              { value: "5,000+", label: "Surgeries Performed" },
+              { value: "98.5%", label: "Return-to-Sport Rate", accent: "teal" },
+              { value: "4.9/5", label: "Google Patient Rating", accent: "lime" },
+              { value: "24 hrs", label: "Keyhole Discharge Time" },
+            ].map(({ value, label, accent }) => (
+              <motion.div key={label} variants={fadeUp} className="flex flex-col">
+                <dt className="sr-only">{label}</dt>
+                <dd
+                  className={`text-2xl font-black ${
+                    accent === "teal"
+                      ? "text-teal-400"
+                      : accent === "lime"
+                      ? "text-[#d5f14c]"
+                      : "text-white"
+                  }`}
+                >
+                  {value}
+                </dd>
+                <span className="text-xs text-slate-400 uppercase tracking-wider mt-0.5">
+                  {label}
+                </span>
+              </motion.div>
+            ))}
+          </motion.dl>
+        </div>
+      </section>
+
+      {/* ── BODY NAVIGATOR ─────────────────────────────────────────────── */}
+      <section
+        id="navigator"
+        className="py-20 bg-[#102321] border-b border-slate-800"
+        aria-labelledby="navigator-heading"
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="text-center space-y-4 mb-12"
+          >
+            <h2
+              id="navigator-heading"
+              className="text-3xl sm:text-4xl font-extrabold text-white"
+            >
+              Interactive Body-Part Selector
             </h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm">
-              Click on an affected joint or anatomical area to explore common conditions, symptoms, and targeted treatment solutions.
+              Click on an affected joint or anatomical area to explore common
+              conditions and our treatment approach.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-12 gap-8 items-start">
-            {/* Left Body Part List */}
-            <div className="lg:col-span-5 space-y-3">
-              {BODY_PARTS.map((bp) => {
+            {/* Body part list */}
+            <div
+              className="lg:col-span-5 space-y-3"
+              role="listbox"
+              aria-label="Select body part"
+              aria-activedescendant={`bodypart-${selectedBodyPart.id}`}
+            >
+              {BODY_PARTS.map((bp, idx) => {
                 const Icon = bp.icon;
                 const isSelected = selectedBodyPart.id === bp.id;
                 return (
-                  <div
+                  <motion.div
                     key={bp.id}
+                    id={`bodypart-${bp.id}`}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={fadeUp}
+                    custom={idx}
+                    role="option"
+                    aria-selected={isSelected}
+                    tabIndex={0}
                     onClick={() => setSelectedBodyPart(bp)}
-                    className={`p-4 rounded-2xl border cursor-pointer transition-all ${
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setSelectedBodyPart(bp);
+                      }
+                    }}
+                    className={`p-4 rounded-2xl border cursor-pointer transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#d5f14c] ${
                       isSelected
-                        ? "bg-gradient-to-r from-teal-500/20 to-emerald-500/10 border-teal-400 text-white shadow-xl"
-                        : "bg-slate-900/80 border-slate-800/80 text-slate-400 hover:bg-slate-900 hover:text-white"
+                        ? "bg-slate-900 border-teal-400 text-white shadow-xl"
+                        : "bg-slate-950/50 border-slate-800 text-slate-400 hover:bg-slate-900 hover:text-white"
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${isSelected ? "bg-teal-400 text-slate-950" : "bg-slate-800 text-teal-400"}`}>
+                        <div
+                          className={`h-10 w-10 rounded-xl flex items-center justify-center ${
+                            isSelected
+                              ? "bg-teal-400 text-[#102321]"
+                              : "bg-slate-800 text-teal-400"
+                          }`}
+                          aria-hidden="true"
+                        >
                           <Icon className="h-5 w-5" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-sm text-white">{bp.name}</h4>
+                          <h3 className="font-bold text-sm text-white">{bp.name}</h3>
                           <p className="text-xs text-slate-400">{bp.subtitle}</p>
                         </div>
                       </div>
-                      <ChevronRight className={`h-5 w-5 transition-transform ${isSelected ? "translate-x-1 text-teal-400" : "text-slate-600"}`} />
+                      <ChevronRight
+                        className={`h-5 w-5 transition-transform ${
+                          isSelected
+                            ? "translate-x-1 text-teal-400"
+                            : "text-slate-600"
+                        }`}
+                        aria-hidden="true"
+                      />
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
 
-            {/* Right Injury Details Display */}
-            <div className="lg:col-span-7">
-              <Card className="bg-slate-900/90 border border-teal-500/40 shadow-2xl p-6 space-y-6">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                  <div>
-                    <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 mb-2">
-                      Clinical Focus
+            {/* Condition detail panel */}
+            <div className="lg:col-span-7" aria-live="polite" aria-atomic="true">
+              <motion.div
+                key={selectedBodyPart.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Card className="bg-slate-900 border border-slate-800 shadow-2xl p-6 space-y-6">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <h3 className="text-2xl font-black text-white">
+                      {selectedBodyPart.name} Conditions
+                    </h3>
+                    <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-xs">
+                      {selectedBodyPart.recovery}
                     </Badge>
-                    <h3 className="text-2xl font-black text-white">{selectedBodyPart.name} Conditions</h3>
                   </div>
-                  <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-xs">
-                    {selectedBodyPart.recovery}
-                  </Badge>
-                </div>
 
-                <div className="space-y-4">
-                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Commonly Diagnosed Conditions</h4>
-                  <div className="grid sm:grid-cols-2 gap-3">
-                    {selectedBodyPart.conditions.map((cond, i) => (
-                      <div key={i} className="flex items-center gap-2.5 bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs text-slate-200">
-                        <CheckCircle2 className="h-4 w-4 text-teal-400 shrink-0" />
-                        <span>{cond}</span>
-                      </div>
-                    ))}
+                  <div className="space-y-4">
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                      Commonly Diagnosed Conditions
+                    </h4>
+                    <ul className="grid sm:grid-cols-2 gap-3" role="list">
+                      {selectedBodyPart.conditions.map((cond, i) => (
+                        <li
+                          key={i}
+                          className="flex items-center gap-2.5 bg-[#102321] p-3 rounded-xl border border-slate-800 text-xs text-slate-200"
+                        >
+                          <CheckCircle2
+                            className="h-4 w-4 text-teal-400 shrink-0"
+                            aria-hidden="true"
+                          />
+                          {cond}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                </div>
 
-                <div className="pt-4 border-t border-slate-800 space-y-2">
-                  <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Treatment & Procedure Approach</h4>
-                  <p className="text-sm text-teal-300 font-semibold">{selectedBodyPart.solution}</p>
-                </div>
-
-                <div className="pt-4 flex justify-end">
-                  <a href="#booking">
-                    <Button className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-bold">
-                      Book OPD for {selectedBodyPart.name} <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </a>
-                </div>
-              </Card>
+                  <div className="pt-4 border-t border-slate-800 space-y-2">
+                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                      Treatment Approach
+                    </h4>
+                    <p className="text-sm text-teal-300 font-semibold">
+                      {selectedBodyPart.solution}
+                    </p>
+                  </div>
+                </Card>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* NIKE-INSPIRED SPORTS WE TREAT SECTION */}
-      <section id="sports" className="py-20 bg-slate-900 border-b border-teal-900/30">
+      {/* ── SPORTS WE TREAT ────────────────────────────────────────────── */}
+      <section
+        id="sports"
+        className="py-20 bg-slate-950 border-b border-slate-800"
+        aria-labelledby="sports-heading"
+      >
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center space-y-4 mb-16">
-            <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
-              Athletic Performance Medicine
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              Sports We Treat & Biomechanical Protocols
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="text-center space-y-4 mb-16"
+          >
+            <h2
+              id="sports-heading"
+              className="text-3xl sm:text-4xl font-extrabold text-white"
+            >
+              Sports We Treat
             </h2>
-            <p className="text-slate-400 max-w-2xl mx-auto text-sm">
-              Tailored orthopedic care and return-to-sport testing customized for specific athletic disciplines.
+            <p className="text-slate-400 max-w-xl mx-auto text-sm">
+              Specialist protocols for every athletic discipline — from elite
+              competition to weekend recreation.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
             {SPORTS_WE_TREAT.map((item, idx) => {
               const Icon = item.icon;
               return (
-                <Card key={idx} className="bg-slate-950 border-slate-800 hover:border-teal-500/40 transition-all flex flex-col justify-between">
-                  <CardHeader>
-                    <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 mb-4">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <CardTitle className="text-xl text-white font-bold">{item.sport}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <p className="text-xs text-slate-300"><strong>Common Injuries:</strong> {item.injuries}</p>
-                    <p className="text-xs text-teal-400 font-semibold pt-2 border-t border-slate-800">
-                      <strong>Care Approach:</strong> {item.approach}
-                    </p>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* RECOVERY JOURNEY TIMELINE (Andrews Sports Medicine Style) */}
-      <section className="py-20 bg-slate-950 border-b border-teal-900/30">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center space-y-4 mb-16">
-            <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
-              Patient Care Continuum
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              The 6-Stage Recovery Journey
-            </h2>
-            <p className="text-slate-400 max-w-2xl mx-auto text-sm">
-              From your initial symptom assessment to 100% athletic clearance and pain-free living.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {RECOVERY_STAGES.map((stg, i) => (
-              <div key={i} className="bg-slate-900 p-5 rounded-2xl border border-slate-800 flex flex-col justify-between hover:border-teal-500/50 transition-all">
-                <div className="text-2xl font-black text-teal-400 mb-2">{stg.stage}</div>
-                <h4 className="font-bold text-sm text-white mb-1">{stg.name}</h4>
-                <p className="text-xs text-slate-400 leading-relaxed">{stg.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* DUAL SPECTRUM SERVICES SECTION */}
-      <section id="services" className="py-20 bg-slate-900 border-b border-teal-900/30">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center space-y-4 mb-12">
-            <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
-              Complete Clinical Spectrum
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              General Orthopedics, Trauma & Sports Medicine
-            </h2>
-            <p className="text-slate-400 max-w-2xl mx-auto text-sm">
-              Comprehensive care for joint pain, general checkups, fractures, pediatric deformities, keyhole surgeries, and specialized rehab.
-            </p>
-          </div>
-
-          {/* Filter Category Tabs */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            <button
-              onClick={() => setActiveServiceTab("all")}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeServiceTab === "all" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-950 border border-slate-800 text-slate-400 hover:text-white"}`}
-            >
-              All Clinical Services
-            </button>
-            <button
-              onClick={() => setActiveServiceTab("general")}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeServiceTab === "general" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-950 border border-slate-800 text-slate-400 hover:text-white"}`}
-            >
-              General Orthopedics & Checkups
-            </button>
-            <button
-              onClick={() => setActiveServiceTab("sports")}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeServiceTab === "sports" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-950 border border-slate-800 text-slate-400 hover:text-white"}`}
-            >
-              Athlete Sports & Ligament Surgery
-            </button>
-            <button
-              onClick={() => setActiveServiceTab("rehab")}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${activeServiceTab === "rehab" ? "bg-gradient-to-r from-teal-400 to-emerald-500 text-slate-950 shadow-lg" : "bg-slate-950 border border-slate-800 text-slate-400 hover:text-white"}`}
-            >
-              Physiotherapy & Rehab
-            </button>
-          </div>
-
-          {/* Services Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredServices.map((s) => {
-              const Icon = s.icon;
-              return (
-                <Card key={s.id} className="bg-slate-950 border border-slate-800 hover:border-teal-400/60 transition-all group flex flex-col justify-between">
-                  <CardHeader>
-                    <div className="flex justify-between items-start mb-3">
-                      <div className="h-12 w-12 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-300 group-hover:scale-110 transition-transform">
+                <motion.div key={idx} variants={fadeUp} className="h-full">
+                  <Card className="bg-[#102321] border-slate-800 hover:border-teal-500/40 transition-all flex flex-col justify-between h-full">
+                    <CardHeader>
+                      <div
+                        className="h-12 w-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-teal-400 mb-4"
+                        aria-hidden="true"
+                      >
                         <Icon className="h-6 w-6" />
                       </div>
-                      <Badge variant="outline" className="bg-slate-900 border-slate-700 text-teal-300 text-[11px]">
-                        {s.badge}
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-lg text-white font-bold">{s.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <p className="text-slate-300 text-xs leading-relaxed">{s.desc}</p>
-                    <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-teal-400 font-bold">
-                      <span>{s.stats}</span>
-                      <a href="#booking" className="flex items-center gap-1 hover:underline">
-                        Book <ChevronRight className="h-4 w-4" />
-                      </a>
-                    </div>
-                  </CardContent>
-                </Card>
+                      <CardTitle className="text-xl text-white font-bold">
+                        {item.sport}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      <p className="text-xs text-slate-300">
+                        <strong>Common Injuries:</strong> {item.injuries}
+                      </p>
+                      <p className="text-xs text-teal-400 font-semibold pt-2 border-t border-slate-800">
+                        <strong>Care Approach:</strong> {item.approach}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* DOCTOR SIGNATURE BANNER — "Meet Dr. Amit Jha" (The Emotional Trust Anchor) */}
-      <section id="doctor-signature" className="py-24 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-b border-teal-900/30 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 items-center">
-          {/* Doctor Portrait Column (Transparent PNG Cutout) */}
-          <div className="lg:col-span-5 relative order-2 lg:order-1 flex justify-center">
-            <div className="relative max-w-sm w-full">
-              <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-teal-500/10 via-slate-900 to-slate-950 border border-teal-500/30 p-2 shadow-2xl">
-                <img
-                  src="/dr-amit-jha-cutout.png"
-                  alt="Dr. Amit Kumar Jha - Senior Orthopedic & Sports Medicine Surgeon"
-                  className="w-full h-auto object-cover object-top hover:scale-105 transition-transform duration-500 filter drop-shadow-2xl"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Doctor Bio & Credentials */}
-          <div className="lg:col-span-7 space-y-6 order-1 lg:order-2">
-            <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
-              Meet Your Surgeon
-            </Badge>
-
-            <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-              Dr. Amit Kumar Jha
-            </h2>
-
-            <p className="text-base text-teal-300 font-semibold">
-              Senior Sports Injury Specialist • Keyhole Arthroscopy & Joint Preservation Surgeon
-            </p>
-
-            <blockquote className="italic text-slate-300 text-sm border-l-4 border-teal-400 pl-4 py-1 leading-relaxed bg-slate-900/50 rounded-r-xl">
-              &ldquo;My commitment is to provide evidence-based orthopedic care that restores full joint stability, eliminates pain, and enables every patient—from professional athletes to active individuals—to return confidently to the activities they love.&rdquo;
-            </blockquote>
-
-            {/* Verified Qualifications & Memberships */}
-            <div className="space-y-3 pt-2">
-              <div className="flex items-center gap-3 bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs">
-                <Award className="h-5 w-5 text-teal-400 shrink-0" />
-                <span><strong>FNB Sports Medicine:</strong> Fellowship Trained at Ganga Hospital & Medical Centre, Coimbatore</span>
-              </div>
-              <div className="flex items-center gap-3 bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs">
-                <Award className="h-5 w-5 text-teal-400 shrink-0" />
-                <span><strong>Postgraduate Degrees:</strong> MS Orthopaedics & DNB Orthopaedics (National Board of Examination)</span>
-              </div>
-              <div className="flex items-center gap-3 bg-slate-900 p-3 rounded-xl border border-slate-800 text-xs">
-                <Building2 className="h-5 w-5 text-teal-400 shrink-0" />
-                <span><strong>Hospital Affiliations:</strong> Apex Super Specialty Hospital & Dr. Amit Jha Sports Clinic, Varanasi</span>
-              </div>
-            </div>
-
-            <div className="pt-4 flex flex-wrap gap-4">
-              <a href="#booking">
-                <Button size="lg" className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-extrabold px-8 h-12 shadow-xl shadow-teal-500/25">
-                  <Calendar className="mr-2 h-5 w-5" /> Book Consultation with Dr. Jha
-                </Button>
-              </a>
-              <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer">
-                <Button size="lg" variant="outline" className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-950/40 h-12 px-6">
-                  <MessageCircle className="mr-2 h-5 w-5 fill-emerald-400/20" /> WhatsApp Dr. Jha&apos;s Team
-                </Button>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* APPLE/STEADMAN-INSPIRED CONVERSION BOOKING WIZARD */}
-      <section id="booking" className="py-20 bg-slate-900 border-b border-teal-900/30">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center space-y-4 mb-12">
-            <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
-              Instant OPD Token Booking
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              Schedule Your Consultation with Dr. Amit Jha
+      {/* ── SERVICES ───────────────────────────────────────────────────── */}
+      <section
+        id="services"
+        className="py-20 bg-[#102321] border-b border-slate-800"
+        aria-labelledby="services-heading"
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="text-center space-y-4 mb-16"
+          >
+            <h2
+              id="services-heading"
+              className="text-3xl sm:text-4xl font-extrabold text-white"
+            >
+              Our Services
             </h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm">
-              Instant appointment token generation with automated queue confirmation.
+              Dual-spectrum care covering both general orthopedic patients and
+              elite athletes — under one roof.
             </p>
-          </div>
+          </motion.div>
 
-          <Card className="bg-slate-950 border border-slate-800 shadow-2xl overflow-hidden">
-            <CardHeader className="bg-slate-900/80 border-b border-slate-800 pb-6">
-              <div className="grid grid-cols-3 gap-4 text-center max-w-lg mx-auto">
-                <div className={`pb-2 border-b-2 font-bold text-xs ${bookingStep >= 1 ? "border-teal-400 text-teal-400" : "border-slate-800 text-slate-600"}`}>
-                  1. Service & Slot
-                </div>
-                <div className={`pb-2 border-b-2 font-bold text-xs ${bookingStep >= 2 ? "border-teal-400 text-teal-400" : "border-slate-800 text-slate-600"}`}>
-                  2. Patient Info
-                </div>
-                <div className={`pb-2 border-b-2 font-bold text-xs ${bookingStep >= 3 ? "border-teal-400 text-teal-400" : "border-slate-800 text-slate-600"}`}>
-                  3. Digital Token
-                </div>
-              </div>
-            </CardHeader>
-
-            <CardContent className="p-8">
-              {isBooked ? (
-                <div className="text-center py-10 space-y-6">
-                  <div className="h-20 w-20 bg-teal-500/20 text-teal-400 rounded-full flex items-center justify-center mx-auto border border-teal-500/40 shadow-xl">
-                    <CheckCircle2 className="h-10 w-10" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-black text-white">OPD Appointment Confirmed!</h3>
-                    <p className="text-slate-400 text-sm mt-1">Your consultation token has been reserved in the live queue.</p>
-                  </div>
-                  <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 max-w-md mx-auto text-left space-y-3">
-                    <div className="flex justify-between border-b border-slate-800 pb-2">
-                      <span className="text-slate-400 text-xs">Token Number</span>
-                      <span className="text-teal-400 font-mono font-bold text-sm">KH-2026-0850</span>
-                    </div>
-                    <div className="flex justify-between border-b border-slate-800 pb-2">
-                      <span className="text-slate-400 text-xs">Patient Name</span>
-                      <span className="text-white text-xs font-bold">{patientName || "Patient"}</span>
-                    </div>
-                    <div className="flex justify-between border-b border-slate-800 pb-2">
-                      <span className="text-slate-400 text-xs">Service</span>
-                      <span className="text-white text-xs font-semibold">{selectedService}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 text-xs">Date & Time Slot</span>
-                      <span className="text-white text-xs font-semibold">{selectedDate} @ {selectedSlot}</span>
-                    </div>
-                  </div>
-                  <Button onClick={() => setIsBooked(false)} className="bg-teal-400 hover:bg-teal-300 text-slate-950 font-bold">
-                    Book Another Appointment
-                  </Button>
-                </div>
-              ) : (
-                <form onSubmit={handleBookingSubmit} className="space-y-8">
-                  {bookingStep === 1 && (
-                    <div className="space-y-6">
-                      <div>
-                        <Label className="text-slate-300 mb-3 block text-xs font-bold uppercase tracking-wider">
-                          Select Required Service
-                        </Label>
-                        <div className="grid sm:grid-cols-2 gap-3">
-                          {SERVICES.map((srv) => (
-                            <div
-                              key={srv.id}
-                              onClick={() => setSelectedService(srv.title)}
-                              className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                                selectedService === srv.title
-                                  ? "bg-teal-500/10 border-teal-400 text-white shadow-md"
-                                  : "bg-slate-900 border-slate-800 text-slate-400 hover:bg-slate-850"
-                              }`}
-                            >
-                              <div className="flex items-center justify-between font-bold text-xs">
-                                <span>{srv.title}</span>
-                                {selectedService === srv.title && <CheckCircle2 className="h-4 w-4 text-teal-400" />}
-                              </div>
-                              <p className="text-[11px] text-slate-500 mt-1 line-clamp-2">{srv.desc}</p>
-                            </div>
-                          ))}
-                        </div>
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {SERVICES.map((srv) => {
+              const Icon = srv.icon;
+              return (
+                <motion.div key={srv.id} variants={fadeUp}>
+                  <Card className="bg-slate-900 border-slate-800 hover:border-teal-500/30 transition-all h-full flex flex-col">
+                    <CardHeader className="pb-3">
+                      <Badge
+                        className="w-fit text-xs mb-3 bg-teal-900/40 text-teal-300 border-teal-800"
+                        aria-label={`Service category: ${srv.badge}`}
+                      >
+                        {srv.badge}
+                      </Badge>
+                      <div
+                        className="h-10 w-10 rounded-xl bg-[#102321] border border-slate-800 flex items-center justify-center text-teal-400 mb-2"
+                        aria-hidden="true"
+                      >
+                        <Icon className="h-5 w-5" />
                       </div>
-
-                      <div className="grid sm:grid-cols-2 gap-6">
-                        <div>
-                          <Label className="text-slate-300 mb-2 block text-xs font-bold uppercase">Preferred Date</Label>
-                          <Input
-                            type="date"
-                            value={selectedDate}
-                            onChange={(e) => setSelectedDate(e.target.value)}
-                            className="bg-slate-900 border-slate-800 text-white"
-                          />
-                        </div>
-                        <div>
-                          <Label className="text-slate-300 mb-2 block text-xs font-bold uppercase">Available Time Slot</Label>
-                          <select
-                            value={selectedSlot}
-                            onChange={(e) => setSelectedSlot(e.target.value)}
-                            className="w-full h-10 px-3 rounded-md bg-slate-900 border border-slate-800 text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
-                          >
-                            {TIME_SLOTS.map((s) => (
-                              <option key={s} value={s}>{s}</option>
-                            ))}
-                          </select>
-                        </div>
+                      <CardTitle className="text-base text-white font-bold leading-snug">
+                        {srv.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-1 flex flex-col justify-between gap-4">
+                      <p className="text-xs text-slate-400 leading-relaxed">
+                        {srv.desc}
+                      </p>
+                      <div className="flex items-center gap-2 text-xs font-bold text-[#d5f14c]">
+                        <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
+                        {srv.stats}
                       </div>
-
-                      <div className="flex justify-end pt-4">
-                        <Button type="button" onClick={() => setBookingStep(2)} className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-bold">
-                          Next: Patient Details <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-
-                  {bookingStep === 2 && (
-                    <div className="space-y-6">
-                      <div className="grid sm:grid-cols-2 gap-4">
-                        <div>
-                          <Label className="text-slate-300 mb-2 block text-xs font-bold uppercase">Patient Full Name</Label>
-                          <Input
-                            placeholder="e.g. Ramesh Chandra"
-                            value={patientName}
-                            onChange={(e) => setPatientName(e.target.value)}
-                            required
-                            className="bg-slate-900 border-slate-800 text-white"
-                          />
-                        </div>
-                        <div>
-                          <Label className="text-slate-300 mb-2 block text-xs font-bold uppercase">Mobile Number</Label>
-                          <Input
-                            placeholder="e.g. 9876543210"
-                            value={patientPhone}
-                            onChange={(e) => setPatientPhone(e.target.value)}
-                            required
-                            className="bg-slate-900 border-slate-800 text-white"
-                          />
-                        </div>
-                      </div>
-
-                      <div>
-                        <Label className="text-slate-300 mb-2 block text-xs font-bold uppercase">Symptoms / Notes</Label>
-                        <Textarea
-                          placeholder="Describe joint pain, ligament injury, fracture, or checkup request..."
-                          value={complaint}
-                          onChange={(e) => setComplaint(e.target.value)}
-                          className="bg-slate-900 border-slate-800 text-white h-24"
-                        />
-                      </div>
-
-                      <div className="flex justify-between pt-4">
-                        <Button type="button" variant="outline" onClick={() => setBookingStep(1)} className="border-slate-800 text-slate-300">
-                          Back
-                        </Button>
-                        <Button type="submit" className="bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-bold">
-                          Confirm & Generate Token
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </form>
-              )}
-            </CardContent>
-          </Card>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </motion.div>
         </div>
       </section>
 
-      {/* PATIENT TESTIMONIALS SECTION */}
-      <section id="testimonials" className="py-20 bg-slate-950 border-b border-teal-900/30">
+      {/* ── RECOVERY JOURNEY ───────────────────────────────────────────── */}
+      <section
+        className="py-20 bg-slate-950 border-b border-slate-800"
+        aria-labelledby="recovery-heading"
+      >
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center space-y-4 mb-16">
-            <Badge className="bg-teal-500/10 text-teal-400 border-teal-500/30 px-3 py-1 text-xs">
-              Verified Patient Reviews
-            </Badge>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-              Trusted by General Patients & Professional Athletes
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="text-center space-y-4 mb-16"
+          >
+            <h2
+              id="recovery-heading"
+              className="text-3xl sm:text-4xl font-extrabold text-white"
+            >
+              Your Recovery Journey
             </h2>
+            <p className="text-slate-400 max-w-xl mx-auto text-sm">
+              A clear 6-stage pathway from pain to peak performance — fully
+              transparent, evidence-based.
+            </p>
+          </motion.div>
+
+          <motion.ol
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+            aria-label="6-stage recovery process"
+          >
+            {RECOVERY_STAGES.map((stage, idx) => (
+              <motion.li
+                key={stage.stage}
+                variants={fadeUp}
+                className="bg-[#102321] border border-slate-800 rounded-2xl p-6 flex gap-4"
+              >
+                <span
+                  className="text-3xl font-black text-[#d5f14c] leading-none shrink-0 select-none"
+                  aria-hidden="true"
+                >
+                  {stage.stage}
+                </span>
+                <div>
+                  <h3 className="font-bold text-white text-sm mb-1">
+                    {stage.name}
+                  </h3>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    {stage.desc}
+                  </p>
+                </div>
+              </motion.li>
+            ))}
+          </motion.ol>
+        </div>
+      </section>
+
+      {/* ── DOCTOR BIO ─────────────────────────────────────────────────── */}
+      <section
+        id="doctor-signature"
+        className="py-24 bg-[#102321] border-b border-slate-800 relative overflow-hidden"
+        aria-labelledby="doctor-heading"
+      >
+        <div className="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 items-center">
+          {/* Photo — below fold, lazy loaded */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="lg:col-span-5 order-2 lg:order-1 flex justify-center"
+          >
+            <div className="relative rounded-3xl overflow-hidden bg-slate-900 border border-slate-800 p-2">
+              <Image
+                src="/dr-amit-jha-cutout.png"
+                alt="Dr. Amit Kumar Jha in clinic"
+                width={480}
+                height={640}
+                loading="lazy"
+                quality={90}
+                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 480px"
+                className="w-full h-auto object-cover"
+              />
+            </div>
+          </motion.div>
+
+          {/* Bio Content */}
+          <div className="lg:col-span-7 space-y-6 order-1 lg:order-2">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+            >
+              <h2
+                id="doctor-heading"
+                className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight"
+              >
+                Dr. Amit Kumar Jha
+              </h2>
+              <p className="text-base text-teal-400 font-semibold mt-2">
+                Senior Sports Injury & Orthopedic Specialist, Varanasi
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={stagger}
+              className="space-y-3 pt-2"
+            >
+              {[
+                {
+                  label: "FNB Sports Medicine (Ganga Hospital)",
+                  desc: "Fellowship trained in sports surgery",
+                },
+                {
+                  label: "MS & DNB Orthopaedics",
+                  desc: "Post-graduate surgical qualification",
+                },
+                {
+                  label: "Keyhole Arthroscopy Specialist",
+                  desc: "Knee, shoulder & ankle minimally invasive surgery",
+                },
+              ].map(({ label, desc }) => (
+                <motion.div
+                  key={label}
+                  variants={fadeUp}
+                  className="flex items-start gap-3 bg-slate-900 p-4 rounded-xl border border-slate-800 text-sm"
+                >
+                  <Award
+                    className="h-6 w-6 text-[#d5f14c] shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <strong className="text-white block">{label}</strong>
+                    <span className="text-slate-400 text-xs">{desc}</span>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── TESTIMONIALS ───────────────────────────────────────────────── */}
+      <section
+        className="py-20 bg-slate-950 border-b border-slate-800"
+        aria-labelledby="testimonials-heading"
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="text-center space-y-4 mb-16"
+          >
+            <h2
+              id="testimonials-heading"
+              className="text-3xl sm:text-4xl font-extrabold text-white"
+            >
+              Patient Outcomes
+            </h2>
+            <p className="text-slate-400 max-w-xl mx-auto text-sm">
+              Real recoveries. Real results.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+            className="grid md:grid-cols-3 gap-6"
+          >
+            {TESTIMONIALS.map((t, idx) => (
+              <motion.figure
+                key={idx}
+                variants={fadeUp}
+                className="bg-[#102321] border border-slate-800 rounded-2xl p-6 flex flex-col gap-4"
+              >
+                <div
+                  className="flex gap-0.5"
+                  aria-label={`${t.rating} out of 5 stars`}
+                >
+                  {Array.from({ length: t.rating }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className="h-4 w-4 fill-amber-400 text-amber-400"
+                      aria-hidden="true"
+                    />
+                  ))}
+                </div>
+                <blockquote className="text-sm text-slate-300 leading-relaxed flex-1">
+                  &ldquo;{t.quote}&rdquo;
+                </blockquote>
+                <figcaption className="border-t border-slate-800 pt-4">
+                  <strong className="text-white text-sm block">{t.name}</strong>
+                  <span className="text-xs text-slate-400">{t.role}</span>
+                  <Badge className="mt-2 bg-teal-900/30 text-teal-300 border-teal-800 text-xs">
+                    {t.type}
+                  </Badge>
+                </figcaption>
+              </motion.figure>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── BOOKING WIZARD ─────────────────────────────────────────────── */}
+      <section
+        id="booking"
+        className="py-20 bg-[#102321] border-b border-slate-800"
+        aria-labelledby="booking-heading"
+      >
+        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-12">
+          {/* Why Book Here sidebar */}
+          <div className="lg:col-span-4 space-y-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+            >
+              <h2
+                id="booking-heading"
+                className="text-3xl font-extrabold text-white mb-6"
+              >
+                Why Book Here?
+              </h2>
+              <div className="space-y-6" role="list">
+                {[
+                  {
+                    icon: Stethoscope,
+                    title: "Expert Diagnosis",
+                    desc: "Direct consultation with a fellowship-trained specialist.",
+                  },
+                  {
+                    icon: Clock,
+                    title: "Zero Wait Time",
+                    desc: "Your token secures a dedicated slot in our live OPD queue.",
+                  },
+                  {
+                    icon: ShieldCheck,
+                    title: "Clear Treatment Plans",
+                    desc: "Transparent guidance on surgical vs non-surgical care.",
+                  },
+                ].map(({ icon: Icon, title, desc }) => (
+                  <div key={title} className="flex gap-4" role="listitem">
+                    <div
+                      className="h-10 w-10 shrink-0 bg-slate-900 border border-slate-800 rounded-full flex items-center justify-center text-teal-400"
+                      aria-hidden="true"
+                    >
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-white text-sm">{title}</h3>
+                      <p className="text-sm text-slate-400 mt-1">{desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {TESTIMONIALS.map((t, idx) => (
-              <Card key={idx} className="bg-slate-900 border-slate-800 flex flex-col justify-between hover:border-teal-400/40 transition-all">
-                <CardHeader>
-                  <div className="flex gap-1 text-amber-400 mb-3">
-                    {[...Array(t.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-amber-400" />
-                    ))}
+          {/* Booking Form */}
+          <div className="lg:col-span-8">
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+            >
+              <Card className="bg-slate-900 border border-slate-800 shadow-2xl overflow-hidden">
+                {/* Step indicator */}
+                <div
+                  className="bg-[#102321] border-b border-slate-800 px-8 py-5"
+                  role="tablist"
+                  aria-label="Booking form steps"
+                >
+                  <div className="grid grid-cols-2 gap-4 text-center max-w-sm mx-auto">
+                    <div
+                      className={`pb-2 border-b-2 font-bold text-xs transition-colors ${
+                        bookingStep >= 1
+                          ? "border-teal-400 text-teal-400"
+                          : "border-slate-700 text-slate-600"
+                      }`}
+                      role="tab"
+                      aria-selected={bookingStep === 1}
+                      aria-label="Step 1: Service and slot selection"
+                    >
+                      1. Service & Slot
+                    </div>
+                    <div
+                      className={`pb-2 border-b-2 font-bold text-xs transition-colors ${
+                        bookingStep >= 2
+                          ? "border-teal-400 text-teal-400"
+                          : "border-slate-700 text-slate-600"
+                      }`}
+                      role="tab"
+                      aria-selected={bookingStep === 2}
+                      aria-label="Step 2: Patient information"
+                    >
+                      2. Patient Info
+                    </div>
                   </div>
-                  <p className="text-slate-300 italic text-xs leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
-                </CardHeader>
-                <CardContent className="pt-4 border-t border-slate-800">
-                  <div className="font-bold text-white text-sm">{t.name}</div>
-                  <div className="text-xs text-teal-400 font-semibold">{t.role}</div>
-                  <div className="text-[11px] text-slate-500 mt-1">{t.type}</div>
+                </div>
+
+                <CardContent className="p-8">
+                  {isBooked ? (
+                    /* ── Success State ── */
+                    <div
+                      className="text-center py-10 space-y-6"
+                      role="status"
+                      aria-live="polite"
+                      aria-label="Appointment confirmed successfully"
+                    >
+                      <div
+                        className="h-20 w-20 bg-teal-500/20 text-teal-400 rounded-full flex items-center justify-center mx-auto border border-teal-500/40"
+                        aria-hidden="true"
+                      >
+                        <CheckCircle2 className="h-10 w-10" />
+                      </div>
+                      <div>
+                        <h3 className="text-2xl font-black text-white">
+                          OPD Appointment Confirmed!
+                        </h3>
+                        <p className="text-slate-400 text-sm mt-1">
+                          Your consultation token has been reserved.
+                        </p>
+                      </div>
+                      <dl className="bg-[#102321] border border-slate-800 rounded-xl p-6 max-w-md mx-auto text-left space-y-3">
+                        <div className="flex justify-between border-b border-slate-800 pb-2">
+                          <dt className="text-slate-400 text-xs">Patient Name</dt>
+                          <dd className="text-white text-xs font-bold">
+                            {patientName || "Patient"}
+                          </dd>
+                        </div>
+                        <div className="flex justify-between border-b border-slate-800 pb-2">
+                          <dt className="text-slate-400 text-xs">Service</dt>
+                          <dd className="text-white text-xs font-semibold">
+                            {selectedService}
+                          </dd>
+                        </div>
+                        <div className="flex justify-between">
+                          <dt className="text-slate-400 text-xs">Date & Time Slot</dt>
+                          <dd className="text-white text-xs font-semibold">
+                            {selectedDate} @ {selectedSlot}
+                          </dd>
+                        </div>
+                      </dl>
+                      <Button
+                        onClick={() => {
+                          setIsBooked(false);
+                          setBookingStep(1);
+                        }}
+                        className="bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-bold focus-visible:ring-2 focus-visible:ring-white"
+                      >
+                        Book Another Appointment
+                      </Button>
+                    </div>
+                  ) : (
+                    <form
+                      onSubmit={handleBookingSubmit}
+                      className="space-y-8"
+                      noValidate
+                      aria-label="OPD appointment booking form"
+                    >
+                      {/* ── Step 1 ── */}
+                      {bookingStep === 1 && (
+                        <div className="space-y-6">
+                          <fieldset>
+                            <legend className="text-slate-300 mb-3 block text-xs font-bold uppercase tracking-wider">
+                              Select Required Service
+                            </legend>
+                            <div
+                              className="grid sm:grid-cols-2 gap-3"
+                              role="listbox"
+                              aria-label="Select a service"
+                            >
+                              {SERVICES.map((srv) => (
+                                <div
+                                  key={srv.id}
+                                  role="option"
+                                  aria-selected={selectedService === srv.title}
+                                  tabIndex={0}
+                                  onClick={() => setSelectedService(srv.title)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                      e.preventDefault();
+                                      setSelectedService(srv.title);
+                                    }
+                                  }}
+                                  className={`p-4 rounded-xl border cursor-pointer transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#d5f14c] ${
+                                    selectedService === srv.title
+                                      ? "bg-teal-900/30 border-teal-400 text-white shadow-md"
+                                      : "bg-[#102321] border-slate-800 text-slate-400 hover:bg-slate-800/80 hover:text-white"
+                                  }`}
+                                >
+                                  <div className="flex items-center justify-between font-bold text-xs">
+                                    <span>{srv.title}</span>
+                                    {selectedService === srv.title && (
+                                      <CheckCircle2
+                                        className="h-4 w-4 text-teal-400 shrink-0"
+                                        aria-hidden="true"
+                                      />
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </fieldset>
+
+                          <div className="grid sm:grid-cols-2 gap-6">
+                            <div>
+                              <Label
+                                htmlFor="preferred-date"
+                                className="text-slate-300 mb-2 block text-xs font-bold uppercase"
+                              >
+                                Preferred Date
+                              </Label>
+                              <Input
+                                id="preferred-date"
+                                type="date"
+                                value={selectedDate}
+                                onChange={(e) => setSelectedDate(e.target.value)}
+                                className="bg-[#102321] border-slate-700 text-white focus-visible:ring-teal-500"
+                                aria-label="Select your preferred appointment date"
+                              />
+                            </div>
+                            <div>
+                              <Label
+                                htmlFor="time-slot"
+                                className="text-slate-300 mb-2 block text-xs font-bold uppercase"
+                              >
+                                Available Time Slot
+                              </Label>
+                              <select
+                                id="time-slot"
+                                value={selectedSlot}
+                                onChange={(e) => setSelectedSlot(e.target.value)}
+                                className="w-full h-10 px-3 rounded-md bg-[#102321] border border-slate-700 text-white text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+                                aria-label="Select an available time slot"
+                              >
+                                <optgroup label="Morning OPD (11:00 AM – 1:30 PM)">
+                                  {TIME_SLOTS.slice(0, 5).map((s) => (
+                                    <option key={s} value={s}>{s}</option>
+                                  ))}
+                                </optgroup>
+                                <optgroup label="Evening OPD (3:30 PM – 8:30 PM)">
+                                  {TIME_SLOTS.slice(5).map((s) => (
+                                    <option key={s} value={s}>{s}</option>
+                                  ))}
+                                </optgroup>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div className="flex justify-end pt-2">
+                            <Button
+                              type="button"
+                              onClick={() => setBookingStep(2)}
+                              className="bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-bold focus-visible:ring-2 focus-visible:ring-white"
+                            >
+                              Next: Patient Details{" "}
+                              <ArrowRight
+                                className="ml-2 h-4 w-4"
+                                aria-hidden="true"
+                              />
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* ── Step 2 ── */}
+                      {bookingStep === 2 && (
+                        <div className="space-y-6">
+                          <div className="grid sm:grid-cols-2 gap-4">
+                            <div>
+                              <Label
+                                htmlFor="patient-name"
+                                className="text-slate-300 mb-2 block text-xs font-bold uppercase"
+                              >
+                                Patient Full Name{" "}
+                                <span className="text-red-400" aria-label="required">*</span>
+                              </Label>
+                              <Input
+                                id="patient-name"
+                                placeholder="e.g. Ramesh Chandra"
+                                value={patientName}
+                                onChange={(e) => setPatientName(e.target.value)}
+                                required
+                                autoComplete="name"
+                                className="bg-[#102321] border-slate-700 text-white focus-visible:ring-teal-500"
+                                aria-required="true"
+                                aria-describedby="name-hint"
+                              />
+                              <span id="name-hint" className="sr-only">
+                                Enter the patient&apos;s full name
+                              </span>
+                            </div>
+                            <div>
+                              <Label
+                                htmlFor="patient-phone"
+                                className="text-slate-300 mb-2 block text-xs font-bold uppercase"
+                              >
+                                Mobile Number{" "}
+                                <span className="text-red-400" aria-label="required">*</span>
+                              </Label>
+                              <Input
+                                id="patient-phone"
+                                placeholder="e.g. 9876543210"
+                                value={patientPhone}
+                                onChange={(e) => setPatientPhone(e.target.value)}
+                                required
+                                type="tel"
+                                autoComplete="tel"
+                                inputMode="numeric"
+                                className="bg-[#102321] border-slate-700 text-white focus-visible:ring-teal-500"
+                                aria-required="true"
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <Label
+                              htmlFor="complaint"
+                              className="text-slate-300 mb-2 block text-xs font-bold uppercase"
+                            >
+                              Symptoms / Notes
+                            </Label>
+                            <Textarea
+                              id="complaint"
+                              placeholder="Describe joint pain, injury, or request..."
+                              value={complaint}
+                              onChange={(e) => setComplaint(e.target.value)}
+                              className="bg-[#102321] border-slate-700 text-white h-24 focus-visible:ring-teal-500"
+                              aria-label="Optional: describe your symptoms or special requests"
+                            />
+                          </div>
+
+                          <div className="flex justify-between pt-2">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={() => setBookingStep(1)}
+                              className="border-slate-700 text-slate-300 hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              type="submit"
+                              className="bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-bold focus-visible:ring-2 focus-visible:ring-white"
+                            >
+                              Confirm & Generate Token
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </form>
+                  )}
                 </CardContent>
               </Card>
-            ))}
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="py-12 bg-slate-950 text-slate-400 text-xs">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8 mb-12">
+      {/* ── FOOTER ─────────────────────────────────────────────────────── */}
+      <footer
+        className="py-12 bg-slate-950 text-slate-400 text-xs border-t border-slate-800"
+        role="contentinfo"
+      >
+        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8 mb-10">
+          {/* Brand */}
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-white font-black text-base">
-              <Activity className="h-5 w-5 text-teal-400" /> Dr. Amit Jha Clinic
+              <Activity className="h-5 w-5 text-teal-400" aria-hidden="true" />
+              Dr. Amit Jha Clinic
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Fellowship Trained Sports Medicine & Orthopedic Surgeon (FNB Ganga Hospital, MS, DNB).
+              Fellowship Trained Sports Medicine & Orthopedic Surgeon (FNB Ganga
+              Hospital, MS, DNB).
             </p>
           </div>
-          <div>
-            <h4 className="text-white font-bold mb-2">Location & OPD</h4>
+
+          {/* Location */}
+          <address className="not-italic">
+            <h2 className="text-white font-bold mb-2 not-italic text-xs uppercase tracking-wider">
+              Location & OPD
+            </h2>
             <p className="text-slate-400 flex items-start gap-2">
-              <MapPin className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" />
+              <MapPin
+                className="h-4 w-4 text-teal-400 shrink-0 mt-0.5"
+                aria-hidden="true"
+              />
               Sigra & Apex Super Specialty Hospital, Varanasi, UP
             </p>
-          </div>
+          </address>
+
+          {/* Nav Links */}
+          <nav aria-label="Footer navigation">
+            <h2 className="text-white font-bold mb-2 text-xs uppercase tracking-wider">
+              Navigation
+            </h2>
+            <div className="flex flex-col space-y-2">
+              <a href="#about" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">About Dr. Jha</a>
+              <a href="#services" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">Our Services</a>
+              <a href="#booking" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">Book Appointment</a>
+              <Link href="/login" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">Staff ERP Portal</Link>
+            </div>
+          </nav>
+
+          {/* OPD Hours */}
           <div>
-            <h4 className="text-white font-bold mb-2">OPD Hours</h4>
+            <h2 className="text-white font-bold mb-2 text-xs uppercase tracking-wider">
+              OPD Hours
+            </h2>
             <p className="text-slate-400">Morning: 11:00 AM – 1:30 PM IST</p>
             <p className="text-slate-400 mt-1">Evening: 3:30 PM – 8:30 PM IST</p>
           </div>
-          <div>
-            <h4 className="text-white font-bold mb-2">Staff ERP Access</h4>
-            <Link href="/login">
-              <Button variant="outline" className="w-full border-slate-800 text-slate-300 hover:bg-slate-900 hover:text-white">
-                ERP Staff Portal
-              </Button>
-            </Link>
-          </div>
         </div>
-        <div className="border-t border-slate-900 text-center text-slate-500 pt-8">
-          © 2026 KrishnaHealth ERP — Dr. Amit Jha Sports Injury & Orthopedic Clinic. All rights reserved.
+
+        <div className="max-w-7xl mx-auto px-6 border-t border-slate-900 text-center text-slate-500 pt-6">
+          © 2026 KrishnaHealth ERP — Dr. Amit Jha Sports Injury & Orthopedic
+          Clinic. All rights reserved.
         </div>
       </footer>
-
-      {/* MOBILE FLOATING STICKY CTA BAR */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 p-3 flex gap-3">
-        <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="flex-1">
-          <Button variant="outline" className="w-full border-emerald-500/40 text-emerald-400 hover:bg-emerald-950/40 text-xs font-bold h-11">
-            <MessageCircle className="mr-1.5 h-4 w-4 fill-emerald-400/20" /> WhatsApp
-          </Button>
-        </a>
-        <a href="#booking" className="flex-1">
-          <Button className="w-full bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-black text-xs h-11">
-            <Calendar className="mr-1.5 h-4 w-4" /> Book Appointment
-          </Button>
-        </a>
-      </div>
     </div>
   );
 }
