@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 /**
  * LandingAnimations — thin client wrapper for all Framer Motion animated
@@ -8,6 +8,7 @@
  * component functions cross the server->client prop boundary.
  */
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import {
@@ -19,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BodyNavigatorIsland, type BodyPart } from "@/components/landing/body-navigator-island";
 import { BookingWizardIsland, type Service } from "@/components/landing/booking-wizard-island";
+import { BookingModal } from "@/components/Booking/BookingModal";
 
 // ─── ICON MAP (string -> component) ─────────────────────────────────────────
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -69,6 +71,14 @@ type Props = {
 export function LandingAnimations({
   bodyParts, sportsWeTreat, services, recoveryStages, testimonials, timeSlots,
 }: Props) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
+
+  const handleOpenBooking = (partId?: string) => {
+    if (partId) setSelectedPartId(partId);
+    setModalOpen(true);
+  };
+
   const bookingServices: Service[] = services.map((s) => ({ id: s.id, title: s.title }));
 
   return (
@@ -556,6 +566,13 @@ export function LandingAnimations({
       >
         <BookingWizardIsland services={bookingServices} timeSlots={timeSlots} />
       </section>
+
+      {/* ── QUICK BOOKING MODAL DIALOG ────────────────────────────────────── */}
+      <BookingModal
+        isOpen={modalOpen}
+        initialPartId={selectedPartId}
+        onClose={() => setModalOpen(false)}
+      />
     </>
   );
 }
