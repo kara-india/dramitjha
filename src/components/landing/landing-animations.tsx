@@ -1,13 +1,5 @@
 "use client";
 
-/**
- * LandingAnimations — thin client wrapper for all Framer Motion animated
- * sections on the public landing page.
- *
- * Icons are resolved from string keys via ICON_MAP so that no React
- * component functions cross the server->client prop boundary.
- */
-
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -22,15 +14,16 @@ import { BodyNavigatorIsland, type BodyPart } from "@/components/landing/body-na
 import { BookingWizardIsland, type Service } from "@/components/landing/booking-wizard-island";
 import { BookingModal } from "@/components/Booking/BookingModal";
 import BodySelectorFeature from "@/components/BodySelector3D/BodySelectorFeature";
+import { FeedbackWidget } from "@/components/Feedback/FeedbackWidget";
 
-// ─── ICON MAP (string -> component) ─────────────────────────────────────────
+// ??? ICON MAP (string -> component) ?????????????????????????????????????????
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Award, Star, CheckCircle2, Activity, MapPin,
   Trophy, Flame, Zap, Dumbbell, Compass, Stethoscope, Bone,
   ShieldAlert, Users, Target, ShieldCheck,
 };
 
-// ─── ANIMATION VARIANTS ──────────────────────────────────────────────────────
+// ??? ANIMATION VARIANTS ??????????????????????????????????????????????????????
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const } },
@@ -39,7 +32,7 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-// ─── DATA TYPES ──────────────────────────────────────────────────────────────
+// ??? DATA TYPES ??????????????????????????????????????????????????????????????
 type SportEntry = {
   sport: string;
   icon: string;
@@ -58,7 +51,7 @@ type ServiceEntry = {
 type RecoveryStage = { stage: string; name: string; desc: string };
 type Testimonial = { name: string; role: string; type: string; quote: string; rating: number };
 
-// ─── PROPS ───────────────────────────────────────────────────────────────────
+// ??? PROPS ???????????????????????????????????????????????????????????????????
 type Props = {
   bodyParts: BodyPart[];
   sportsWeTreat: SportEntry[];
@@ -68,7 +61,7 @@ type Props = {
   timeSlots: string[];
 };
 
-// ─── COMPONENT ───────────────────────────────────────────────────────────────
+// ??? COMPONENT ???????????????????????????????????????????????????????????????
 export function LandingAnimations({
   bodyParts, sportsWeTreat, services, recoveryStages, testimonials, timeSlots,
 }: Props) {
@@ -84,8 +77,7 @@ export function LandingAnimations({
 
   return (
     <>
-      {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      {/* Token: --ink bg, --lime CTA, teal-400 heading span */}
+      {/* ?? HERO ???????????????????????????????????????????????????????????? */}
       <section
         id="about"
         className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden bg-[#102321] border-b border-slate-800/80"
@@ -109,7 +101,7 @@ export function LandingAnimations({
             </p>
           </motion.div>
 
-          {/* Precision Credibility Metrics — hairline-bordered pills */}
+          {/* Precision Credibility Metrics */}
           <motion.div
             initial="hidden"
             animate="visible"
@@ -136,15 +128,14 @@ export function LandingAnimations({
             variants={fadeUp}
             className="pt-2 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
-            <a href="#booking" className="w-full sm:w-auto">
-              <Button
-                size="lg"
-                className="w-full bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 h-13 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#102321]"
-                aria-label="Book an OPD appointment with Dr. Amit Jha"
-              >
-                Book OPD Appointment
-              </Button>
-            </a>
+            <Button
+              size="lg"
+              onClick={() => handleOpenBooking()}
+              className="w-full sm:w-auto bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 h-13 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#102321]"
+              aria-label="Book an OPD appointment with Dr. Amit Jha"
+            >
+              Book OPD Appointment
+            </Button>
             <a href="#doctor-signature" className="w-full sm:w-auto">
               <Button
                 size="lg"
@@ -159,8 +150,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ── TRUST ANCHORS (Instrumentation Metric Bar) ────────────────────── */}
-      {/* Token: glass-card on --ink via slate-950 bg, --lime for 4.9★, teal-400 for 98.5% */}
+      {/* ?? TRUST ANCHORS ??????????????????????????????????????????????????? */}
       <section
         className="py-10 bg-slate-950 border-b border-slate-800/80"
         aria-label="Clinical outcomes and trust statistics"
@@ -176,7 +166,7 @@ export function LandingAnimations({
             {[
               { value: "5,000+", label: "SURGICAL PROCEDURES", sub: "Anatomic Precision", accent: "text-white" },
               { value: "98.5%", label: "RETURN-TO-SPORT", sub: "ACL & Arthroscopy", accent: "text-teal-400" },
-              { value: "4.9★", label: "GOOGLE RATING", sub: "500+ Verified Reviews", accent: "text-[#d5f14c]" },
+              { value: "4.9?", label: "GOOGLE RATING", sub: "500+ Verified Reviews", accent: "text-[#d5f14c]" },
               { value: "24-HR", label: "DISCHARGE TIME", sub: "Keyhole Minimally Invasive", accent: "text-white" },
             ].map(({ value, label, sub, accent }) => (
               <motion.div
@@ -195,8 +185,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ── BODY NAVIGATOR ────────────────────────────────────────────────── */}
-      {/* Token: --ink bg, teal-400 for active selection, --lime ring on focus */}
+      {/* ?? BODY NAVIGATOR ?????????????????????????????????????????????????? */}
       <section
         id="navigator"
         className="py-20 bg-[#102321] border-b border-slate-800/80"
@@ -224,8 +213,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ── SPORTS WE TREAT ───────────────────────────────────────────────── */}
-      {/* Token: glass-card, teal-400 icons, border-slate-800/80 hairline */}
+      {/* ?? SPORTS WE TREAT ????????????????????????????????????????????????? */}
       <section
         id="sports"
         className="py-20 bg-slate-950 border-b border-slate-800/80"
@@ -246,7 +234,7 @@ export function LandingAnimations({
               Sports We Treat
             </h2>
             <p className="text-slate-400 max-w-xl mx-auto text-sm">
-              Specialist protocols for every athletic discipline — from elite competition to weekend recreation.
+              Specialist protocols for every athletic discipline ? from elite competition to weekend recreation.
             </p>
           </motion.div>
           <motion.div
@@ -284,8 +272,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ── SERVICES ──────────────────────────────────────────────────────── */}
-      {/* Token: --ink bg, --lime for stats, glass-card */}
+      {/* ?? SERVICES ???????????????????????????????????????????????????????? */}
       <section
         id="services"
         className="py-20 bg-[#102321] border-b border-slate-800/80"
@@ -306,7 +293,7 @@ export function LandingAnimations({
               Our Services
             </h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm">
-              Dual-spectrum care covering both general orthopedic patients and elite athletes — under one roof.
+              Dual-spectrum care covering both general orthopedic patients and elite athletes ? under one roof.
             </p>
           </motion.div>
           <motion.div
@@ -349,8 +336,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ── RECOVERY JOURNEY ──────────────────────────────────────────────── */}
-      {/* Token: --lime for stage numbers, glass-card, border-slate-800/80 hairlines */}
+      {/* ?? RECOVERY JOURNEY ???????????????????????????????????????????????? */}
       <section
         className="py-20 bg-slate-950 border-b border-slate-800/80"
         aria-labelledby="recovery-heading"
@@ -370,7 +356,7 @@ export function LandingAnimations({
               Your Recovery Journey
             </h2>
             <p className="text-slate-400 max-w-xl mx-auto text-sm">
-              A clear 6-stage pathway from pain to peak performance — fully transparent, evidence-based.
+              A clear 6-stage pathway from pain to peak performance ? fully transparent, evidence-based.
             </p>
           </motion.div>
           <motion.ol
@@ -403,15 +389,13 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ── DOCTOR BIO / PROFILE SECTION ──────────────────────────────────── */}
-      {/* Token: --ink bg, --lime pulse dot & CTA, teal-400 specialist label, glass-card */}
+      {/* ?? DOCTOR BIO ?????????????????????????????????????????????????????? */}
       <section
         id="doctor-signature"
         className="py-20 lg:py-28 bg-[#102321] border-b border-slate-800/80 relative overflow-hidden"
         aria-labelledby="doctor-heading"
       >
         <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Left Text Column */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -430,7 +414,7 @@ export function LandingAnimations({
               Dr. Amit Kumar Jha
             </h2>
             <p className="text-lg sm:text-xl font-semibold text-teal-400 font-mono">
-              FNB Sports Medicine, MS &amp; DNB Orthopaedics — Senior Specialist
+              FNB Sports Medicine, MS &amp; DNB Orthopaedics ? Senior Specialist
             </p>
             <p className="text-base text-slate-300 leading-relaxed max-w-3xl">
               Committed to providing evidence-based, compassionate care at Dr. Amit Jha Sports Injury Clinic (Krishna Health). Dr. Jha specializes in comprehensive diagnostic evaluations, keyhole arthroscopy, ACL reconstruction, and personalized treatment plans for optimal patient outcomes.
@@ -455,14 +439,13 @@ export function LandingAnimations({
               ))}
             </div>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <a href="#booking" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="w-full bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 focus-visible:ring-2 focus-visible:ring-white"
-                >
-                  Request Appointment
-                </Button>
-              </a>
+              <Button
+                size="lg"
+                onClick={() => handleOpenBooking()}
+                className="w-full sm:w-auto bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 focus-visible:ring-2 focus-visible:ring-white"
+              >
+                Request Appointment
+              </Button>
               <a href="#navigator" className="w-full sm:w-auto">
                 <Button
                   size="lg"
@@ -475,7 +458,6 @@ export function LandingAnimations({
             </div>
           </motion.div>
 
-          {/* Right Image Column */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -488,7 +470,7 @@ export function LandingAnimations({
               <div className="relative rounded-2xl overflow-hidden bg-slate-950/40 aspect-[4/5]">
                 <Image
                   src="/dr-amit-jha-cutout.png"
-                  alt="Dr. Amit Kumar Jha — Senior Sports Injury & Orthopedic Specialist, Varanasi"
+                  alt="Dr. Amit Kumar Jha ? Senior Sports Injury & Orthopedic Specialist, Varanasi"
                   fill
                   priority
                   sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 560px"
@@ -500,8 +482,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ── TESTIMONIALS ──────────────────────────────────────────────────── */}
-      {/* Token: glass-card, border-slate-800/80, amber-400 stars, font-mono badge */}
+      {/* ?? TESTIMONIALS ???????????????????????????????????????????????????? */}
       <section
         className="py-20 bg-slate-950 border-b border-slate-800/80"
         aria-labelledby="testimonials-heading"
@@ -558,8 +539,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ── BOOKING WIZARD ────────────────────────────────────────────────── */}
-      {/* Token: --ink bg, --lime step indicator & submit CTA, glass-card form container */}
+      {/* ?? BOOKING WIZARD ?????????????????????????????????????????????????? */}
       <section
         id="booking"
         className="py-20 bg-[#102321] border-b border-slate-800/80"
@@ -568,12 +548,15 @@ export function LandingAnimations({
         <BookingWizardIsland services={bookingServices} timeSlots={timeSlots} />
       </section>
 
-      {/* ── QUICK BOOKING MODAL DIALOG ────────────────────────────────────── */}
+      {/* ?? QUICK BOOKING MODAL DIALOG ?????????????????????????????????????? */}
       <BookingModal
         isOpen={modalOpen}
         initialPartId={selectedPartId}
         onClose={() => setModalOpen(false)}
       />
+
+      {/* ?? PATIENT FEEDBACK WIDGET ????????????????????????????????????????? */}
+      <FeedbackWidget />
     </>
   );
 }
