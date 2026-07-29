@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { BodyNavigatorIsland, type BodyPart } from "@/components/landing/body-navigator-island";
 import { BookingWizardIsland, type Service } from "@/components/landing/booking-wizard-island";
 import { BookingModal } from "@/components/Booking/BookingModal";
+import BodySelectorFeature from "@/components/BodySelector3D/BodySelectorFeature";
 
 // ─── ICON MAP (string -> component) ─────────────────────────────────────────
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -219,7 +220,7 @@ export function LandingAnimations({
               Click on an affected joint or anatomical area to explore common conditions and our treatment approach.
             </p>
           </motion.div>
-          <BodyNavigatorIsland bodyParts={bodyParts} />
+          <BodySelectorFeature />
         </div>
       </section>
 
