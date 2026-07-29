@@ -1,9 +1,9 @@
-﻿// src/components/Booking/BookingModal.tsx
+// src/components/Booking/BookingModal.tsx
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, User, Phone, Clock, CheckCircle2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { X, User, Phone, CheckCircle2 } from "lucide-react";
 import { BODY_PARTS, getBodyPart } from "@/data/bodyParts";
 
 interface BookingModalProps {
@@ -12,6 +12,8 @@ interface BookingModalProps {
   onClose: () => void;
   onBook?: (partId: string, data: { name: string; phone: string; date: string; time: string }) => void;
 }
+
+const LS_KEY = "kh_public_bookings";
 
 export const BookingModal: React.FC<BookingModalProps> = ({
   isOpen,
@@ -23,8 +25,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [date, setDate] = useState("");
-  const [time, setTime] = useState("10:00 AM");
+  const [time, setTime] = useState("11:00 AM");
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (initialPartId) setSelectedPartId(initialPartId);
@@ -33,25 +37,61 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !phone) return;
+    setError(null);
+    setSubmitting(true);
+
+    const payload = {
+      partId: selectedPartId,
+      name: name.trim(),
+      phone: phone.trim(),
+      date: date || new Date().toISOString().split("T")[0],
+      time,
+      source: "public",
+    };
 
     try {
-      await fetch("/api/book", {
+      const res = await fetch("/api/book", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ partId: selectedPartId, name, phone, date, time }),
+        body: JSON.stringify(payload),
       });
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setError(data.error || "Booking failed. Please try again.");
+        setSubmitting(false);
+        return;
+      }
+
+      // Mirror to localStorage so Staff ERP in same browser always sees it
+      try {
+        const prev = JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+        prev.unshift(data.appointment || payload);
+        localStorage.setItem(LS_KEY, JSON.stringify(prev.slice(0, 50)));
+      } catch {
+        // ignore
+      }
 
       if (onBook) {
-        onBook(selectedPartId, { name, phone, date, time });
+        onBook(selectedPartId, {
+          name: payload.name,
+          phone: payload.phone,
+          date: payload.date,
+          time: payload.time,
+        });
       }
 
       setIsSuccess(true);
       setTimeout(() => {
         setIsSuccess(false);
+        setName("");
+        setPhone("");
         onClose();
-      }, 2500);
-    } catch (err) {
-      console.error("Booking error:", err);
+      }, 2200);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -61,7 +101,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 font-sans">
-      {/* Backdrop */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -70,7 +109,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         className="fixed inset-0 bg-stone-900/60 backdrop-blur-sm"
       />
 
-      {/* Modal Card */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -80,7 +118,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         aria-modal="true"
         aria-labelledby="booking-modal-title"
       >
-        {/* Header */}
         <div className="flex items-center justify-between border-b border-stone-200 pb-4 mb-5">
           <div>
             <h3 id="booking-modal-title" className="text-xl font-black text-stone-900 font-heading">
@@ -107,12 +144,18 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             </div>
             <h4 className="text-2xl font-black text-stone-900 font-heading">Token Reserved!</h4>
             <p className="text-xs text-stone-600 max-w-xs mx-auto">
-              Appointment request received for <strong className="text-stone-900">{name}</strong> ({part?.label || "General OPD"}). Our clinic receptionist will confirm your slot shortly.
+              Appointment for <strong className="text-stone-900">{name}</strong> (
+              {part?.label || "General OPD"}) is now in the Staff ERP queue.
             </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Body Region Selector */}
+            {error && (
+              <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-800">
+                {error}
+              </div>
+            )}
+
             <div>
               <label className="block text-xs font-mono font-bold text-stone-700 uppercase tracking-wider mb-1">
                 Anatomical Area / Joint
@@ -130,7 +173,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               </select>
             </div>
 
-            {/* Patient Name */}
             <div>
               <label htmlFor="modal-name" className="block text-xs font-mono font-bold text-stone-700 uppercase tracking-wider mb-1">
                 Patient Full Name *
@@ -143,13 +185,12 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Rahul Sharma"
+                  placeholder="e.g. Karan"
                   className="w-full rounded-xl bg-[#fcfbf8] border border-[#c89b2a]/40 pl-10 pr-4 py-3 text-sm text-stone-900 placeholder-stone-400 font-medium focus:outline-none focus:ring-2 focus:ring-[#c89b2a]"
                 />
               </div>
             </div>
 
-            {/* Phone Number */}
             <div>
               <label htmlFor="modal-phone" className="block text-xs font-mono font-bold text-stone-700 uppercase tracking-wider mb-1">
                 Mobile Number *
@@ -168,7 +209,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
               </div>
             </div>
 
-            {/* Date & Time Row */}
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11px] font-mono font-bold text-stone-700 uppercase tracking-wider mb-1">
@@ -190,21 +230,22 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                   onChange={(e) => setTime(e.target.value)}
                   className="w-full rounded-xl bg-[#fcfbf8] border border-[#c89b2a]/40 p-2.5 text-xs text-stone-900 font-medium focus:outline-none focus:ring-2 focus:ring-[#c89b2a]"
                 >
-                  <option value="10:00 AM">10:00 AM - Morning</option>
-                  <option value="01:00 PM">01:00 PM - Afternoon</option>
-                  <option value="05:00 PM">05:00 PM - Evening</option>
-                  <option value="07:00 PM">07:00 PM - Evening</option>
+                  <option value="11:00 AM">11:00 AM - Morning</option>
+                  <option value="12:00 PM">12:00 PM - Afternoon</option>
+                  <option value="04:00 PM">04:00 PM - Evening</option>
+                  <option value="06:00 PM">06:00 PM - Evening</option>
+                  <option value="07:30 PM">07:30 PM - Evening</option>
                 </select>
               </div>
             </div>
 
-            {/* Submit Button */}
             <div className="pt-3">
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-xl gold-gradient-btn font-black text-sm uppercase tracking-wider shadow-lg"
+                disabled={submitting}
+                className="w-full py-3.5 rounded-xl gold-gradient-btn font-black text-sm uppercase tracking-wider shadow-lg disabled:opacity-60"
               >
-                Confirm OPD Appointment
+                {submitting ? "Saving…" : "Confirm OPD Appointment"}
               </button>
             </div>
           </form>

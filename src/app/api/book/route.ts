@@ -1,36 +1,41 @@
-﻿import { NextResponse } from "next/server";
-import { captureException, captureMessage } from "@/lib/monitoring";
+import { NextResponse } from "next/server";
+import { addAppointment } from "@/lib/appointments-store";
 
+/** Public site booking — same store as Staff ERP appointments. */
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { partId, name, phone } = body || {};
+    const body = await request.json().catch(() => ({}));
+    const name = String(body.name || "").trim();
+    const phone = String(body.phone || "").trim();
 
     if (!name || !phone) {
-      captureMessage(`[API /api/book] Validation failed: missing name or phone`, "warning");
       return NextResponse.json(
-        { error: "Validation Error: Name and phone are required fields." },
+        { error: "Name and phone are required" },
         { status: 400 }
       );
     }
 
-    const bookingId = `bk_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-    captureMessage(`[API /api/book] Successful appointment ${bookingId} for ${name} (${phone}), region: ${partId || 'general'}`, "info");
+    const appointment = addAppointment({
+      patientName: name,
+      patientPhone: phone,
+      doctorId: "DOC-001",
+      doctorName: "Dr. Amit Jha",
+      type: "CONSULTATION",
+      status: "SCHEDULED",
+      date: body.date || new Date().toISOString().split("T")[0],
+      time: body.time || "11:00",
+      duration: 30,
+      partId: body.partId,
+      source: "public",
+    });
 
-    return NextResponse.json(
-      {
-        ok: true,
-        bookingId,
-        message: "Appointment request received successfully.",
-        timestamp: new Date().toISOString(),
-      },
-      { status: 200 }
-    );
-  } catch (err) {
-    captureException(err, { context: { route: "/api/book", method: "POST" } });
-    return NextResponse.json(
-      { error: "Invalid JSON payload" },
-      { status: 400 }
-    );
+    return NextResponse.json({
+      success: true,
+      appointment,
+      message: "Appointment request received",
+    });
+  } catch (e) {
+    console.error("book error", e);
+    return NextResponse.json({ error: "Booking failed" }, { status: 500 });
   }
 }
