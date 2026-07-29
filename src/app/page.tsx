@@ -363,7 +363,7 @@ export default function LandingPage() {
     >
       {/* ── NAVIGATION ─────────────────────────────────────────────────── */}
       <header
-        className="sticky top-0 z-50 backdrop-blur-2xl bg-[#102321]/90 border-b border-slate-800"
+        className="sticky top-0 z-50 glass-header border-b border-slate-800/80"
         role="banner"
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -375,10 +375,23 @@ export default function LandingPage() {
             >
               <Activity className="h-6 w-6" />
             </div>
-            <span className="text-xl font-black tracking-tight text-white">
-              Dr. Amit Jha
-            </span>
+            <div className="flex flex-col">
+              <span className="text-xl font-black tracking-tight text-white leading-none">
+                Dr. Amit Jha
+              </span>
+              <span className="text-[10px] font-mono text-teal-400 tracking-wider uppercase mt-0.5">
+                Sports Medicine Clinic
+              </span>
+            </div>
           </a>
+
+          {/* Live Status Badge */}
+          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-mono">
+            <span className="w-2 h-2 rounded-full bg-[#d5f14c] animate-pulse" aria-hidden="true" />
+            <span className="text-slate-300 font-medium">OPD QUEUE ACTIVE</span>
+            <span className="text-slate-600">•</span>
+            <span className="text-teal-400 font-bold">11:00 AM – 8:30 PM</span>
+          </div>
 
           {/* Desktop Nav */}
           <nav
@@ -396,7 +409,7 @@ export default function LandingPage() {
             <Link href="/login">
               <Button
                 variant="ghost"
-                className="text-slate-300 hover:text-white hover:bg-slate-900 border border-slate-800 focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
+                className="text-slate-300 hover:text-white hover:bg-slate-900/80 border border-slate-800 text-xs font-mono focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
                 aria-label="Staff ERP Portal login"
               >
                 Staff ERP
@@ -419,7 +432,7 @@ export default function LandingPage() {
         {mobileNavOpen && (
           <nav
             id="mobile-nav"
-            className="lg:hidden bg-slate-950 border-t border-slate-800 px-6 py-4 flex flex-col gap-4 text-sm font-semibold"
+            className="lg:hidden bg-[#102321]/95 backdrop-blur-xl border-t border-slate-800 px-6 py-4 flex flex-col gap-4 text-sm font-semibold"
             aria-label="Mobile navigation"
           >
             {["#about", "#navigator", "#sports", "#services", "#booking"].map(
@@ -441,13 +454,13 @@ export default function LandingPage() {
       {/* ── HERO ───────────────────────────────────────────────────────── */}
       <section
         id="about"
-        className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden bg-[#102321] border-b border-slate-800"
+        className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden bg-[#102321] border-b border-slate-800/80"
         aria-labelledby="hero-heading"
       >
         <div className="max-w-4xl mx-auto px-6 relative z-10 text-center lg:text-left space-y-8">
           <motion.div initial="hidden" animate="visible" variants={fadeUp} className="space-y-4">
-            <Badge className="bg-teal-900/50 text-teal-300 border-teal-700/50 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider">
-              Varanasi&apos;s Premier Sports Medicine & Orthopedic Care
+            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3.5 py-1 text-xs font-mono uppercase tracking-widest">
+              // CLINICAL PRECISION // VARANASI OPD
             </Badge>
             <h1
               id="hero-heading"
@@ -462,18 +475,19 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          {/* Trust line — credentials above fold */}
+          {/* Precision Credibility Metrics */}
           <motion.div
             initial="hidden"
             animate="visible"
             variants={fadeUp}
-            className="flex flex-wrap justify-center lg:justify-start gap-3 pt-1 text-xs sm:text-sm font-bold text-slate-300"
+            className="flex flex-wrap justify-center lg:justify-start gap-3 pt-1 text-xs sm:text-sm font-semibold text-slate-300"
             aria-label="Dr. Amit Jha credentials"
           >
-            <span className="bg-slate-900/80 px-3.5 py-1.5 rounded-lg border border-slate-800">
+            <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-slate-300 flex items-center gap-2">
+              <Award className="h-4 w-4 text-[#d5f14c]" aria-hidden="true" />
               FNB Sports Medicine (Ganga Hospital)
             </span>
-            <span className="bg-slate-900/80 px-3.5 py-1.5 rounded-lg border border-slate-800 text-amber-400 flex items-center gap-1.5">
+            <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-amber-400 flex items-center gap-1.5">
               4.9{" "}
               <Star
                 className="h-3.5 w-3.5 fill-amber-400"
@@ -481,7 +495,7 @@ export default function LandingPage() {
               />{" "}
               Google Rating
             </span>
-            <span className="bg-slate-900/80 px-3.5 py-1.5 rounded-lg border border-slate-800 text-teal-400">
+            <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-teal-400">
               5,000+ Surgeries
             </span>
           </motion.div>
@@ -516,9 +530,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── TRUST ANCHORS ──────────────────────────────────────────────── */}
+      {/* ── TRUST ANCHORS (Instrumentation Metric Bar) ───────────────────── */}
       <section
-        className="py-8 bg-slate-950 border-b border-slate-800"
+        className="py-10 bg-slate-950 border-b border-slate-800/80"
         aria-label="Clinical outcomes and trust statistics"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -527,30 +541,22 @@ export default function LandingPage() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={stagger}
-            className="flex flex-wrap justify-center gap-10 text-center"
+            className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
           >
             {[
-              { value: "5,000+", label: "Surgeries Performed" },
-              { value: "98.5%", label: "Return-to-Sport Rate", accent: "teal" },
-              { value: "4.9/5", label: "Google Patient Rating", accent: "lime" },
-              { value: "24 hrs", label: "Keyhole Discharge Time" },
-            ].map(({ value, label, accent }) => (
-              <motion.div key={label} variants={fadeUp} className="flex flex-col">
-                <dt className="sr-only">{label}</dt>
-                <dd
-                  className={`text-2xl font-black ${
-                    accent === "teal"
-                      ? "text-teal-400"
-                      : accent === "lime"
-                      ? "text-[#d5f14c]"
-                      : "text-white"
-                  }`}
-                >
-                  {value}
-                </dd>
-                <span className="text-xs text-slate-400 uppercase tracking-wider mt-0.5">
-                  {label}
-                </span>
+              { value: "5,000+", label: "SURGICAL PROCEDURES", sub: "Anatomic Precision", accent: "text-white" },
+              { value: "98.5%", label: "RETURN-TO-SPORT", sub: "ACL & Arthroscopy", accent: "text-teal-400" },
+              { value: "4.9★", label: "GOOGLE RATING", sub: "500+ Verified Reviews", accent: "text-[#d5f14c]" },
+              { value: "24-HR", label: "DISCHARGE TIME", sub: "Keyhole Minimally Invasive", accent: "text-white" },
+            ].map(({ value, label, sub, accent }) => (
+              <motion.div
+                key={label}
+                variants={fadeUp}
+                className="glass-card rounded-2xl p-5 border border-slate-800/80 flex flex-col justify-between space-y-2 hover:border-teal-500/30 transition-all duration-300"
+              >
+                <dt className="text-[10px] font-mono tracking-widest text-slate-400 uppercase">{label}</dt>
+                <dd className={`text-3xl sm:text-4xl font-black font-heading ${accent}`}>{value}</dd>
+                <span className="text-xs text-slate-400 font-medium">{sub}</span>
               </motion.div>
             ))}
           </motion.dl>
@@ -560,7 +566,7 @@ export default function LandingPage() {
       {/* ── BODY NAVIGATOR ─────────────────────────────────────────────── */}
       <section
         id="navigator"
-        className="py-20 bg-[#102321] border-b border-slate-800"
+        className="py-20 bg-[#102321] border-b border-slate-800/80"
         aria-labelledby="navigator-heading"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -571,6 +577,9 @@ export default function LandingPage() {
             variants={fadeUp}
             className="text-center space-y-4 mb-12"
           >
+            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+              DIAGNOSTIC ARCHITECTURE
+            </Badge>
             <h2
               id="navigator-heading"
               className="text-3xl sm:text-4xl font-extrabold text-white"
@@ -658,25 +667,25 @@ export default function LandingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <Card className="bg-slate-900 border border-slate-800 shadow-2xl p-6 space-y-6">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                    <h3 className="text-2xl font-black text-white">
+                <div className="glass-card border border-slate-800/80 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+                  <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
+                    <h3 className="text-2xl font-black text-white font-heading">
                       {selectedBodyPart.name} Conditions
                     </h3>
-                    <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-xs">
+                    <Badge className="bg-teal-950/80 text-teal-300 border-teal-700/50 text-xs font-mono">
                       {selectedBodyPart.recovery}
                     </Badge>
                   </div>
 
                   <div className="space-y-4">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                      Commonly Diagnosed Conditions
+                    <h4 className="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">
+                      // COMMONLY DIAGNOSED CONDITIONS
                     </h4>
                     <ul className="grid sm:grid-cols-2 gap-3" role="list">
                       {selectedBodyPart.conditions.map((cond, i) => (
                         <li
                           key={i}
-                          className="flex items-center gap-2.5 bg-[#102321] p-3 rounded-xl border border-slate-800 text-xs text-slate-200"
+                          className="flex items-center gap-2.5 bg-[#0c1a18] p-3 rounded-xl border border-slate-800/80 text-xs font-medium text-slate-200"
                         >
                           <CheckCircle2
                             className="h-4 w-4 text-teal-400 shrink-0"
@@ -688,15 +697,15 @@ export default function LandingPage() {
                     </ul>
                   </div>
 
-                  <div className="pt-4 border-t border-slate-800 space-y-2">
-                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                      Treatment Approach
+                  <div className="pt-4 border-t border-slate-800/80 space-y-2">
+                    <h4 className="text-xs font-mono font-bold text-slate-400 uppercase tracking-widest">
+                      // CLINICAL TREATMENT APPROACH
                     </h4>
-                    <p className="text-sm text-teal-300 font-semibold">
+                    <p className="text-sm text-teal-300 font-semibold leading-relaxed">
                       {selectedBodyPart.solution}
                     </p>
                   </div>
-                </Card>
+                </div>
               </motion.div>
             </div>
           </div>
@@ -706,7 +715,7 @@ export default function LandingPage() {
       {/* ── SPORTS WE TREAT ────────────────────────────────────────────── */}
       <section
         id="sports"
-        className="py-20 bg-slate-950 border-b border-slate-800"
+        className="py-20 bg-slate-950 border-b border-slate-800/80"
         aria-labelledby="sports-heading"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -717,6 +726,9 @@ export default function LandingPage() {
             variants={fadeUp}
             className="text-center space-y-4 mb-16"
           >
+            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+              ATHLETIC PROTOCOLS
+            </Badge>
             <h2
               id="sports-heading"
               className="text-3xl sm:text-4xl font-extrabold text-white"
@@ -740,27 +752,25 @@ export default function LandingPage() {
               const Icon = item.icon;
               return (
                 <motion.div key={idx} variants={fadeUp} className="h-full">
-                  <Card className="bg-[#102321] border-slate-800 hover:border-teal-500/40 transition-all flex flex-col justify-between h-full">
-                    <CardHeader>
+                  <div className="glass-card border border-slate-800/80 hover:border-teal-500/40 transition-all duration-300 rounded-2xl p-6 flex flex-col justify-between h-full group">
+                    <div>
                       <div
-                        className="h-12 w-12 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-teal-400 mb-4"
+                        className="h-12 w-12 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-center text-teal-400 mb-4 group-hover:border-teal-500/50 transition-colors"
                         aria-hidden="true"
                       >
                         <Icon className="h-6 w-6" />
                       </div>
-                      <CardTitle className="text-xl text-white font-bold">
+                      <h3 className="text-xl text-white font-bold font-heading mb-3">
                         {item.sport}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <p className="text-xs text-slate-300">
-                        <strong>Common Injuries:</strong> {item.injuries}
+                      </h3>
+                      <p className="text-xs text-slate-300 leading-relaxed mb-3">
+                        <strong className="text-slate-200">Common Injuries:</strong> {item.injuries}
                       </p>
-                      <p className="text-xs text-teal-400 font-semibold pt-2 border-t border-slate-800">
-                        <strong>Care Approach:</strong> {item.approach}
-                      </p>
-                    </CardContent>
-                  </Card>
+                    </div>
+                    <p className="text-xs text-teal-400 font-semibold pt-3 border-t border-slate-800/80">
+                      <strong className="text-teal-300">Care Approach:</strong> {item.approach}
+                    </p>
+                  </div>
                 </motion.div>
               );
             })}
@@ -771,7 +781,7 @@ export default function LandingPage() {
       {/* ── SERVICES ───────────────────────────────────────────────────── */}
       <section
         id="services"
-        className="py-20 bg-[#102321] border-b border-slate-800"
+        className="py-20 bg-[#102321] border-b border-slate-800/80"
         aria-labelledby="services-heading"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -782,6 +792,9 @@ export default function LandingPage() {
             variants={fadeUp}
             className="text-center space-y-4 mb-16"
           >
+            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+              CLINICAL SPECTRUM
+            </Badge>
             <h2
               id="services-heading"
               className="text-3xl sm:text-4xl font-extrabold text-white"
@@ -805,34 +818,32 @@ export default function LandingPage() {
               const Icon = srv.icon;
               return (
                 <motion.div key={srv.id} variants={fadeUp}>
-                  <Card className="bg-slate-900 border-slate-800 hover:border-teal-500/30 transition-all h-full flex flex-col">
-                    <CardHeader className="pb-3">
+                  <div className="glass-card border border-slate-800/80 hover:border-teal-500/40 transition-all duration-300 rounded-2xl p-6 h-full flex flex-col justify-between group">
+                    <div>
                       <Badge
-                        className="w-fit text-xs mb-3 bg-teal-900/40 text-teal-300 border-teal-800"
+                        className="w-fit text-[11px] font-mono mb-3 bg-teal-950/60 text-teal-300 border-teal-800/60"
                         aria-label={`Service category: ${srv.badge}`}
                       >
                         {srv.badge}
                       </Badge>
                       <div
-                        className="h-10 w-10 rounded-xl bg-[#102321] border border-slate-800 flex items-center justify-center text-teal-400 mb-2"
+                        className="h-10 w-10 rounded-xl bg-[#0c1a18] border border-slate-800 flex items-center justify-center text-teal-400 mb-3 group-hover:border-teal-500/50 transition-colors"
                         aria-hidden="true"
                       >
                         <Icon className="h-5 w-5" />
                       </div>
-                      <CardTitle className="text-base text-white font-bold leading-snug">
+                      <h3 className="text-base text-white font-bold font-heading leading-snug mb-2">
                         {srv.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="flex-1 flex flex-col justify-between gap-4">
-                      <p className="text-xs text-slate-400 leading-relaxed">
+                      </h3>
+                      <p className="text-xs text-slate-400 leading-relaxed mb-4">
                         {srv.desc}
                       </p>
-                      <div className="flex items-center gap-2 text-xs font-bold text-[#d5f14c]">
-                        <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
-                        {srv.stats}
-                      </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                    <div className="flex items-center gap-2 text-xs font-bold font-mono text-[#d5f14c] pt-3 border-t border-slate-800/80">
+                      <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      {srv.stats}
+                    </div>
+                  </div>
                 </motion.div>
               );
             })}
@@ -842,7 +853,7 @@ export default function LandingPage() {
 
       {/* ── RECOVERY JOURNEY ───────────────────────────────────────────── */}
       <section
-        className="py-20 bg-slate-950 border-b border-slate-800"
+        className="py-20 bg-slate-950 border-b border-slate-800/80"
         aria-labelledby="recovery-heading"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -853,6 +864,9 @@ export default function LandingPage() {
             variants={fadeUp}
             className="text-center space-y-4 mb-16"
           >
+            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+              INSTRUMENTED CONTINUUM
+            </Badge>
             <h2
               id="recovery-heading"
               className="text-3xl sm:text-4xl font-extrabold text-white"
@@ -873,20 +887,20 @@ export default function LandingPage() {
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
             aria-label="6-stage recovery process"
           >
-            {RECOVERY_STAGES.map((stage, idx) => (
+            {RECOVERY_STAGES.map((stage) => (
               <motion.li
                 key={stage.stage}
                 variants={fadeUp}
-                className="bg-[#102321] border border-slate-800 rounded-2xl p-6 flex gap-4"
+                className="glass-card border border-slate-800/80 rounded-2xl p-6 flex gap-4 hover:border-teal-500/30 transition-all duration-300"
               >
                 <span
-                  className="text-3xl font-black text-[#d5f14c] leading-none shrink-0 select-none"
+                  className="text-3xl sm:text-4xl font-black font-heading text-[#d5f14c] leading-none shrink-0 select-none"
                   aria-hidden="true"
                 >
                   {stage.stage}
                 </span>
                 <div>
-                  <h3 className="font-bold text-white text-sm mb-1">
+                  <h3 className="font-bold text-white text-sm font-heading mb-1">
                     {stage.name}
                   </h3>
                   <p className="text-xs text-slate-400 leading-relaxed">
@@ -902,7 +916,7 @@ export default function LandingPage() {
       {/* ── DOCTOR BIO ─────────────────────────────────────────────────── */}
       <section
         id="doctor-signature"
-        className="py-24 bg-[#102321] border-b border-slate-800 relative overflow-hidden"
+        className="py-24 bg-[#102321] border-b border-slate-800/80 relative overflow-hidden"
         aria-labelledby="doctor-heading"
       >
         <div className="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 items-center">
@@ -914,7 +928,7 @@ export default function LandingPage() {
             variants={fadeUp}
             className="lg:col-span-5 order-2 lg:order-1 flex justify-center"
           >
-            <div className="relative w-full max-w-md rounded-3xl overflow-hidden bg-gradient-to-b from-teal-950/60 via-slate-900 to-slate-950 border border-slate-800/80 p-3 shadow-2xl shadow-teal-950/60 group hover:border-teal-500/40 transition-all duration-300">
+            <div className="relative w-full max-w-md rounded-3xl overflow-hidden glass-card bg-gradient-to-b from-teal-950/60 via-slate-900 to-slate-950 border border-slate-800/80 p-3 shadow-2xl shadow-teal-950/60 group hover:border-teal-500/40 transition-all duration-300">
               <div className="relative rounded-2xl overflow-hidden bg-slate-950/40">
                 <Image
                   src="/dr-amit-jha-portrait.webp"
@@ -937,15 +951,19 @@ export default function LandingPage() {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeUp}
+              className="space-y-2"
             >
+              <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+                LEAD SURGEON & FELLOW
+              </Badge>
               <h2
                 id="doctor-heading"
-                className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight"
+                className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight font-heading"
               >
                 Dr. Amit Kumar Jha
               </h2>
-              <p className="text-base text-teal-400 font-semibold mt-2">
-                Senior Sports Injury & Orthopedic Specialist, Varanasi
+              <p className="text-base text-teal-400 font-semibold">
+                Senior Sports Injury &amp; Orthopedic Specialist, Varanasi
               </p>
             </motion.div>
 
@@ -973,14 +991,14 @@ export default function LandingPage() {
                 <motion.div
                   key={label}
                   variants={fadeUp}
-                  className="flex items-start gap-3 bg-slate-900 p-4 rounded-xl border border-slate-800 text-sm"
+                  className="flex items-start gap-3 glass-card bg-slate-900/80 p-4 rounded-xl border border-slate-800/80 text-sm"
                 >
                   <Award
                     className="h-6 w-6 text-[#d5f14c] shrink-0 mt-0.5"
                     aria-hidden="true"
                   />
                   <div>
-                    <strong className="text-white block">{label}</strong>
+                    <strong className="text-white block font-heading">{label}</strong>
                     <span className="text-slate-400 text-xs">{desc}</span>
                   </div>
                 </motion.div>
@@ -992,7 +1010,7 @@ export default function LandingPage() {
 
       {/* ── TESTIMONIALS ───────────────────────────────────────────────── */}
       <section
-        className="py-20 bg-slate-950 border-b border-slate-800"
+        className="py-20 bg-slate-950 border-b border-slate-800/80"
         aria-labelledby="testimonials-heading"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -1003,6 +1021,9 @@ export default function LandingPage() {
             variants={fadeUp}
             className="text-center space-y-4 mb-16"
           >
+            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+              VERIFIED OUTCOMES
+            </Badge>
             <h2
               id="testimonials-heading"
               className="text-3xl sm:text-4xl font-extrabold text-white"
@@ -1025,27 +1046,29 @@ export default function LandingPage() {
               <motion.figure
                 key={idx}
                 variants={fadeUp}
-                className="bg-[#102321] border border-slate-800 rounded-2xl p-6 flex flex-col gap-4"
+                className="glass-card border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between gap-4 hover:border-teal-500/30 transition-all duration-300"
               >
-                <div
-                  className="flex gap-0.5"
-                  aria-label={`${t.rating} out of 5 stars`}
-                >
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-4 w-4 fill-amber-400 text-amber-400"
-                      aria-hidden="true"
-                    />
-                  ))}
+                <div className="space-y-3">
+                  <div
+                    className="flex gap-0.5"
+                    aria-label={`${t.rating} out of 5 stars`}
+                  >
+                    {Array.from({ length: t.rating }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-4 w-4 fill-amber-400 text-amber-400"
+                        aria-hidden="true"
+                      />
+                    ))}
+                  </div>
+                  <blockquote className="text-sm text-slate-300 leading-relaxed">
+                    &ldquo;{t.quote}&rdquo;
+                  </blockquote>
                 </div>
-                <blockquote className="text-sm text-slate-300 leading-relaxed flex-1">
-                  &ldquo;{t.quote}&rdquo;
-                </blockquote>
-                <figcaption className="border-t border-slate-800 pt-4">
-                  <strong className="text-white text-sm block">{t.name}</strong>
-                  <span className="text-xs text-slate-400">{t.role}</span>
-                  <Badge className="mt-2 bg-teal-900/30 text-teal-300 border-teal-800 text-xs">
+                <figcaption className="border-t border-slate-800/80 pt-4">
+                  <strong className="text-white text-sm block font-heading">{t.name}</strong>
+                  <span className="text-xs text-slate-400 block">{t.role}</span>
+                  <Badge className="mt-2 bg-teal-950/60 text-teal-300 border-teal-800/60 text-[11px] font-mono">
                     {t.type}
                   </Badge>
                 </figcaption>
@@ -1058,7 +1081,7 @@ export default function LandingPage() {
       {/* ── BOOKING WIZARD ─────────────────────────────────────────────── */}
       <section
         id="booking"
-        className="py-20 bg-[#102321] border-b border-slate-800"
+        className="py-20 bg-[#102321] border-b border-slate-800/80"
         aria-labelledby="booking-heading"
       >
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-12">
@@ -1069,10 +1092,14 @@ export default function LandingPage() {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeUp}
+              className="space-y-6"
             >
+              <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+                DIRECT RESERVATION
+              </Badge>
               <h2
                 id="booking-heading"
-                className="text-3xl font-extrabold text-white mb-6"
+                className="text-3xl font-extrabold text-white"
               >
                 Why Book Here?
               </h2>
@@ -1096,13 +1123,13 @@ export default function LandingPage() {
                 ].map(({ icon: Icon, title, desc }) => (
                   <div key={title} className="flex gap-4" role="listitem">
                     <div
-                      className="h-10 w-10 shrink-0 bg-slate-900 border border-slate-800 rounded-full flex items-center justify-center text-teal-400"
+                      className="h-10 w-10 shrink-0 bg-[#0c1a18] border border-slate-800 rounded-xl flex items-center justify-center text-teal-400"
                       aria-hidden="true"
                     >
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-white text-sm">{title}</h3>
+                      <h3 className="font-bold text-white text-sm font-heading">{title}</h3>
                       <p className="text-sm text-slate-400 mt-1">{desc}</p>
                     </div>
                   </div>
@@ -1119,42 +1146,42 @@ export default function LandingPage() {
               viewport={{ once: true }}
               variants={fadeUp}
             >
-              <Card className="bg-slate-900 border border-slate-800 shadow-2xl overflow-hidden">
+              <div className="glass-card border border-slate-800/80 rounded-3xl shadow-2xl overflow-hidden">
                 {/* Step indicator */}
                 <div
-                  className="bg-[#102321] border-b border-slate-800 px-8 py-5"
+                  className="bg-[#0c1a18] border-b border-slate-800/80 px-8 py-5"
                   role="tablist"
                   aria-label="Booking form steps"
                 >
-                  <div className="grid grid-cols-2 gap-4 text-center max-w-sm mx-auto">
+                  <div className="grid grid-cols-2 gap-4 text-center max-w-sm mx-auto font-mono text-xs">
                     <div
-                      className={`pb-2 border-b-2 font-bold text-xs transition-colors ${
+                      className={`pb-2 border-b-2 font-bold transition-colors ${
                         bookingStep >= 1
-                          ? "border-teal-400 text-teal-400"
-                          : "border-slate-700 text-slate-600"
+                          ? "border-[#d5f14c] text-[#d5f14c]"
+                          : "border-slate-800 text-slate-600"
                       }`}
                       role="tab"
                       aria-selected={bookingStep === 1}
                       aria-label="Step 1: Service and slot selection"
                     >
-                      1. Service & Slot
+                      01. SERVICE &amp; SLOT
                     </div>
                     <div
-                      className={`pb-2 border-b-2 font-bold text-xs transition-colors ${
+                      className={`pb-2 border-b-2 font-bold transition-colors ${
                         bookingStep >= 2
-                          ? "border-teal-400 text-teal-400"
-                          : "border-slate-700 text-slate-600"
+                          ? "border-[#d5f14c] text-[#d5f14c]"
+                          : "border-slate-800 text-slate-600"
                       }`}
                       role="tab"
                       aria-selected={bookingStep === 2}
                       aria-label="Step 2: Patient information"
                     >
-                      2. Patient Info
+                      02. PATIENT INFO
                     </div>
                   </div>
                 </div>
 
-                <CardContent className="p-8">
+                <div className="p-8">
                   {isBooked ? (
                     /* ── Success State ── */
                     <div
@@ -1167,32 +1194,32 @@ export default function LandingPage() {
                         className="h-20 w-20 bg-teal-500/20 text-teal-400 rounded-full flex items-center justify-center mx-auto border border-teal-500/40"
                         aria-hidden="true"
                       >
-                        <CheckCircle2 className="h-10 w-10" />
+                        <CheckCircle2 className="h-10 w-10 text-[#d5f14c]" />
                       </div>
                       <div>
-                        <h3 className="text-2xl font-black text-white">
+                        <h3 className="text-2xl font-black text-white font-heading">
                           OPD Appointment Confirmed!
                         </h3>
                         <p className="text-slate-400 text-sm mt-1">
                           Your consultation token has been reserved.
                         </p>
                       </div>
-                      <dl className="bg-[#102321] border border-slate-800 rounded-xl p-6 max-w-md mx-auto text-left space-y-3">
-                        <div className="flex justify-between border-b border-slate-800 pb-2">
-                          <dt className="text-slate-400 text-xs">Patient Name</dt>
-                          <dd className="text-white text-xs font-bold">
+                      <dl className="bg-[#0c1a18] border border-slate-800/80 rounded-2xl p-6 max-w-md mx-auto text-left space-y-3 font-mono text-xs">
+                        <div className="flex justify-between border-b border-slate-800/80 pb-2">
+                          <dt className="text-slate-400">Patient Name</dt>
+                          <dd className="text-white font-bold">
                             {patientName || "Patient"}
                           </dd>
                         </div>
-                        <div className="flex justify-between border-b border-slate-800 pb-2">
-                          <dt className="text-slate-400 text-xs">Service</dt>
-                          <dd className="text-white text-xs font-semibold">
+                        <div className="flex justify-between border-b border-slate-800/80 pb-2">
+                          <dt className="text-slate-400">Service</dt>
+                          <dd className="text-white font-semibold">
                             {selectedService}
                           </dd>
                         </div>
                         <div className="flex justify-between">
-                          <dt className="text-slate-400 text-xs">Date & Time Slot</dt>
-                          <dd className="text-white text-xs font-semibold">
+                          <dt className="text-slate-400">Date &amp; Time Slot</dt>
+                          <dd className="text-teal-400 font-bold">
                             {selectedDate} @ {selectedSlot}
                           </dd>
                         </div>
@@ -1202,7 +1229,7 @@ export default function LandingPage() {
                           setIsBooked(false);
                           setBookingStep(1);
                         }}
-                        className="bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-bold focus-visible:ring-2 focus-visible:ring-white"
+                        className="bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black focus-visible:ring-2 focus-visible:ring-white"
                       >
                         Book Another Appointment
                       </Button>
@@ -1218,8 +1245,8 @@ export default function LandingPage() {
                       {bookingStep === 1 && (
                         <div className="space-y-6">
                           <fieldset>
-                            <legend className="text-slate-300 mb-3 block text-xs font-bold uppercase tracking-wider">
-                              Select Required Service
+                            <legend className="text-slate-300 mb-3 block text-xs font-mono font-bold uppercase tracking-widest">
+                              // SELECT REQUIRED SERVICE
                             </legend>
                             <div
                               className="grid sm:grid-cols-2 gap-3"
@@ -1241,15 +1268,15 @@ export default function LandingPage() {
                                   }}
                                   className={`p-4 rounded-xl border cursor-pointer transition-all outline-none focus-visible:ring-2 focus-visible:ring-[#d5f14c] ${
                                     selectedService === srv.title
-                                      ? "bg-teal-900/30 border-teal-400 text-white shadow-md"
-                                      : "bg-[#102321] border-slate-800 text-slate-400 hover:bg-slate-800/80 hover:text-white"
+                                      ? "bg-slate-900 border-[#d5f14c] text-white shadow-md"
+                                      : "bg-[#0c1a18] border-slate-800/80 text-slate-400 hover:bg-slate-900/80 hover:text-white"
                                   }`}
                                 >
                                   <div className="flex items-center justify-between font-bold text-xs">
                                     <span>{srv.title}</span>
                                     {selectedService === srv.title && (
                                       <CheckCircle2
-                                        className="h-4 w-4 text-teal-400 shrink-0"
+                                        className="h-4 w-4 text-[#d5f14c] shrink-0"
                                         aria-hidden="true"
                                       />
                                     )}
@@ -1263,7 +1290,7 @@ export default function LandingPage() {
                             <div>
                               <Label
                                 htmlFor="preferred-date"
-                                className="text-slate-300 mb-2 block text-xs font-bold uppercase"
+                                className="text-slate-300 mb-2 block text-xs font-mono font-bold uppercase tracking-wider"
                               >
                                 Preferred Date
                               </Label>
@@ -1272,14 +1299,14 @@ export default function LandingPage() {
                                 type="date"
                                 value={selectedDate}
                                 onChange={(e) => setSelectedDate(e.target.value)}
-                                className="bg-[#102321] border-slate-700 text-white focus-visible:ring-teal-500"
+                                className="bg-[#0c1a18] border-slate-800 text-white focus-visible:ring-teal-500"
                                 aria-label="Select your preferred appointment date"
                               />
                             </div>
                             <div>
                               <Label
                                 htmlFor="time-slot"
-                                className="text-slate-300 mb-2 block text-xs font-bold uppercase"
+                                className="text-slate-300 mb-2 block text-xs font-mono font-bold uppercase tracking-wider"
                               >
                                 Available Time Slot
                               </Label>
@@ -1287,7 +1314,7 @@ export default function LandingPage() {
                                 id="time-slot"
                                 value={selectedSlot}
                                 onChange={(e) => setSelectedSlot(e.target.value)}
-                                className="w-full h-10 px-3 rounded-md bg-[#102321] border border-slate-700 text-white text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+                                className="w-full h-10 px-3 rounded-md bg-[#0c1a18] border border-slate-800 text-white text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 font-mono"
                                 aria-label="Select an available time slot"
                               >
                                 <optgroup label="Morning OPD (11:00 AM – 1:30 PM)">
@@ -1308,7 +1335,7 @@ export default function LandingPage() {
                             <Button
                               type="button"
                               onClick={() => setBookingStep(2)}
-                              className="bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-bold focus-visible:ring-2 focus-visible:ring-white"
+                              className="bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black focus-visible:ring-2 focus-visible:ring-white"
                             >
                               Next: Patient Details{" "}
                               <ArrowRight
@@ -1327,7 +1354,7 @@ export default function LandingPage() {
                             <div>
                               <Label
                                 htmlFor="patient-name"
-                                className="text-slate-300 mb-2 block text-xs font-bold uppercase"
+                                className="text-slate-300 mb-2 block text-xs font-mono font-bold uppercase tracking-wider"
                               >
                                 Patient Full Name{" "}
                                 <span className="text-red-400" aria-label="required">*</span>
@@ -1339,7 +1366,7 @@ export default function LandingPage() {
                                 onChange={(e) => setPatientName(e.target.value)}
                                 required
                                 autoComplete="name"
-                                className="bg-[#102321] border-slate-700 text-white focus-visible:ring-teal-500"
+                                className="bg-[#0c1a18] border-slate-800 text-white focus-visible:ring-teal-500"
                                 aria-required="true"
                                 aria-describedby="name-hint"
                               />
@@ -1350,7 +1377,7 @@ export default function LandingPage() {
                             <div>
                               <Label
                                 htmlFor="patient-phone"
-                                className="text-slate-300 mb-2 block text-xs font-bold uppercase"
+                                className="text-slate-300 mb-2 block text-xs font-mono font-bold uppercase tracking-wider"
                               >
                                 Mobile Number{" "}
                                 <span className="text-red-400" aria-label="required">*</span>
@@ -1364,7 +1391,7 @@ export default function LandingPage() {
                                 type="tel"
                                 autoComplete="tel"
                                 inputMode="numeric"
-                                className="bg-[#102321] border-slate-700 text-white focus-visible:ring-teal-500"
+                                className="bg-[#0c1a18] border-slate-800 text-white focus-visible:ring-teal-500"
                                 aria-required="true"
                               />
                             </div>
@@ -1373,7 +1400,7 @@ export default function LandingPage() {
                           <div>
                             <Label
                               htmlFor="complaint"
-                              className="text-slate-300 mb-2 block text-xs font-bold uppercase"
+                              className="text-slate-300 mb-2 block text-xs font-mono font-bold uppercase tracking-wider"
                             >
                               Symptoms / Notes
                             </Label>
@@ -1382,7 +1409,7 @@ export default function LandingPage() {
                               placeholder="Describe joint pain, injury, or request..."
                               value={complaint}
                               onChange={(e) => setComplaint(e.target.value)}
-                              className="bg-[#102321] border-slate-700 text-white h-24 focus-visible:ring-teal-500"
+                              className="bg-[#0c1a18] border-slate-800 text-white h-24 focus-visible:ring-teal-500"
                               aria-label="Optional: describe your symptoms or special requests"
                             />
                           </div>
@@ -1392,23 +1419,23 @@ export default function LandingPage() {
                               type="button"
                               variant="outline"
                               onClick={() => setBookingStep(1)}
-                              className="border-slate-700 text-slate-300 hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
+                              className="border-slate-800 text-slate-300 hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
                             >
                               Back
                             </Button>
                             <Button
                               type="submit"
-                              className="bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-bold focus-visible:ring-2 focus-visible:ring-white"
+                              className="bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black focus-visible:ring-2 focus-visible:ring-white"
                             >
-                              Confirm & Generate Token
+                              Confirm &amp; Generate Token
                             </Button>
                           </div>
                         </div>
                       )}
                     </form>
                   )}
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>
