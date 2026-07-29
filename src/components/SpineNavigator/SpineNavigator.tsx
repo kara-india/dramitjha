@@ -82,108 +82,32 @@ const RECOVERY = [
   { stage: "06", name: "Return to Sport Clearance", desc: "Biomechanical testing for field readiness." },
 ];
 
-/** Clean 4-vertebra column (matches simple white-line spine icon). */
-function FourVertebraSpine({
-  active,
-  hovered,
-  onSelect,
-  onHover,
-}: {
-  active: SpineModule | null;
-  hovered: SpineModule | null;
-  onSelect: (id: SpineModule) => void;
-  onHover: (id: SpineModule | null) => void;
-}) {
-  // Four stacked vertebrae — y centers
-  const verts = [
-    { id: MODULES[0].id, cy: 48 },
-    { id: MODULES[1].id, cy: 108 },
-    { id: MODULES[2].id, cy: 168 },
-    { id: MODULES[3].id, cy: 228 },
-  ] as const;
-
+function VertebraIcon({ hot }: { hot: boolean }) {
+  const stroke = hot ? "#c89b2a" : "#1a3d3d";
+  const fill = hot ? "#f5e8c7" : "#ffffff";
   return (
-    <svg viewBox="0 0 120 280" className="w-full max-w-[160px] h-auto mx-auto" aria-hidden="false">
-      {verts.map((v, i) => {
-        const isHot = active === v.id || hovered === v.id;
-        const stroke = isHot ? "#c89b2a" : "#1a3d3d";
-        const fill = isHot ? "#f5e8c7" : "#ffffff";
-        const cx = 60;
-        const cy = v.cy;
-        const mod = MODULES[i];
-        return (
-          <g
-            key={v.id}
-            role="button"
-            tabIndex={0}
-            aria-label={mod.label}
-            aria-pressed={active === v.id}
-            className="cursor-pointer outline-none"
-            onClick={() => onSelect(v.id)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                onSelect(v.id);
-              }
-            }}
-            onMouseEnter={() => onHover(v.id)}
-            onMouseLeave={() => onHover(null)}
-            onFocus={() => onHover(v.id)}
-            onBlur={() => onHover(null)}
-          >
-            {/* Hit target */}
-            <rect x={10} y={cy - 28} width={100} height={56} fill="transparent" />
-
-            {/* Vertebral body */}
-            <path
-              d={`
-                M ${cx - 28} ${cy - 18}
-                Q ${cx - 32} ${cy - 22}, ${cx - 22} ${cy - 24}
-                L ${cx + 22} ${cy - 24}
-                Q ${cx + 32} ${cy - 22}, ${cx + 28} ${cy - 18}
-                L ${cx + 28} ${cy + 18}
-                Q ${cx + 32} ${cy + 22}, ${cx + 22} ${cy + 24}
-                L ${cx - 22} ${cy + 24}
-                Q ${cx - 32} ${cy + 22}, ${cx - 28} ${cy + 18}
-                Z
-              `}
-              fill={fill}
-              stroke={stroke}
-              strokeWidth={isHot ? 2.5 : 2}
-              strokeLinejoin="round"
-            />
-
-            {/* Left transverse process */}
-            <path
-              d={`M ${cx - 28} ${cy - 6} L ${cx - 42} ${cy - 4} Q ${cx - 48} ${cy}, ${cx - 42} ${cy + 4} L ${cx - 28} ${cy + 6}`}
-              fill={fill}
-              stroke={stroke}
-              strokeWidth={isHot ? 2.5 : 2}
-              strokeLinejoin="round"
-            />
-            {/* Right transverse process */}
-            <path
-              d={`M ${cx + 28} ${cy - 6} L ${cx + 42} ${cy - 4} Q ${cx + 48} ${cy}, ${cx + 42} ${cy + 4} L ${cx + 28} ${cy + 6}`}
-              fill={fill}
-              stroke={stroke}
-              strokeWidth={isHot ? 2.5 : 2}
-              strokeLinejoin="round"
-            />
-
-            {/* Label to the right */}
-            <text
-              x={cx + 52}
-              y={cy + 4}
-              fontSize="11"
-              fontWeight="700"
-              fill={isHot ? "#96721b" : "#44403c"}
-              className="select-none pointer-events-none"
-            >
-              {mod.label}
-            </text>
-          </g>
-        );
-      })}
+    <svg viewBox="0 0 72 48" className="w-14 h-10 sm:w-16 sm:h-11 shrink-0" aria-hidden="true">
+      <path
+        d="M 22 6 Q 18 4, 24 2 L 48 2 Q 54 4, 50 6 L 50 42 Q 54 44, 48 46 L 24 46 Q 18 44, 22 42 Z"
+        fill={fill}
+        stroke={stroke}
+        strokeWidth={hot ? 2.4 : 2}
+        strokeLinejoin="round"
+      />
+      <path
+        d="M 22 18 L 8 16 Q 2 20, 8 24 L 22 22"
+        fill={fill}
+        stroke={stroke}
+        strokeWidth={hot ? 2.4 : 2}
+        strokeLinejoin="round"
+      />
+      <path
+        d="M 50 18 L 64 16 Q 70 20, 64 24 L 50 22"
+        fill={fill}
+        stroke={stroke}
+        strokeWidth={hot ? 2.4 : 2}
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -205,23 +129,51 @@ export const SpineNavigator: FC<SpineNavigatorProps> = ({ onBook }) => {
       <h2 className="text-2xl sm:text-3xl font-black text-center leading-tight mb-1 font-heading text-[#1c1917] z-10">
         Move Without <span className="gold-text-gradient">Pain.</span>
       </h2>
-      <p className="text-stone-600 text-xs text-center max-w-sm mb-4 z-10">
+      <p className="text-stone-600 text-xs text-center max-w-sm mb-5 z-10">
         Tap a vertebra — Services, Credentials, Stories, or Recovery.
       </p>
 
-      <div className="relative w-full max-w-[280px] mx-auto z-10 py-2">
-        <FourVertebraSpine
-          active={active}
-          hovered={hovered}
-          onSelect={setActive}
-          onHover={setHovered}
-        />
+      {/* 4 stacked clickable vertebrae with full HTML labels */}
+      <div className="relative z-10 flex flex-col items-stretch gap-3 w-full max-w-[260px] mx-auto">
+        {MODULES.map((m) => {
+          const isHot = active === m.id || hovered === m.id;
+          const Icon = m.icon;
+          return (
+            <button
+              key={m.id}
+              type="button"
+              aria-label={m.label}
+              aria-pressed={active === m.id}
+              onClick={() => setActive(m.id)}
+              onMouseEnter={() => setHovered(m.id)}
+              onMouseLeave={() => setHovered(null)}
+              onFocus={() => setHovered(m.id)}
+              onBlur={() => setHovered(null)}
+              className={`flex items-center gap-3 rounded-xl px-2 py-1.5 text-left transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c89b2a] ${
+                isHot ? "bg-[#f5e8c7]/60 scale-[1.02]" : "hover:bg-stone-100/80"
+              }`}
+            >
+              <VertebraIcon hot={isHot} />
+              <span className="flex flex-col min-w-0">
+                <span
+                  className={`text-sm font-bold leading-tight flex items-center gap-1.5 ${
+                    isHot ? "text-[#96721b]" : "text-stone-800"
+                  }`}
+                >
+                  <Icon className="h-3.5 w-3.5 shrink-0" />
+                  {m.label}
+                </span>
+                <span className="text-[10px] text-stone-500 truncate">{m.short}</span>
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       <button
         type="button"
         onClick={onBook}
-        className="mt-4 rounded-xl px-6 py-2.5 text-sm font-bold gold-gradient-btn flex items-center gap-2 z-10"
+        className="mt-5 rounded-xl px-6 py-2.5 text-sm font-bold gold-gradient-btn flex items-center gap-2 z-10"
       >
         <Calendar className="h-4 w-4" />
         Book Appointment
