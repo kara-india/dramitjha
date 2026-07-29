@@ -1,200 +1,135 @@
-﻿// src/components/Booking/BookingModal.tsx
-"use client";
+﻿"use client";
 
-import { useEffect, useRef, useState, type FC } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { X, CheckCircle2 } from "lucide-react";
-import { BODY_PARTS } from "@/data/bodyParts";
+import React, { useEffect, useRef, useState } from "react";
 
 interface BookingModalProps {
-  isOpen: boolean;
+  open?: boolean;
+  isOpen?: boolean;
+  partId?: string | null;
   initialPartId?: string | null;
   onClose: () => void;
+  onBook?: (partId: string, data?: any) => void;
 }
 
-export const BookingModal: FC<BookingModalProps> = ({
-  isOpen,
-  initialPartId,
-  onClose,
-}) => {
-  const modalRef = useRef<HTMLDivElement>(null);
-  const closeBtnRef = useRef<HTMLButtonElement>(null);
+export function BookingModal({ open, isOpen, partId, initialPartId, onClose, onBook }: BookingModalProps) {
+  const isModalOpen = open ?? isOpen ?? false;
+  const activePartId = partId ?? initialPartId ?? null;
 
-  const [selectedPart, setSelectedPart] = useState(initialPartId || "knee");
+  const dialogRef = useRef<HTMLDivElement | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    if (initialPartId) {
-      setSelectedPart(initialPartId);
-    }
-  }, [initialPartId]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
-
-  useEffect(() => {
-    if (isOpen) {
+    if (isModalOpen) {
       setIsSubmitted(false);
-      setTimeout(() => closeBtnRef.current?.focus(), 50);
+      dialogRef.current?.focus();
     }
-  }, [isOpen]);
+  }, [isModalOpen]);
 
-  const handleTrapTab = (e: React.KeyboardEvent) => {
-    if (e.key !== "Tab" || !modalRef.current) return;
-    const focusables = modalRef.current.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    if (!focusables.length) return;
-    const first = focusables[0];
-    const last = focusables[focusables.length - 1];
-
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  };
+  if (!isModalOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const payload = { name, phone, date, time };
+    if (onBook && activePartId) {
+      onBook(activePartId, payload);
+    }
     setIsSubmitted(true);
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <motion.div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            aria-hidden="true"
-          />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
 
-          <motion.div
-            ref={modalRef}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="booking-modal-title"
-            onKeyDown={handleTrapTab}
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="relative z-50 w-full max-w-lg bg-[#102321] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden"
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="booking-title"
+        tabIndex={-1}
+        className="relative z-10 w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 text-slate-900"
+      >
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3 mb-4">
+          <h2 id="booking-title" className="text-lg font-bold text-slate-900">
+            Book Appointment
+          </h2>
+          <button
+            onClick={onClose}
+            type="button"
+            className="rounded-lg p-1 text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+            aria-label="Close modal"
           >
-            <div className="flex items-center justify-between border-b border-slate-800/80 pb-4 mb-6">
-              <div>
-                <span className="text-[10px] font-mono text-teal-400 uppercase tracking-widest block">
-                  OPD APPOINTMENT
-                </span>
-                <h2 id="booking-modal-title" className="text-xl font-bold text-white font-heading">
-                  Quick OPD Booking
-                </h2>
-              </div>
-              <button
-                ref={closeBtnRef}
-                onClick={onClose}
-                type="button"
-                aria-label="Close booking modal"
-                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c]"
-              >
-                <X className="h-5 w-5" />
-              </button>
+            ✕
+          </button>
+        </div>
+
+        {isSubmitted ? (
+          <div className="text-center py-6 space-y-3">
+            <div className="h-12 w-12 bg-teal-100 text-teal-700 rounded-full flex items-center justify-center mx-auto text-xl font-bold">
+              ✓
+            </div>
+            <h3 className="text-lg font-bold text-slate-900">Booking Requested</h3>
+            <p className="text-xs text-slate-600">
+              Thank you {name}. We have recorded your request for {activePartId || "consultation"}.
+            </p>
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full mt-2 rounded-xl px-4 py-2.5 font-bold text-sm bg-[#d5f14c] text-[#071211] hover:bg-[#c4df3b]"
+            >
+              Done
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700">Full name *</label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              />
             </div>
 
-            {isSubmitted ? (
-              <div className="text-center py-8 space-y-4">
-                <div className="h-16 w-16 bg-teal-500/20 text-[#d5f14c] rounded-full flex items-center justify-center mx-auto border border-teal-500/40">
-                  <CheckCircle2 className="h-8 w-8" />
-                </div>
-                <h3 className="text-xl font-bold text-white">Token Reserved!</h3>
-                <p className="text-sm text-slate-300">
-                  Thank you <strong className="text-white">{name}</strong>. Your consultation request for{" "}
-                  <span className="text-teal-400 font-semibold uppercase">{selectedPart}</span> care is recorded.
-                </p>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="w-full mt-4 rounded-xl px-6 py-3 font-black text-sm bg-[#d5f14c] text-[#102321] hover:bg-[#c4df3b]"
-                >
-                  Done
-                </button>
+            <div>
+              <label className="block text-xs font-semibold text-slate-700">Phone *</label>
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+                className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                inputMode="tel"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700">Date</label>
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500" />
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="modal-part" className="block text-xs font-mono text-slate-300 mb-1.5 uppercase tracking-wider">
-                    Treatment Area
-                  </label>
-                  <select
-                    id="modal-part"
-                    value={selectedPart}
-                    onChange={(e) => setSelectedPart(e.target.value)}
-                    className="w-full h-11 px-3 rounded-xl bg-[#0c1a18] border border-slate-800 text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 font-mono"
-                  >
-                    {BODY_PARTS.map((bp) => (
-                      <option key={bp.id} value={bp.id}>
-                        {bp.label} — {bp.subtitle}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+              <div>
+                <label className="block text-xs font-semibold text-slate-700">Time</label>
+                <input type="time" value={time} onChange={(e) => setTime(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-500" />
+              </div>
+            </div>
 
-                <div>
-                  <label htmlFor="modal-name" className="block text-xs font-mono text-slate-300 mb-1.5 uppercase tracking-wider">
-                    Full Name *
-                  </label>
-                  <input
-                    id="modal-name"
-                    required
-                    type="text"
-                    placeholder="e.g. Rahul Sharma"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full h-11 px-3 rounded-xl bg-[#0c1a18] border border-slate-800 text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="modal-phone" className="block text-xs font-mono text-slate-300 mb-1.5 uppercase tracking-wider">
-                    Phone Number *
-                  </label>
-                  <input
-                    id="modal-phone"
-                    required
-                    type="tel"
-                    placeholder="e.g. 9876543210"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full h-11 px-3 rounded-xl bg-[#0c1a18] border border-slate-800 text-white text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
-                  />
-                </div>
-
-                <div className="pt-4">
-                  <button
-                    type="submit"
-                    className="w-full rounded-xl px-6 py-3.5 font-black text-sm bg-[#d5f14c] text-[#102321] hover:bg-[#c4df3b] transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
-                  >
-                    Confirm Booking
-                  </button>
-                </div>
-              </form>
-            )}
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+            <div className="flex items-center gap-3 mt-5 pt-2 border-t border-slate-100">
+              <button type="submit" className="flex-1 rounded-xl bg-[#d5f14c] text-[#071211] px-4 py-2.5 font-bold text-sm hover:bg-[#c4df3b]">
+                Confirm Booking
+              </button>
+              <button type="button" onClick={onClose} className="rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                Cancel
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
   );
-};
+}
+
+export default BookingModal;
