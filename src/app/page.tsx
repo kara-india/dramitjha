@@ -913,98 +913,110 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── DOCTOR BIO ─────────────────────────────────────────────────── */}
+      {/* ── DOCTOR BIO / PROFILE SECTION ───────────────────────────────── */}
       <section
         id="doctor-signature"
-        className="py-24 bg-[#102321] border-b border-slate-800/80 relative overflow-hidden"
+        className="py-20 lg:py-28 bg-[#102321] border-b border-slate-800/80 relative overflow-hidden"
         aria-labelledby="doctor-heading"
       >
-        <div className="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-12 gap-12 items-center">
-          {/* Photo — elevated hero-adjacent portrait, lazy loaded */}
+        <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left Text Column: Columns 1-7 */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeUp}
-            className="lg:col-span-5 order-2 lg:order-1 flex justify-center"
+            className="lg:col-span-7 space-y-6"
           >
-            <div className="relative w-full max-w-md rounded-3xl overflow-hidden glass-card bg-gradient-to-b from-teal-950/60 via-slate-900 to-slate-950 border border-slate-800/80 p-3 shadow-2xl shadow-teal-950/60 group hover:border-teal-500/40 transition-all duration-300">
-              <div className="relative rounded-2xl overflow-hidden bg-slate-950/40">
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-teal-950/80 border border-teal-800/60 text-teal-300 text-xs font-mono font-semibold tracking-wider uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#d5f14c] animate-pulse" aria-hidden="true"></span>
+              LEAD PHYSICIAN &amp; SURGEON
+            </div>
+
+            <h2
+              id="doctor-heading"
+              className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight font-heading"
+            >
+              Dr. Amit Kumar Jha
+            </h2>
+
+            <p className="text-lg sm:text-xl font-semibold text-teal-400 font-mono">
+              FNB Sports Medicine, MS &amp; DNB Orthopaedics — Senior Specialist
+            </p>
+
+            <p className="text-base text-slate-300 leading-relaxed max-w-3xl">
+              Committed to providing evidence-based, compassionate care at Dr. Amit Jha Sports Injury Clinic (Krishna Health). Dr. Jha specializes in comprehensive diagnostic evaluations, keyhole arthroscopy, ACL reconstruction, and personalized treatment plans for optimal patient outcomes.
+            </p>
+
+            {/* Bullet Points */}
+            <div className="grid sm:grid-cols-2 gap-3 pt-2">
+              {[
+                { title: "FNB Sports Medicine (Ganga Hospital)", desc: "Fellowship trained in sports surgery" },
+                { title: "MS & DNB Orthopaedics", desc: "Post-graduate surgical qualification" },
+                { title: "Keyhole Arthroscopy Specialist", desc: "Minimally invasive joint preservation" },
+                { title: "Ethical & Advanced Diagnostics", desc: "5,000+ successful surgical outcomes" },
+              ].map(({ title, desc }) => (
+                <div
+                  key={title}
+                  className="flex items-start gap-3 glass-card bg-slate-900/80 p-3.5 rounded-xl border border-slate-800/80 text-xs"
+                >
+                  <Award className="h-5 w-5 text-[#d5f14c] shrink-0 mt-0.5" aria-hidden="true" />
+                  <div>
+                    <strong className="text-white block font-heading">{title}</strong>
+                    <span className="text-slate-400">{desc}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <a href="#booking" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  className="w-full bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 h-13 focus-visible:ring-2 focus-visible:ring-white"
+                  aria-label="Request OPD appointment with Dr. Amit Jha"
+                >
+                  Request Appointment
+                </Button>
+              </a>
+              <a href="#navigator" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white h-13 px-6 font-semibold focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
+                  aria-label="Learn more about treatments and services"
+                >
+                  Learn More About Us
+                </Button>
+              </a>
+            </div>
+          </motion.div>
+
+          {/* Right Image Column: Columns 8-12 */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="lg:col-span-5 relative"
+          >
+            {/* Subtle Backglow effect */}
+            <div className="absolute -inset-4 bg-gradient-to-tr from-teal-500/30 to-emerald-400/20 rounded-full blur-3xl opacity-60 -z-10"></div>
+
+            {/* Image Container with precise styling */}
+            <div className="relative overflow-hidden rounded-3xl shadow-2xl border border-slate-800/80 bg-slate-900/90 glass-card p-3 group hover:border-teal-500/40 transition-all duration-500">
+              <div className="relative rounded-2xl overflow-hidden bg-slate-950/40 aspect-[4/5]">
                 <Image
                   src="/dr-amit-jha-portrait.webp"
                   alt="Dr. Amit Kumar Jha — Senior Sports Injury & Orthopedic Specialist, Varanasi"
-                  width={560}
-                  height={643}
-                  loading="lazy"
-                  quality={95}
+                  fill
                   sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 560px"
-                  className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                  className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
                 />
               </div>
             </div>
           </motion.div>
-
-          {/* Bio Content */}
-          <div className="lg:col-span-7 space-y-6 order-1 lg:order-2">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              className="space-y-2"
-            >
-              <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
-                LEAD SURGEON & FELLOW
-              </Badge>
-              <h2
-                id="doctor-heading"
-                className="text-4xl sm:text-5xl font-black text-white tracking-tight leading-tight font-heading"
-              >
-                Dr. Amit Kumar Jha
-              </h2>
-              <p className="text-base text-teal-400 font-semibold">
-                Senior Sports Injury &amp; Orthopedic Specialist, Varanasi
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={stagger}
-              className="space-y-3 pt-2"
-            >
-              {[
-                {
-                  label: "FNB Sports Medicine (Ganga Hospital)",
-                  desc: "Fellowship trained in sports surgery",
-                },
-                {
-                  label: "MS & DNB Orthopaedics",
-                  desc: "Post-graduate surgical qualification",
-                },
-                {
-                  label: "Keyhole Arthroscopy Specialist",
-                  desc: "Knee, shoulder & ankle minimally invasive surgery",
-                },
-              ].map(({ label, desc }) => (
-                <motion.div
-                  key={label}
-                  variants={fadeUp}
-                  className="flex items-start gap-3 glass-card bg-slate-900/80 p-4 rounded-xl border border-slate-800/80 text-sm"
-                >
-                  <Award
-                    className="h-6 w-6 text-[#d5f14c] shrink-0 mt-0.5"
-                    aria-hidden="true"
-                  />
-                  <div>
-                    <strong className="text-white block font-heading">{label}</strong>
-                    <span className="text-slate-400 text-xs">{desc}</span>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
         </div>
       </section>
 
