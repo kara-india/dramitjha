@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Award, Star, CheckCircle2, Activity, MapPin,
   Trophy, Flame, Zap, Dumbbell, Compass, Stethoscope, Bone,
-  ShieldAlert, Users, Target, ShieldCheck, Sparkles,
+  ShieldAlert, Users, Target, ShieldCheck, Sparkles, ArrowRight,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,14 +18,12 @@ import BodySelectorFeature from "@/components/BodySelector3D/BodySelectorFeature
 import { FeedbackWidget } from "@/components/Feedback/FeedbackWidget";
 import HeroBone from "@/components/HeroBone/HeroBone";
 
-// ??? ICON MAP (string -> component) ?????????????????????????????????????????
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Award, Star, CheckCircle2, Activity, MapPin,
   Trophy, Flame, Zap, Dumbbell, Compass, Stethoscope, Bone,
   ShieldAlert, Users, Target, ShieldCheck,
 };
 
-// ??? ANIMATION VARIANTS ??????????????????????????????????????????????????????
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] as const } },
@@ -33,7 +32,6 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-// ??? DATA TYPES ??????????????????????????????????????????????????????????????
 type SportEntry = {
   sport: string;
   icon: string;
@@ -52,7 +50,6 @@ type ServiceEntry = {
 type RecoveryStage = { stage: string; name: string; desc: string };
 type Testimonial = { name: string; role: string; type: string; quote: string; rating: number };
 
-// ??? PROPS ???????????????????????????????????????????????????????????????????
 type Props = {
   bodyParts: BodyPart[];
   sportsWeTreat: SportEntry[];
@@ -62,7 +59,6 @@ type Props = {
   timeSlots: string[];
 };
 
-// ??? COMPONENT ???????????????????????????????????????????????????????????????
 export function LandingAnimations({
   bodyParts, sportsWeTreat, services, recoveryStages, testimonials, timeSlots,
 }: Props) {
@@ -78,14 +74,13 @@ export function LandingAnimations({
 
   return (
     <>
-      {/* ?? HERO SECTION WITH HEROBONE ON RHS ???????????????????????????????? */}
+      {/* HERO */}
       <section
         id="about"
         className="relative pt-12 pb-20 lg:pt-16 lg:pb-24 overflow-hidden bg-gradient-to-b from-[#fcfbf8] via-[#f8f5ee] to-[#f2ede4] border-b border-[#c89b2a]/20"
         aria-labelledby="hero-heading"
       >
         <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Left Column ? Copy & CTAs */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             <motion.div initial="hidden" animate="visible" variants={fadeUp} className="space-y-4">
               <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3.5 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
@@ -104,7 +99,6 @@ export function LandingAnimations({
               </p>
             </motion.div>
 
-            {/* Precision Credibility Metrics */}
             <motion.div
               initial="hidden"
               animate="visible"
@@ -124,7 +118,6 @@ export function LandingAnimations({
               </span>
             </motion.div>
 
-            {/* CTAs */}
             <motion.div
               initial="hidden"
               animate="visible"
@@ -152,7 +145,6 @@ export function LandingAnimations({
             </motion.div>
           </div>
 
-          {/* Right Column ? HeroBone Component (RHS) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -164,7 +156,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ?? TRUST ANCHORS ??????????????????????????????????????????????????? */}
+      {/* TRUST ANCHORS */}
       <section
         className="py-10 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
         aria-label="Clinical outcomes and trust statistics"
@@ -180,7 +172,7 @@ export function LandingAnimations({
             {[
               { value: "5,000+", label: "SURGICAL PROCEDURES", sub: "Anatomic Precision", accent: "text-stone-900" },
               { value: "98.5%", label: "RETURN-TO-SPORT", sub: "ACL & Arthroscopy", accent: "gold-text-gradient" },
-              { value: "4.9?", label: "GOOGLE RATING", sub: "500+ Verified Reviews", accent: "text-[#96721b]" },
+              { value: "4.9★", label: "GOOGLE RATING", sub: "500+ Verified Reviews", accent: "text-[#96721b]" },
               { value: "24-HR", label: "DISCHARGE TIME", sub: "Keyhole Minimally Invasive", accent: "text-stone-900" },
             ].map(({ value, label, sub, accent }) => (
               <motion.div
@@ -199,7 +191,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ?? BODY NAVIGATOR ?????????????????????????????????????????????????? */}
+      {/* BODY NAVIGATOR */}
       <section
         id="navigator"
         className="py-20 bg-[#fcfbf8] border-b border-[#c89b2a]/20"
@@ -227,7 +219,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ?? SPORTS WE TREAT ????????????????????????????????????????????????? */}
+      {/* SPORTS WE TREAT */}
       <section
         id="sports"
         className="py-20 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
@@ -248,7 +240,7 @@ export function LandingAnimations({
               Sports We Treat
             </h2>
             <p className="text-stone-600 max-w-xl mx-auto text-sm font-medium">
-              Specialist protocols for every athletic discipline ? from elite competition to weekend recreation.
+              Specialist protocols for every athletic discipline — from elite competition to weekend recreation.
             </p>
           </motion.div>
           <motion.div
@@ -286,7 +278,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ?? SERVICES ???????????????????????????????????????????????????????? */}
+      {/* SERVICES TEASER → /services */}
       <section
         id="services"
         className="py-20 bg-[#fcfbf8] border-b border-[#c89b2a]/20"
@@ -298,7 +290,7 @@ export function LandingAnimations({
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeUp}
-            className="text-center space-y-4 mb-16"
+            className="text-center space-y-4 mb-10"
           >
             <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
               CLINICAL SPECTRUM
@@ -307,50 +299,54 @@ export function LandingAnimations({
               Our Services
             </h2>
             <p className="text-stone-600 max-w-2xl mx-auto text-sm font-medium">
-              Dual-spectrum care covering both general orthopedic patients and elite athletes ? under one roof.
+              Full procedure lists, sports protocols, and body-part pathways live on the dedicated Services page — filtered the way patients actually search.
             </p>
           </motion.div>
+
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={stagger}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10"
           >
-            {services.map((srv) => {
+            {services.slice(0, 3).map((srv) => {
               const Icon = ICON_MAP[srv.icon];
               return (
                 <motion.div key={srv.id} variants={fadeUp}>
-                  <div className="glass-card bg-white border border-[#c89b2a]/30 hover:border-[#c89b2a]/60 transition-all duration-300 rounded-2xl p-6 h-full flex flex-col justify-between shadow-sm group">
-                    <div>
-                      <Badge
-                        className="w-fit text-[11px] font-mono mb-3 bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 font-semibold"
-                        aria-label={`Service category: ${srv.badge}`}
-                      >
-                        {srv.badge}
-                      </Badge>
-                      <div
-                        className="h-10 w-10 rounded-xl bg-[#f5e8c7]/50 border border-[#c89b2a]/30 flex items-center justify-center text-[#c89b2a] mb-3 group-hover:border-[#c89b2a]/60 transition-colors"
-                        aria-hidden="true"
-                      >
-                        {Icon && <Icon className="h-5 w-5" />}
-                      </div>
-                      <h3 className="text-base text-stone-900 font-bold font-heading leading-snug mb-2">{srv.title}</h3>
-                      <p className="text-xs text-stone-600 leading-relaxed mb-4">{srv.desc}</p>
+                  <div className="glass-card bg-white border border-[#c89b2a]/30 rounded-2xl p-5 h-full shadow-sm">
+                    <Badge className="w-fit text-[10px] font-mono mb-2 bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 font-semibold">
+                      {srv.badge}
+                    </Badge>
+                    <div className="flex items-center gap-2 mb-2">
+                      {Icon && <Icon className="h-4 w-4 text-[#c89b2a]" />}
+                      <h3 className="text-sm text-stone-900 font-bold font-heading leading-snug">{srv.title}</h3>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-bold font-mono text-[#96721b] pt-3 border-t border-stone-200">
-                      <CheckCircle2 className="h-4 w-4 shrink-0 text-[#c89b2a]" aria-hidden="true" />
-                      {srv.stats}
-                    </div>
+                    <p className="text-xs text-stone-600 line-clamp-2">{srv.desc}</p>
                   </div>
                 </motion.div>
               );
             })}
           </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+            className="flex justify-center"
+          >
+            <Link href="/services">
+              <Button size="lg" className="gold-gradient-btn font-black text-base px-8 gap-2">
+                Browse all services by sport &amp; body part
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
-      {/* ?? RECOVERY JOURNEY ???????????????????????????????????????????????? */}
+      {/* RECOVERY JOURNEY */}
       <section
         className="py-20 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
         aria-labelledby="recovery-heading"
@@ -370,7 +366,7 @@ export function LandingAnimations({
               Your Recovery Journey
             </h2>
             <p className="text-stone-600 max-w-xl mx-auto text-sm font-medium">
-              A clear 6-stage pathway from pain to peak performance ? fully transparent, evidence-based.
+              A clear 6-stage pathway from pain to peak performance — fully transparent, evidence-based.
             </p>
           </motion.div>
           <motion.ol
@@ -403,7 +399,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ?? DOCTOR BIO ?????????????????????????????????????????????????????? */}
+      {/* DOCTOR BIO */}
       <section
         id="doctor-signature"
         className="py-20 lg:py-28 bg-[#fcfbf8] border-b border-[#c89b2a]/20 relative overflow-hidden"
@@ -428,7 +424,7 @@ export function LandingAnimations({
               Dr. Amit Kumar Jha
             </h2>
             <p className="text-lg sm:text-xl font-bold text-[#96721b] font-mono">
-              FNB Sports Medicine, MS &amp; DNB Orthopaedics ? Senior Specialist
+              FNB Sports Medicine, MS &amp; DNB Orthopaedics — Senior Specialist
             </p>
             <p className="text-base text-stone-700 leading-relaxed max-w-3xl font-medium">
               Committed to providing evidence-based, compassionate care at Dr. Amit Jha Sports Injury Clinic (Krishna Health). Dr. Jha specializes in comprehensive diagnostic evaluations, keyhole arthroscopy, ACL reconstruction, and personalized treatment plans for optimal patient outcomes.
@@ -484,7 +480,7 @@ export function LandingAnimations({
               <div className="relative rounded-2xl overflow-hidden bg-stone-100 aspect-[4/5]">
                 <Image
                   src="/dr-amit-jha-cutout.png"
-                  alt="Dr. Amit Kumar Jha ? Senior Sports Injury & Orthopedic Specialist, Varanasi"
+                  alt="Dr. Amit Kumar Jha — Senior Sports Injury & Orthopedic Specialist, Varanasi"
                   fill
                   priority
                   sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 560px"
@@ -496,7 +492,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ?? TESTIMONIALS ???????????????????????????????????????????????????? */}
+      {/* TESTIMONIALS */}
       <section
         className="py-20 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
         aria-labelledby="testimonials-heading"
@@ -509,7 +505,7 @@ export function LandingAnimations({
             variants={fadeUp}
             className="text-center space-y-4 mb-16"
           >
-            <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
+            <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-wider font-semibold">
               VERIFIED OUTCOMES
             </Badge>
             <h2 id="testimonials-heading" className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-heading">
@@ -553,7 +549,7 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* ?? BOOKING WIZARD ?????????????????????????????????????????????????? */}
+      {/* BOOKING */}
       <section
         id="booking"
         className="py-20 bg-[#fcfbf8] border-b border-[#c89b2a]/20"
@@ -562,14 +558,12 @@ export function LandingAnimations({
         <BookingWizardIsland services={bookingServices} timeSlots={timeSlots} />
       </section>
 
-      {/* ?? QUICK BOOKING MODAL DIALOG ?????????????????????????????????????? */}
       <BookingModal
         isOpen={modalOpen}
         initialPartId={selectedPartId}
         onClose={() => setModalOpen(false)}
       />
 
-      {/* ?? PATIENT FEEDBACK WIDGET ????????????????????????????????????????? */}
       <FeedbackWidget />
     </>
   );

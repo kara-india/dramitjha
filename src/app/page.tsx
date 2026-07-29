@@ -13,8 +13,6 @@ import { Button } from "@/components/ui/button";
 import { MobileNavIsland } from "@/components/landing/mobile-nav-island";
 import { LandingAnimations } from "@/components/landing/landing-animations";
 
-// ─── DATA ──────────────────────────────────────────────────────────────────
-
 const BODY_PARTS = [
   {
     id: "knee",
@@ -246,21 +244,17 @@ const TIME_SLOTS = [
   "06:00 PM", "07:00 PM", "08:00 PM",
 ];
 
-// ─── PAGE (SERVER COMPONENT) ─────────────────────────────────────────────────
-
 export default function LandingPage() {
   return (
     <div
       className="min-h-screen bg-[#102321] text-slate-300 font-sans selection:bg-[#d5f14c] selection:text-[#102321] relative overflow-x-hidden"
       role="main"
     >
-      {/* ── NAVIGATION — server-rendered static HTML ────────────────────── */}
       <header
         className="sticky top-0 z-50 glass-header border-b border-slate-800/80"
         role="banner"
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          {/* Brand */}
           <a
             href="#"
             className="flex items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm"
@@ -281,7 +275,6 @@ export default function LandingPage() {
             </div>
           </a>
 
-          {/* Live Status Badge — static, no JS needed */}
           <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-[#d5f14c] animate-pulse" aria-hidden="true" />
             <span className="text-slate-300 font-medium">OPD QUEUE ACTIVE</span>
@@ -289,7 +282,6 @@ export default function LandingPage() {
             <span className="text-teal-400 font-bold">11:00 AM \u2013 8:30 PM</span>
           </div>
 
-          {/* Desktop Nav — static links, no JS */}
           <nav
             className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-300"
             aria-label="Primary navigation"
@@ -297,7 +289,7 @@ export default function LandingPage() {
             <a href="#about" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">About</a>
             <a href="#navigator" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Body Navigator</a>
             <a href="#sports" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Sports We Treat</a>
-            <a href="#services" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Services</a>
+            <Link href="/services" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Services</Link>
             <a href="#booking" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Book OPD</a>
           </nav>
 
@@ -311,13 +303,11 @@ export default function LandingPage() {
                 Staff ERP
               </Button>
             </Link>
-            {/* Mobile hamburger — client island (tiny: toggle only) */}
             <MobileNavIsland />
           </div>
         </div>
       </header>
 
-      {/* ── PAGE BODY — all animated sections as a single client boundary ── */}
       <LandingAnimations
         bodyParts={BODY_PARTS}
         sportsWeTreat={SPORTS_WE_TREAT}
@@ -327,13 +317,11 @@ export default function LandingPage() {
         timeSlots={TIME_SLOTS}
       />
 
-      {/* ── FOOTER — server-rendered static HTML ────────────────────────── */}
       <footer
         className="py-12 bg-slate-950 text-slate-400 text-xs border-t border-slate-800"
         role="contentinfo"
       >
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8 mb-10">
-          {/* Brand */}
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-white font-black text-base">
               <Activity className="h-5 w-5 text-teal-400" aria-hidden="true" />
@@ -344,7 +332,6 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Location */}
           <address className="not-italic">
             <h2 className="text-white font-bold mb-2 not-italic text-xs uppercase tracking-wider">
               Location & OPD
@@ -355,18 +342,16 @@ export default function LandingPage() {
             </p>
           </address>
 
-          {/* Nav Links */}
           <nav aria-label="Footer navigation">
             <h2 className="text-white font-bold mb-2 text-xs uppercase tracking-wider">Navigation</h2>
             <div className="flex flex-col space-y-2">
               <a href="#about" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">About Dr. Jha</a>
-              <a href="#services" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">Our Services</a>
+              <Link href="/services" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">Our Services</Link>
               <a href="#booking" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">Book Appointment</a>
               <Link href="/login" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">Staff ERP Portal</Link>
             </div>
           </nav>
 
-          {/* OPD Hours */}
           <div>
             <h2 className="text-white font-bold mb-2 text-xs uppercase tracking-wider">OPD Hours</h2>
             <p className="text-slate-400">Morning: 11:00 AM \u2013 1:30 PM IST</p>
