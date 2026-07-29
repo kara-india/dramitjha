@@ -15,6 +15,7 @@ import { BookingWizardIsland, type Service } from "@/components/landing/booking-
 import { BookingModal } from "@/components/Booking/BookingModal";
 import BodySelectorFeature from "@/components/BodySelector3D/BodySelectorFeature";
 import { FeedbackWidget } from "@/components/Feedback/FeedbackWidget";
+import HeroBone from "@/components/HeroBone/HeroBone";
 
 // ??? ICON MAP (string -> component) ?????????????????????????????????????????
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -77,75 +78,90 @@ export function LandingAnimations({
 
   return (
     <>
-      {/* ?? HERO ???????????????????????????????????????????????????????????? */}
+      {/* ?? HERO SECTION WITH HEROBONE ON RHS ???????????????????????????????? */}
       <section
         id="about"
-        className="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden bg-[#102321] border-b border-slate-800/80"
+        className="relative pt-12 pb-20 lg:pt-16 lg:pb-24 overflow-hidden bg-[#102321] border-b border-slate-800/80"
         aria-labelledby="hero-heading"
       >
-        <div className="max-w-4xl mx-auto px-6 relative z-10 text-center lg:text-left space-y-8">
-          <motion.div initial="hidden" animate="visible" variants={fadeUp} className="space-y-4">
-            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3.5 py-1 text-xs font-mono uppercase tracking-widest">
-              // CLINICAL PRECISION // VARANASI OPD
-            </Badge>
-            <h1
-              id="hero-heading"
-              className="text-5xl sm:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05]"
-            >
-              Recover Faster.{" "}
-              <br />
-              <span className="text-teal-400">Move Better.</span>
-            </h1>
-            <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
-              Specialized keyhole arthroscopy, ACL reconstruction, joint preservation &amp; comprehensive sports rehabilitation tailored to get you back to peak activity safely.
-            </p>
-          </motion.div>
+        <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Left Column ? Copy & CTAs */}
+          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+            <motion.div initial="hidden" animate="visible" variants={fadeUp} className="space-y-4">
+              <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3.5 py-1 text-xs font-mono uppercase tracking-widest">
+                // CLINICAL PRECISION // VARANASI OPD
+              </Badge>
+              <h1
+                id="hero-heading"
+                className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08] font-heading"
+              >
+                Recover Faster.{" "}
+                <br />
+                <span className="text-teal-400">Move Better.</span>
+              </h1>
+              <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                Specialized keyhole arthroscopy, ACL reconstruction, joint preservation &amp; comprehensive sports rehabilitation tailored to get you back to peak activity safely.
+              </p>
+            </motion.div>
 
-          {/* Precision Credibility Metrics */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="flex flex-wrap justify-center lg:justify-start gap-3 pt-1 text-xs sm:text-sm font-semibold text-slate-300"
-            aria-label="Dr. Amit Jha credentials"
-          >
-            <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-slate-300 flex items-center gap-2">
-              <Award className="h-4 w-4 text-[#d5f14c]" aria-hidden="true" />
-              FNB Sports Medicine (Ganga Hospital)
-            </span>
-            <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-amber-400 flex items-center gap-1.5">
-              4.9{" "}<Star className="h-3.5 w-3.5 fill-amber-400" aria-hidden="true" />{" "}Google Rating
-            </span>
-            <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-teal-400">
-              5,000+ Surgeries
-            </span>
-          </motion.div>
-
-          {/* CTAs */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={fadeUp}
-            className="pt-2 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-          >
-            <Button
-              size="lg"
-              onClick={() => handleOpenBooking()}
-              className="w-full sm:w-auto bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 h-13 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#102321]"
-              aria-label="Book an OPD appointment with Dr. Amit Jha"
+            {/* Precision Credibility Metrics */}
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="flex flex-wrap justify-center lg:justify-start gap-3 pt-1 text-xs sm:text-sm font-semibold text-slate-300"
+              aria-label="Dr. Amit Jha credentials"
             >
-              Book OPD Appointment
-            </Button>
-            <a href="#doctor-signature" className="w-full sm:w-auto">
+              <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-slate-300 flex items-center gap-2">
+                <Award className="h-4 w-4 text-[#d5f14c]" aria-hidden="true" />
+                FNB Sports Medicine (Ganga Hospital)
+              </span>
+              <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-amber-400 flex items-center gap-1.5">
+                4.9{" "}<Star className="h-3.5 w-3.5 fill-amber-400" aria-hidden="true" />{" "}Google Rating
+              </span>
+              <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-teal-400">
+                5,000+ Surgeries
+              </span>
+            </motion.div>
+
+            {/* CTAs */}
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={fadeUp}
+              className="pt-2 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+            >
               <Button
                 size="lg"
-                variant="outline"
-                className="w-full border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white h-13 px-6 focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
-                aria-label="View Dr. Amit Jha credentials and qualifications"
+                onClick={() => handleOpenBooking()}
+                className="w-full sm:w-auto bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 h-13 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#102321]"
+                aria-label="Book an OPD appointment with Dr. Amit Jha"
               >
-                View Credentials
+                Book OPD Appointment
               </Button>
-            </a>
+              <a href="#doctor-signature" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white h-13 px-6 focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
+                  aria-label="View Dr. Amit Jha credentials and qualifications"
+                >
+                  View Credentials
+                </Button>
+              </a>
+            </motion.div>
+          </div>
+
+          {/* Right Column ? HeroBone Component (RHS) */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="lg:col-span-5"
+          >
+            <div className="glass-card bg-slate-900/80 border border-slate-800 rounded-3xl p-2 sm:p-4 shadow-2xl">
+              <HeroBone onBook={() => handleOpenBooking()} />
+            </div>
           </motion.div>
         </div>
       </section>
@@ -202,7 +218,7 @@ export function LandingAnimations({
             <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
               DIAGNOSTIC ARCHITECTURE
             </Badge>
-            <h2 id="navigator-heading" className="text-3xl sm:text-4xl font-extrabold text-white">
+            <h2 id="navigator-heading" className="text-3xl sm:text-4xl font-extrabold text-white font-heading">
               Interactive Body-Part Selector
             </h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm">
@@ -230,7 +246,7 @@ export function LandingAnimations({
             <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
               ATHLETIC PROTOCOLS
             </Badge>
-            <h2 id="sports-heading" className="text-3xl sm:text-4xl font-extrabold text-white">
+            <h2 id="sports-heading" className="text-3xl sm:text-4xl font-extrabold text-white font-heading">
               Sports We Treat
             </h2>
             <p className="text-slate-400 max-w-xl mx-auto text-sm">
@@ -289,7 +305,7 @@ export function LandingAnimations({
             <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
               CLINICAL SPECTRUM
             </Badge>
-            <h2 id="services-heading" className="text-3xl sm:text-4xl font-extrabold text-white">
+            <h2 id="services-heading" className="text-3xl sm:text-4xl font-extrabold text-white font-heading">
               Our Services
             </h2>
             <p className="text-slate-400 max-w-2xl mx-auto text-sm">
@@ -352,7 +368,7 @@ export function LandingAnimations({
             <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
               INSTRUMENTED CONTINUUM
             </Badge>
-            <h2 id="recovery-heading" className="text-3xl sm:text-4xl font-extrabold text-white">
+            <h2 id="recovery-heading" className="text-3xl sm:text-4xl font-extrabold text-white font-heading">
               Your Recovery Journey
             </h2>
             <p className="text-slate-400 max-w-xl mx-auto text-sm">
@@ -498,7 +514,7 @@ export function LandingAnimations({
             <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
               VERIFIED OUTCOMES
             </Badge>
-            <h2 id="testimonials-heading" className="text-3xl sm:text-4xl font-extrabold text-white">
+            <h2 id="testimonials-heading" className="text-3xl sm:text-4xl font-extrabold text-white font-heading">
               Patient Outcomes
             </h2>
             <p className="text-slate-400 max-w-xl mx-auto text-sm">Real recoveries. Real results.</p>
