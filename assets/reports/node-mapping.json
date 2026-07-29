@@ -1,12 +1,12 @@
 ﻿{
-  "head": null,
-  "neck": null,
-  "shoulder": null,
-  "elbow": null,
-  "wrist": null,
-  "spine": null,
-  "hip": null,
-  "knee": null,
-  "ankle": null,
-  "notes": "Fill in exact GLB node names for each part after running node-list.json"
+  "head": ["head", "cranium", "head_mesh", "skull"],
+  "neck": ["neck", "cervical", "cervical_spine"],
+  "shoulder": ["shoulder", "deltoid", "ac_joint", "rotator", "glenohumeral"],
+  "elbow": ["elbow", "olecranon", "cubitus"],
+  "wrist": ["wrist", "carpus", "hand", "radiocarpal"],
+  "spine": ["spine", "thoracic", "lumbar", "vertebrae"],
+  "hip": ["hip", "pelvis", "acetabulum"],
+  "knee": ["knee", "patella", "genu"],
+  "ankle": ["ankle", "talus", "tarsus", "foot"],
+  "notes": "Adapter src/lib/nodeMapper.ts uses fuzzy matching against these aliases to resolve node names to part IDs."
 }
