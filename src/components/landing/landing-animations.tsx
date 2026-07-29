@@ -15,6 +15,7 @@ import { type Service } from "@/components/landing/booking-wizard-island";
 import { BookingModal } from "@/components/Booking/BookingModal";
 import BodySelectorFeature from "@/components/BodySelector3D/BodySelectorFeature";
 import { FeedbackWidget } from "@/components/Feedback/FeedbackWidget";
+import { LocateUsWidget } from "@/components/LocateUs/LocateUsWidget";
 import SpineNavigator from "@/components/SpineNavigator/SpineNavigator";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -69,12 +70,10 @@ export function LandingAnimations({
     setModalOpen(true);
   };
 
-  // kept for type compatibility if BookingModal needs service list later
   void services;
 
   return (
     <>
-      {/* HERO — copy left, spine modules right */}
       <section
         id="about"
         className="relative pt-12 pb-20 lg:pt-16 lg:pb-24 overflow-hidden bg-gradient-to-b from-[#fcfbf8] via-[#f8f5ee] to-[#f2ede4] border-b border-[#c89b2a]/20"
@@ -155,7 +154,6 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* TRUST ANCHORS */}
       <section
         className="py-10 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
         aria-label="Clinical outcomes and trust statistics"
@@ -190,7 +188,6 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* BODY NAVIGATOR */}
       <section
         id="navigator"
         className="py-20 bg-[#fcfbf8] border-b border-[#c89b2a]/20"
@@ -218,7 +215,6 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* SPORTS WE TREAT */}
       <section
         id="sports"
         className="py-20 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
@@ -285,7 +281,6 @@ export function LandingAnimations({
         </div>
       </section>
 
-      {/* SINGLE BOOKING ENTRY — opens same BookingModal as hero CTA */}
       <section
         id="booking"
         className="py-20 bg-[#fcfbf8] border-b border-[#c89b2a]/20"
@@ -300,7 +295,6 @@ export function LandingAnimations({
           </h2>
           <p className="text-stone-600 text-sm font-medium max-w-xl mx-auto">
             One booking flow for the whole site — same form whether you start from the hero, a spine vertebra, or here.
-            Choose service, slot, and patient details in a single guided modal.
           </p>
           <ul className="grid sm:grid-cols-3 gap-4 text-left text-sm text-stone-700">
             <li className="bg-white border border-[#c89b2a]/25 rounded-xl p-4">
@@ -335,6 +329,7 @@ export function LandingAnimations({
         onClose={() => setModalOpen(false)}
       />
 
+      <LocateUsWidget />
       <FeedbackWidget />
     </>
   );

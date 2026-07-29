@@ -1,17 +1,12 @@
 // ─── SERVER COMPONENT — no "use client" ────────────────────────────────────
-// All state is isolated in extracted client islands:
-//   - MobileNavIsland      → hamburger toggle
-//   - LandingAnimations    → Framer Motion sections + BodyNavigatorIsland + BookingWizardIsland
-//
-// NOTE: Icon components cannot cross the server→client prop boundary.
-//       All icon references in data arrays use string keys resolved by
-//       the ICON_MAP in landing-animations.tsx.
 
 import Link from "next/link";
 import { Activity, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MobileNavIsland } from "@/components/landing/mobile-nav-island";
 import { LandingAnimations } from "@/components/landing/landing-animations";
+
+const MAPS_URL = "https://maps.app.goo.gl/MNrbv5xXaSqmSh9n6";
 
 const BODY_PARTS = [
   {
@@ -338,7 +333,18 @@ export default function LandingPage() {
             </h2>
             <p className="text-slate-400 flex items-start gap-2">
               <MapPin className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" aria-hidden="true" />
-              Sigra & Apex Super Specialty Hospital, Varanasi, UP
+              <span>
+                Sigra &amp; Apex Super Specialty Hospital, Varanasi, UP
+                <br />
+                <a
+                  href={MAPS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-teal-400 hover:text-[#d5f14c] underline underline-offset-2 mt-1 inline-block"
+                >
+                  Open in Google Maps
+                </a>
+              </span>
             </p>
           </address>
 
