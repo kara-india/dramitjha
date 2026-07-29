@@ -18,7 +18,7 @@ export function MobileNavIsland() {
   return (
     <>
       <button
-        className="lg:hidden p-2 text-slate-300 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm"
+        className="lg:hidden p-2 text-stone-700 hover:text-stone-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c89b2a] rounded-sm"
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-controls="mobile-nav"
@@ -30,7 +30,7 @@ export function MobileNavIsland() {
       {open && (
         <nav
           id="mobile-nav"
-          className="lg:hidden bg-[#102321]/95 backdrop-blur-xl border-t border-slate-800 px-6 py-4 flex flex-col gap-4 text-sm font-semibold absolute top-full left-0 right-0 z-40"
+          className="lg:hidden bg-[#fcfbf8]/98 backdrop-blur-xl border-t border-[#c89b2a]/25 px-6 py-4 flex flex-col gap-4 text-sm font-semibold absolute top-full left-0 right-0 z-40 shadow-lg"
           aria-label="Mobile navigation"
         >
           {NAV_LINKS.map(({ href, label, external }) =>
@@ -38,7 +38,7 @@ export function MobileNavIsland() {
               <Link
                 key={href}
                 href={href}
-                className="text-slate-300 hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm py-1"
+                className="text-stone-700 hover:text-[#c89b2a] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c89b2a] rounded-sm py-1"
                 onClick={() => setOpen(false)}
               >
                 {label}
@@ -47,7 +47,7 @@ export function MobileNavIsland() {
               <a
                 key={href}
                 href={href}
-                className="text-slate-300 hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm py-1"
+                className="text-stone-700 hover:text-[#c89b2a] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c89b2a] rounded-sm py-1"
                 onClick={() => setOpen(false)}
               >
                 {label}

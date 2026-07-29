@@ -242,57 +242,58 @@ const TIME_SLOTS = [
 export default function LandingPage() {
   return (
     <div
-      className="min-h-screen bg-[#102321] text-slate-300 font-sans selection:bg-[#d5f14c] selection:text-[#102321] relative overflow-x-hidden"
+      className="min-h-screen bg-[#fcfbf8] text-stone-800 font-sans selection:bg-[#c89b2a]/30 selection:text-stone-900 relative overflow-x-hidden"
       role="main"
     >
+      {/* Header — cream / gold system matching landing body */}
       <header
-        className="sticky top-0 z-50 glass-header border-b border-slate-800/80"
+        className="sticky top-0 z-50 glass-header"
         role="banner"
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <a
             href="#"
-            className="flex items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm"
+            className="flex items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c89b2a] rounded-sm"
           >
             <div
-              className="h-10 w-10 rounded-xl bg-[#d5f14c] flex items-center justify-center text-[#102321] font-black shadow-lg"
+              className="h-10 w-10 rounded-xl bg-[#c89b2a] flex items-center justify-center text-white font-black shadow-md"
               aria-hidden="true"
             >
               <Activity className="h-6 w-6" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-black tracking-tight text-white leading-none">
+              <span className="text-xl font-black tracking-tight text-stone-900 leading-none">
                 Dr. Amit Jha
               </span>
-              <span className="text-[10px] font-mono text-teal-400 tracking-wider uppercase mt-0.5">
+              <span className="text-[10px] font-mono text-[#96721b] tracking-wider uppercase mt-0.5">
                 Sports Medicine Clinic
               </span>
             </div>
           </a>
 
-          <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/90 border border-slate-800 text-xs font-mono">
-            <span className="w-2 h-2 rounded-full bg-[#d5f14c] animate-pulse" aria-hidden="true" />
-            <span className="text-slate-300 font-medium">OPD QUEUE ACTIVE</span>
-            <span className="text-slate-600">•</span>
-            <span className="text-teal-400 font-bold">11:00 AM \u2013 8:30 PM</span>
+          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#f5e8c7]/80 border border-[#c89b2a]/35 text-xs font-mono">
+            <span className="w-2 h-2 rounded-full bg-[#c89b2a] animate-pulse" aria-hidden="true" />
+            <span className="text-stone-700 font-medium">OPD QUEUE ACTIVE</span>
+            <span className="text-stone-400">•</span>
+            <span className="text-[#96721b] font-bold">11:00 AM \u2013 8:30 PM</span>
           </div>
 
           <nav
-            className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-300"
+            className="hidden lg:flex items-center gap-7 text-sm font-semibold text-stone-600"
             aria-label="Primary navigation"
           >
-            <a href="#about" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">About</a>
-            <a href="#navigator" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Body Navigator</a>
-            <a href="#sports" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Sports We Treat</a>
-            <Link href="/services" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Services</Link>
-            <a href="#booking" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm px-1">Book OPD</a>
+            <a href="#about" className="hover:text-[#c89b2a] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c89b2a] rounded-sm px-1">About</a>
+            <a href="#navigator" className="hover:text-[#c89b2a] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c89b2a] rounded-sm px-1">Body Navigator</a>
+            <a href="#sports" className="hover:text-[#c89b2a] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c89b2a] rounded-sm px-1">Sports We Treat</a>
+            <Link href="/services" className="hover:text-[#c89b2a] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c89b2a] rounded-sm px-1">Services</Link>
+            <a href="#booking" className="hover:text-[#c89b2a] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c89b2a] rounded-sm px-1">Book OPD</a>
           </nav>
 
           <div className="flex items-center gap-3">
             <Link href="/login">
               <Button
-                variant="ghost"
-                className="text-slate-300 hover:text-white hover:bg-slate-900/80 border border-slate-800 text-xs font-mono focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
+                variant="outline"
+                className="text-stone-700 hover:text-stone-900 hover:bg-[#f5e8c7]/50 border border-[#c89b2a]/40 text-xs font-mono focus-visible:ring-2 focus-visible:ring-[#c89b2a]"
                 aria-label="Staff ERP Portal login"
               >
                 Staff ERP
@@ -313,16 +314,16 @@ export default function LandingPage() {
       />
 
       <footer
-        className="py-12 bg-slate-950 text-slate-400 text-xs border-t border-slate-800"
+        className="py-12 bg-stone-900 text-stone-400 text-xs border-t border-stone-800"
         role="contentinfo"
       >
         <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8 mb-10">
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-white font-black text-base">
-              <Activity className="h-5 w-5 text-teal-400" aria-hidden="true" />
+              <Activity className="h-5 w-5 text-[#c89b2a]" aria-hidden="true" />
               Dr. Amit Jha Clinic
             </div>
-            <p className="text-[11px] text-slate-400 leading-relaxed">
+            <p className="text-[11px] text-stone-400 leading-relaxed">
               Fellowship Trained Sports Medicine & Orthopedic Surgeon (FNB Ganga Hospital, MS, DNB).
             </p>
           </div>
@@ -331,8 +332,8 @@ export default function LandingPage() {
             <h2 className="text-white font-bold mb-2 not-italic text-xs uppercase tracking-wider">
               Location & OPD
             </h2>
-            <p className="text-slate-400 flex items-start gap-2">
-              <MapPin className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" aria-hidden="true" />
+            <p className="text-stone-400 flex items-start gap-2">
+              <MapPin className="h-4 w-4 text-[#c89b2a] shrink-0 mt-0.5" aria-hidden="true" />
               <span>
                 Sigra &amp; Apex Super Specialty Hospital, Varanasi, UP
                 <br />
@@ -340,7 +341,7 @@ export default function LandingPage() {
                   href={MAPS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-teal-400 hover:text-[#d5f14c] underline underline-offset-2 mt-1 inline-block"
+                  className="text-[#c89b2a] hover:text-[#d4af37] underline underline-offset-2 mt-1 inline-block"
                 >
                   Open in Google Maps
                 </a>
@@ -351,21 +352,21 @@ export default function LandingPage() {
           <nav aria-label="Footer navigation">
             <h2 className="text-white font-bold mb-2 text-xs uppercase tracking-wider">Navigation</h2>
             <div className="flex flex-col space-y-2">
-              <a href="#about" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">About Dr. Jha</a>
-              <Link href="/services" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">Our Services</Link>
-              <a href="#booking" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">Book Appointment</a>
-              <Link href="/login" className="hover:text-teal-400 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#d5f14c] rounded-sm">Staff ERP Portal</Link>
+              <a href="#about" className="hover:text-[#c89b2a] transition-colors">About Dr. Jha</a>
+              <Link href="/services" className="hover:text-[#c89b2a] transition-colors">Our Services</Link>
+              <a href="#booking" className="hover:text-[#c89b2a] transition-colors">Book Appointment</a>
+              <Link href="/login" className="hover:text-[#c89b2a] transition-colors">Staff ERP Portal</Link>
             </div>
           </nav>
 
           <div>
             <h2 className="text-white font-bold mb-2 text-xs uppercase tracking-wider">OPD Hours</h2>
-            <p className="text-slate-400">Morning: 11:00 AM \u2013 1:30 PM IST</p>
+            <p className="text-stone-400">Morning: 11:00 AM \u2013 1:30 PM IST</p>
             <p className="text-slate-400 mt-1">Evening: 3:30 PM \u2013 8:30 PM IST</p>
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 border-t border-slate-900 text-center text-slate-500 pt-6">
+        <div className="max-w-7xl mx-auto px-6 border-t border-stone-800 text-center text-stone-500 pt-6">
           \u00A9 2026 KrishnaHealth ERP \u2014 Dr. Amit Jha Sports Injury & Orthopedic Clinic. All rights reserved.
         </div>
       </footer>
