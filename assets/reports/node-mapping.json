@@ -1,0 +1,12 @@
+﻿{
+  "head": null,
+  "neck": null,
+  "shoulder": null,
+  "elbow": null,
+  "wrist": null,
+  "spine": null,
+  "hip": null,
+  "knee": null,
+  "ankle": null,
+  "notes": "Fill in exact GLB node names for each part after running node-list.json"
+}

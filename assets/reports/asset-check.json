@@ -1,0 +1,8 @@
+﻿{
+  "agents": [],
+  "summary": {
+    "status": "pending",
+    "notes": "Run scripts/commands.sh to populate files and update this report."
+  },
+  "files": []
+}

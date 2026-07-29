@@ -1,72 +1,21 @@
-﻿// src/data/bodyParts.ts
-// Single source of truth for body part metadata.
-// `id` must match the node name in human.glb AND data-part attr in SVG fallback.
-
-export interface BodyPart {
-  id: string;
+﻿export interface BodyPart {
+  id: string;         // must match GLB node name
   label: string;
-  /** Short anatomical subtitle shown in slide-over header */
+  short: string;
   subtitle: string;
   conditions: string[];
+  services: string[];
 }
 
 export const BODY_PARTS: BodyPart[] = [
-  {
-    id: "head",
-    label: "Head",
-    subtitle: "Skull, TMJ & Cervical Base",
-    conditions: ["Migraine & Cluster Headache", "Tension Headache", "TMJ / Jaw Disorder", "Concussion Assessment"],
-  },
-  {
-    id: "neck",
-    label: "Neck",
-    subtitle: "Cervical Spine",
-    conditions: ["Cervical Spondylosis", "Whiplash Injury", "Cervical Disc Herniation", "Neck Muscle Strain"],
-  },
-  {
-    id: "shoulder",
-    label: "Shoulder",
-    subtitle: "Glenohumeral & AC Joint",
-    conditions: ["Rotator Cuff Tear", "Frozen Shoulder (Adhesive Capsulitis)", "AC Joint Sprain", "SLAP Labral Tear", "Shoulder Dislocation"],
-  },
-  {
-    id: "elbow",
-    label: "Elbow",
-    subtitle: "Elbow Joint & Epicondyles",
-    conditions: ["Lateral Epicondylitis (Tennis Elbow)", "Golfer's Elbow", "Olecranon Bursitis", "UCL / Tommy John Injury"],
-  },
-  {
-    id: "wrist",
-    label: "Wrist",
-    subtitle: "Carpal & Radiocarpal Joint",
-    conditions: ["Carpal Tunnel Syndrome", "TFCC Tear", "De Quervain's Tenosynovitis", "Wrist Fracture (Scaphoid)"],
-  },
-  {
-    id: "spine",
-    label: "Spine",
-    subtitle: "Thoracic & Lumbar Spine",
-    conditions: ["Lumbar Disc Herniation", "Sciatica", "Scoliosis", "Compression Fracture", "Sacroiliac Joint Pain"],
-  },
-  {
-    id: "hip",
-    label: "Hip",
-    subtitle: "Hip Joint & Pelvis",
-    conditions: ["Hip Labral Tear", "Femoroacetabular Impingement (FAI)", "Hip Bursitis", "Hip Osteoarthritis", "Iliotibial Band Syndrome"],
-  },
-  {
-    id: "knee",
-    label: "Knee",
-    subtitle: "Tibiofemoral & Patellofemoral Joint",
-    conditions: ["ACL / PCL Tear", "Meniscus Injury", "Patellar Tendinopathy", "Knee Osteoarthritis", "Patellofemoral Syndrome"],
-  },
-  {
-    id: "ankle",
-    label: "Ankle",
-    subtitle: "Talocrural & Subtalar Joint",
-    conditions: ["Ankle Sprain (ATFL/CFL)", "Achilles Tendon Rupture", "Ankle Impingement", "Plantar Fasciitis", "Ankle Instability"],
-  },
+  { id: "head", label: "Head", short: "Head & face issues", subtitle: "Skull, TMJ & Cervical Base", conditions: ["Migraine", "Tension headache", "TMJ disorder"], services: ["Neurology consult", "TMJ physio"] },
+  { id: "neck", label: "Neck", short: "Cervical pain and stiffness", subtitle: "Cervical Spine", conditions: ["Cervical spondylosis", "Whiplash", "Radiculopathy"], services: ["Spine assessment", "Injection therapy"] },
+  { id: "shoulder", label: "Shoulder", short: "Shoulder pain & limited motion", subtitle: "Glenohumeral & AC Joint", conditions: ["Rotator cuff tear", "Frozen shoulder", "Impingement"], services: ["Arthroscopy", "Physiotherapy"] },
+  { id: "elbow", label: "Elbow", short: "Elbow pain and overuse", subtitle: "Elbow Joint & Epicondyles", conditions: ["Tennis elbow", "Golfer's elbow", "Bursitis"], services: ["Injection", "Rehab"] },
+  { id: "wrist", label: "Wrist/Hand", short: "Wrist & hand conditions", subtitle: "Carpal & Radiocarpal Joint", conditions: ["Carpal tunnel", "Tendonitis", "Fracture"], services: ["Splinting", "Hand therapy"] },
+  { id: "spine", label: "Spine", short: "Back pain & spinal conditions", subtitle: "Thoracic & Lumbar Spine", conditions: ["Disc herniation", "Degenerative disc", "Sciatica"], services: ["Spine clinic", "Epidural injection"] },
+  { id: "hip", label: "Hip", short: "Hip joint problems", subtitle: "Hip Joint & Pelvis", conditions: ["Osteoarthritis", "Labral tear", "Bursitis"], services: ["Hip replacement consult", "Injections"] },
+  { id: "knee", label: "Knee", short: "Knee pain & instability", subtitle: "Tibiofemoral & Patellofemoral Joint", conditions: ["ACL tear", "Meniscus injury", "Patellofemoral pain"], services: ["Arthroscopy", "Knee rehab"] },
+  { id: "ankle", label: "Ankle/Foot", short: "Ankle injuries & foot pain", subtitle: "Talocrural & Subtalar Joint", conditions: ["Sprain", "Achilles tendinopathy", "Plantar fasciitis"], services: ["Casting/boot", "Physio"] },
 ];
-
-/** Quick lookup by id */
-export const getBodyPart = (id: string): BodyPart | undefined =>
-  BODY_PARTS.find((p) => p.id === id);
+export default BODY_PARTS;
