@@ -6,7 +6,7 @@ import Image from "next/image";
 import {
   Award, Star, CheckCircle2, Activity, MapPin,
   Trophy, Flame, Zap, Dumbbell, Compass, Stethoscope, Bone,
-  ShieldAlert, Users, Target, ShieldCheck,
+  ShieldAlert, Users, Target, ShieldCheck, Sparkles,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -81,25 +81,25 @@ export function LandingAnimations({
       {/* ?? HERO SECTION WITH HEROBONE ON RHS ???????????????????????????????? */}
       <section
         id="about"
-        className="relative pt-12 pb-20 lg:pt-16 lg:pb-24 overflow-hidden bg-[#102321] border-b border-slate-800/80"
+        className="relative pt-12 pb-20 lg:pt-16 lg:pb-24 overflow-hidden bg-gradient-to-b from-[#fcfbf8] via-[#f8f5ee] to-[#f2ede4] border-b border-[#c89b2a]/20"
         aria-labelledby="hero-heading"
       >
         <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column ? Copy & CTAs */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             <motion.div initial="hidden" animate="visible" variants={fadeUp} className="space-y-4">
-              <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3.5 py-1 text-xs font-mono uppercase tracking-widest">
+              <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3.5 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
                 // CLINICAL PRECISION // VARANASI OPD
               </Badge>
               <h1
                 id="hero-heading"
-                className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.08] font-heading"
+                className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-[1.08] font-heading"
               >
                 Recover Faster.{" "}
                 <br />
-                <span className="text-teal-400">Move Better.</span>
+                <span className="gold-text-gradient">Move Better.</span>
               </h1>
-              <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+              <p className="text-stone-700 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 font-medium leading-relaxed">
                 Specialized keyhole arthroscopy, ACL reconstruction, joint preservation &amp; comprehensive sports rehabilitation tailored to get you back to peak activity safely.
               </p>
             </motion.div>
@@ -109,17 +109,17 @@ export function LandingAnimations({
               initial="hidden"
               animate="visible"
               variants={fadeUp}
-              className="flex flex-wrap justify-center lg:justify-start gap-3 pt-1 text-xs sm:text-sm font-semibold text-slate-300"
+              className="flex flex-wrap justify-center lg:justify-start gap-3 pt-1 text-xs sm:text-sm font-semibold text-stone-800"
               aria-label="Dr. Amit Jha credentials"
             >
-              <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-slate-300 flex items-center gap-2">
-                <Award className="h-4 w-4 text-[#d5f14c]" aria-hidden="true" />
+              <span className="bg-white/90 px-3.5 py-2 rounded-xl border border-[#c89b2a]/30 font-mono text-stone-800 flex items-center gap-2 shadow-sm">
+                <Award className="h-4 w-4 text-[#c89b2a]" aria-hidden="true" />
                 FNB Sports Medicine (Ganga Hospital)
               </span>
-              <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-amber-400 flex items-center gap-1.5">
-                4.9{" "}<Star className="h-3.5 w-3.5 fill-amber-400" aria-hidden="true" />{" "}Google Rating
+              <span className="bg-white/90 px-3.5 py-2 rounded-xl border border-[#c89b2a]/30 font-mono text-[#96721b] flex items-center gap-1.5 shadow-sm">
+                4.9{" "}<Star className="h-3.5 w-3.5 fill-[#c89b2a] text-[#c89b2a]" aria-hidden="true" />{" "}Google Rating
               </span>
-              <span className="bg-slate-900/90 px-3.5 py-2 rounded-xl border border-slate-800/80 font-mono text-teal-400">
+              <span className="bg-white/90 px-3.5 py-2 rounded-xl border border-[#c89b2a]/30 font-mono text-stone-900 font-bold shadow-sm">
                 5,000+ Surgeries
               </span>
             </motion.div>
@@ -134,7 +134,7 @@ export function LandingAnimations({
               <Button
                 size="lg"
                 onClick={() => handleOpenBooking()}
-                className="w-full sm:w-auto bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 h-13 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#102321]"
+                className="w-full sm:w-auto gold-gradient-btn font-black text-base px-8 h-13"
                 aria-label="Book an OPD appointment with Dr. Amit Jha"
               >
                 Book OPD Appointment
@@ -143,7 +143,7 @@ export function LandingAnimations({
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white h-13 px-6 focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
+                  className="w-full bg-white border-[#c89b2a]/40 text-stone-800 hover:bg-[#f5e8c7]/50 h-13 px-6 font-bold shadow-sm"
                   aria-label="View Dr. Amit Jha credentials and qualifications"
                 >
                   View Credentials
@@ -159,16 +159,14 @@ export function LandingAnimations({
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-5"
           >
-            <div className="glass-card bg-slate-900/80 border border-slate-800 rounded-3xl p-2 sm:p-4 shadow-2xl">
-              <HeroBone onBook={() => handleOpenBooking()} />
-            </div>
+            <HeroBone onBook={() => handleOpenBooking()} />
           </motion.div>
         </div>
       </section>
 
       {/* ?? TRUST ANCHORS ??????????????????????????????????????????????????? */}
       <section
-        className="py-10 bg-slate-950 border-b border-slate-800/80"
+        className="py-10 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
         aria-label="Clinical outcomes and trust statistics"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -180,21 +178,21 @@ export function LandingAnimations({
             className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
           >
             {[
-              { value: "5,000+", label: "SURGICAL PROCEDURES", sub: "Anatomic Precision", accent: "text-white" },
-              { value: "98.5%", label: "RETURN-TO-SPORT", sub: "ACL & Arthroscopy", accent: "text-teal-400" },
-              { value: "4.9?", label: "GOOGLE RATING", sub: "500+ Verified Reviews", accent: "text-[#d5f14c]" },
-              { value: "24-HR", label: "DISCHARGE TIME", sub: "Keyhole Minimally Invasive", accent: "text-white" },
+              { value: "5,000+", label: "SURGICAL PROCEDURES", sub: "Anatomic Precision", accent: "text-stone-900" },
+              { value: "98.5%", label: "RETURN-TO-SPORT", sub: "ACL & Arthroscopy", accent: "gold-text-gradient" },
+              { value: "4.9?", label: "GOOGLE RATING", sub: "500+ Verified Reviews", accent: "text-[#96721b]" },
+              { value: "24-HR", label: "DISCHARGE TIME", sub: "Keyhole Minimally Invasive", accent: "text-stone-900" },
             ].map(({ value, label, sub, accent }) => (
               <motion.div
                 key={label}
                 variants={fadeUp}
-                className="glass-card rounded-2xl p-5 border border-slate-800/80 flex flex-col justify-between space-y-2 hover:border-teal-500/30 transition-all duration-300"
+                className="glass-card bg-white rounded-2xl p-5 border border-[#c89b2a]/25 flex flex-col justify-between space-y-2 hover:border-[#c89b2a]/50 transition-all duration-300 shadow-sm"
               >
-                <dt className="text-[10px] font-mono tracking-widest text-slate-400 uppercase">{label}</dt>
-                <dd className={`text-3xl sm:text-4xl font-black font-heading animate-count-up ${accent}`}>
+                <dt className="text-[10px] font-mono tracking-widest text-stone-500 uppercase font-semibold">{label}</dt>
+                <dd className={`text-3xl sm:text-4xl font-black font-heading ${accent}`}>
                   {value}
                 </dd>
-                <span className="text-xs text-slate-400 font-medium">{sub}</span>
+                <span className="text-xs text-stone-600 font-medium">{sub}</span>
               </motion.div>
             ))}
           </motion.dl>
@@ -204,7 +202,7 @@ export function LandingAnimations({
       {/* ?? BODY NAVIGATOR ?????????????????????????????????????????????????? */}
       <section
         id="navigator"
-        className="py-20 bg-[#102321] border-b border-slate-800/80"
+        className="py-20 bg-[#fcfbf8] border-b border-[#c89b2a]/20"
         aria-labelledby="navigator-heading"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -215,13 +213,13 @@ export function LandingAnimations({
             variants={fadeUp}
             className="text-center space-y-4 mb-12"
           >
-            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+            <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
               DIAGNOSTIC ARCHITECTURE
             </Badge>
-            <h2 id="navigator-heading" className="text-3xl sm:text-4xl font-extrabold text-white font-heading">
+            <h2 id="navigator-heading" className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-heading">
               Interactive Body-Part Selector
             </h2>
-            <p className="text-slate-400 max-w-2xl mx-auto text-sm">
+            <p className="text-stone-600 max-w-2xl mx-auto text-sm font-medium">
               Click on an affected joint or anatomical area to explore common conditions and our treatment approach.
             </p>
           </motion.div>
@@ -232,7 +230,7 @@ export function LandingAnimations({
       {/* ?? SPORTS WE TREAT ????????????????????????????????????????????????? */}
       <section
         id="sports"
-        className="py-20 bg-slate-950 border-b border-slate-800/80"
+        className="py-20 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
         aria-labelledby="sports-heading"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -243,13 +241,13 @@ export function LandingAnimations({
             variants={fadeUp}
             className="text-center space-y-4 mb-16"
           >
-            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+            <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
               ATHLETIC PROTOCOLS
             </Badge>
-            <h2 id="sports-heading" className="text-3xl sm:text-4xl font-extrabold text-white font-heading">
+            <h2 id="sports-heading" className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-heading">
               Sports We Treat
             </h2>
-            <p className="text-slate-400 max-w-xl mx-auto text-sm">
+            <p className="text-stone-600 max-w-xl mx-auto text-sm font-medium">
               Specialist protocols for every athletic discipline ? from elite competition to weekend recreation.
             </p>
           </motion.div>
@@ -264,21 +262,21 @@ export function LandingAnimations({
               const Icon = ICON_MAP[item.icon];
               return (
                 <motion.div key={idx} variants={fadeUp} className="h-full">
-                  <div className="glass-card border border-slate-800/80 hover:border-teal-500/40 transition-all duration-300 rounded-2xl p-6 flex flex-col justify-between h-full group">
+                  <div className="glass-card bg-white border border-[#c89b2a]/30 hover:border-[#c89b2a]/60 transition-all duration-300 rounded-2xl p-6 flex flex-col justify-between h-full shadow-sm group">
                     <div>
                       <div
-                        className="h-12 w-12 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-center text-teal-400 mb-4 group-hover:border-teal-500/50 transition-colors"
+                        className="h-12 w-12 rounded-xl bg-[#f5e8c7]/60 border border-[#c89b2a]/30 flex items-center justify-center text-[#c89b2a] mb-4 group-hover:border-[#c89b2a]/60 transition-colors"
                         aria-hidden="true"
                       >
                         {Icon && <Icon className="h-6 w-6" />}
                       </div>
-                      <h3 className="text-xl text-white font-bold font-heading mb-3">{item.sport}</h3>
-                      <p className="text-xs text-slate-300 leading-relaxed mb-3">
-                        <strong className="text-slate-200">Common Injuries:</strong> {item.injuries}
+                      <h3 className="text-xl text-stone-900 font-bold font-heading mb-3">{item.sport}</h3>
+                      <p className="text-xs text-stone-700 leading-relaxed mb-3">
+                        <strong className="text-stone-900">Common Injuries:</strong> {item.injuries}
                       </p>
                     </div>
-                    <p className="text-xs text-teal-400 font-semibold pt-3 border-t border-slate-800/80">
-                      <strong className="text-teal-300">Care Approach:</strong> {item.approach}
+                    <p className="text-xs text-[#96721b] font-semibold pt-3 border-t border-stone-200">
+                      <strong className="text-stone-900">Care Approach:</strong> {item.approach}
                     </p>
                   </div>
                 </motion.div>
@@ -291,7 +289,7 @@ export function LandingAnimations({
       {/* ?? SERVICES ???????????????????????????????????????????????????????? */}
       <section
         id="services"
-        className="py-20 bg-[#102321] border-b border-slate-800/80"
+        className="py-20 bg-[#fcfbf8] border-b border-[#c89b2a]/20"
         aria-labelledby="services-heading"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -302,13 +300,13 @@ export function LandingAnimations({
             variants={fadeUp}
             className="text-center space-y-4 mb-16"
           >
-            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+            <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
               CLINICAL SPECTRUM
             </Badge>
-            <h2 id="services-heading" className="text-3xl sm:text-4xl font-extrabold text-white font-heading">
+            <h2 id="services-heading" className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-heading">
               Our Services
             </h2>
-            <p className="text-slate-400 max-w-2xl mx-auto text-sm">
+            <p className="text-stone-600 max-w-2xl mx-auto text-sm font-medium">
               Dual-spectrum care covering both general orthopedic patients and elite athletes ? under one roof.
             </p>
           </motion.div>
@@ -323,25 +321,25 @@ export function LandingAnimations({
               const Icon = ICON_MAP[srv.icon];
               return (
                 <motion.div key={srv.id} variants={fadeUp}>
-                  <div className="glass-card border border-slate-800/80 hover:border-teal-500/40 transition-all duration-300 rounded-2xl p-6 h-full flex flex-col justify-between group">
+                  <div className="glass-card bg-white border border-[#c89b2a]/30 hover:border-[#c89b2a]/60 transition-all duration-300 rounded-2xl p-6 h-full flex flex-col justify-between shadow-sm group">
                     <div>
                       <Badge
-                        className="w-fit text-[11px] font-mono mb-3 bg-teal-950/60 text-teal-300 border-teal-800/60"
+                        className="w-fit text-[11px] font-mono mb-3 bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 font-semibold"
                         aria-label={`Service category: ${srv.badge}`}
                       >
                         {srv.badge}
                       </Badge>
                       <div
-                        className="h-10 w-10 rounded-xl bg-[#0c1a18] border border-slate-800 flex items-center justify-center text-teal-400 mb-3 group-hover:border-teal-500/50 transition-colors"
+                        className="h-10 w-10 rounded-xl bg-[#f5e8c7]/50 border border-[#c89b2a]/30 flex items-center justify-center text-[#c89b2a] mb-3 group-hover:border-[#c89b2a]/60 transition-colors"
                         aria-hidden="true"
                       >
                         {Icon && <Icon className="h-5 w-5" />}
                       </div>
-                      <h3 className="text-base text-white font-bold font-heading leading-snug mb-2">{srv.title}</h3>
-                      <p className="text-xs text-slate-400 leading-relaxed mb-4">{srv.desc}</p>
+                      <h3 className="text-base text-stone-900 font-bold font-heading leading-snug mb-2">{srv.title}</h3>
+                      <p className="text-xs text-stone-600 leading-relaxed mb-4">{srv.desc}</p>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-bold font-mono text-[#d5f14c] pt-3 border-t border-slate-800/80">
-                      <CheckCircle2 className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    <div className="flex items-center gap-2 text-xs font-bold font-mono text-[#96721b] pt-3 border-t border-stone-200">
+                      <CheckCircle2 className="h-4 w-4 shrink-0 text-[#c89b2a]" aria-hidden="true" />
                       {srv.stats}
                     </div>
                   </div>
@@ -354,7 +352,7 @@ export function LandingAnimations({
 
       {/* ?? RECOVERY JOURNEY ???????????????????????????????????????????????? */}
       <section
-        className="py-20 bg-slate-950 border-b border-slate-800/80"
+        className="py-20 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
         aria-labelledby="recovery-heading"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -365,13 +363,13 @@ export function LandingAnimations({
             variants={fadeUp}
             className="text-center space-y-4 mb-16"
           >
-            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+            <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
               INSTRUMENTED CONTINUUM
             </Badge>
-            <h2 id="recovery-heading" className="text-3xl sm:text-4xl font-extrabold text-white font-heading">
+            <h2 id="recovery-heading" className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-heading">
               Your Recovery Journey
             </h2>
-            <p className="text-slate-400 max-w-xl mx-auto text-sm">
+            <p className="text-stone-600 max-w-xl mx-auto text-sm font-medium">
               A clear 6-stage pathway from pain to peak performance ? fully transparent, evidence-based.
             </p>
           </motion.div>
@@ -387,17 +385,17 @@ export function LandingAnimations({
               <motion.li
                 key={stage.stage}
                 variants={fadeUp}
-                className="glass-card border border-slate-800/80 rounded-2xl p-6 flex gap-4 hover:border-teal-500/30 transition-all duration-300"
+                className="glass-card bg-white border border-[#c89b2a]/30 rounded-2xl p-6 flex gap-4 hover:border-[#c89b2a]/60 transition-all duration-300 shadow-sm"
               >
                 <span
-                  className="text-3xl sm:text-4xl font-black font-heading text-[#d5f14c] leading-none shrink-0 select-none"
+                  className="text-3xl sm:text-4xl font-black font-heading gold-text-gradient leading-none shrink-0 select-none"
                   aria-hidden="true"
                 >
                   {stage.stage}
                 </span>
                 <div>
-                  <h3 className="font-bold text-white text-sm font-heading mb-1">{stage.name}</h3>
-                  <p className="text-xs text-slate-400 leading-relaxed">{stage.desc}</p>
+                  <h3 className="font-bold text-stone-900 text-sm font-heading mb-1">{stage.name}</h3>
+                  <p className="text-xs text-stone-600 leading-relaxed">{stage.desc}</p>
                 </div>
               </motion.li>
             ))}
@@ -408,7 +406,7 @@ export function LandingAnimations({
       {/* ?? DOCTOR BIO ?????????????????????????????????????????????????????? */}
       <section
         id="doctor-signature"
-        className="py-20 lg:py-28 bg-[#102321] border-b border-slate-800/80 relative overflow-hidden"
+        className="py-20 lg:py-28 bg-[#fcfbf8] border-b border-[#c89b2a]/20 relative overflow-hidden"
         aria-labelledby="doctor-heading"
       >
         <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
@@ -419,20 +417,20 @@ export function LandingAnimations({
             variants={fadeUp}
             className="lg:col-span-7 space-y-6"
           >
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-teal-950/80 border border-teal-800/60 text-teal-300 text-xs font-mono font-semibold tracking-wider uppercase">
-              <span className="w-2 h-2 rounded-full bg-[#d5f14c] animate-pulse" aria-hidden="true"></span>
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#f5e8c7] border border-[#c89b2a]/40 text-[#96721b] text-xs font-mono font-semibold tracking-wider uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-[#c89b2a]" aria-hidden="true" />
               LEAD PHYSICIAN &amp; SURGEON
             </div>
             <h2
               id="doctor-heading"
-              className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight font-heading"
+              className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-tight font-heading"
             >
               Dr. Amit Kumar Jha
             </h2>
-            <p className="text-lg sm:text-xl font-semibold text-teal-400 font-mono">
+            <p className="text-lg sm:text-xl font-bold text-[#96721b] font-mono">
               FNB Sports Medicine, MS &amp; DNB Orthopaedics ? Senior Specialist
             </p>
-            <p className="text-base text-slate-300 leading-relaxed max-w-3xl">
+            <p className="text-base text-stone-700 leading-relaxed max-w-3xl font-medium">
               Committed to providing evidence-based, compassionate care at Dr. Amit Jha Sports Injury Clinic (Krishna Health). Dr. Jha specializes in comprehensive diagnostic evaluations, keyhole arthroscopy, ACL reconstruction, and personalized treatment plans for optimal patient outcomes.
             </p>
             <div className="grid sm:grid-cols-2 gap-3 pt-2">
@@ -444,12 +442,12 @@ export function LandingAnimations({
               ].map(({ title, desc }) => (
                 <div
                   key={title}
-                  className="flex items-start gap-3 glass-card bg-slate-900/80 p-3.5 rounded-xl border border-slate-800/80 text-xs"
+                  className="flex items-start gap-3 glass-card bg-white p-3.5 rounded-xl border border-[#c89b2a]/30 text-xs shadow-sm"
                 >
-                  <Award className="h-5 w-5 text-[#d5f14c] shrink-0 mt-0.5" aria-hidden="true" />
+                  <Award className="h-5 w-5 text-[#c89b2a] shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
-                    <strong className="text-white block font-heading">{title}</strong>
-                    <span className="text-slate-400">{desc}</span>
+                    <strong className="text-stone-900 block font-heading">{title}</strong>
+                    <span className="text-stone-600">{desc}</span>
                   </div>
                 </div>
               ))}
@@ -458,7 +456,7 @@ export function LandingAnimations({
               <Button
                 size="lg"
                 onClick={() => handleOpenBooking()}
-                className="w-full sm:w-auto bg-[#d5f14c] hover:bg-[#c4df3b] text-[#102321] font-black text-base px-8 focus-visible:ring-2 focus-visible:ring-white"
+                className="w-full sm:w-auto gold-gradient-btn font-black text-base px-8"
               >
                 Request Appointment
               </Button>
@@ -466,7 +464,7 @@ export function LandingAnimations({
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white px-6 font-semibold focus-visible:ring-2 focus-visible:ring-[#d5f14c]"
+                  className="w-full bg-white border-[#c89b2a]/40 text-stone-800 hover:bg-[#f5e8c7]/50 px-6 font-bold shadow-sm"
                 >
                   Learn More About Us
                 </Button>
@@ -481,9 +479,9 @@ export function LandingAnimations({
             variants={fadeUp}
             className="lg:col-span-5 relative"
           >
-            <div className="absolute -inset-4 bg-gradient-to-tr from-teal-500/30 to-emerald-400/20 rounded-full blur-3xl opacity-60 -z-10" />
-            <div className="relative overflow-hidden rounded-3xl shadow-2xl border border-slate-800/80 bg-slate-900/90 glass-card p-3 group hover:border-teal-500/40 transition-all duration-500">
-              <div className="relative rounded-2xl overflow-hidden bg-slate-950/40 aspect-[4/5]">
+            <div className="absolute -inset-4 bg-gradient-to-tr from-[#d4af37]/20 to-[#c89b2a]/10 rounded-full blur-3xl opacity-60 -z-10" />
+            <div className="relative overflow-hidden rounded-3xl shadow-2xl border border-[#c89b2a]/40 bg-white p-3 group hover:border-[#c89b2a] transition-all duration-500">
+              <div className="relative rounded-2xl overflow-hidden bg-stone-100 aspect-[4/5]">
                 <Image
                   src="/dr-amit-jha-cutout.png"
                   alt="Dr. Amit Kumar Jha ? Senior Sports Injury & Orthopedic Specialist, Varanasi"
@@ -500,7 +498,7 @@ export function LandingAnimations({
 
       {/* ?? TESTIMONIALS ???????????????????????????????????????????????????? */}
       <section
-        className="py-20 bg-slate-950 border-b border-slate-800/80"
+        className="py-20 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
         aria-labelledby="testimonials-heading"
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -511,13 +509,13 @@ export function LandingAnimations({
             variants={fadeUp}
             className="text-center space-y-4 mb-16"
           >
-            <Badge className="bg-teal-900/40 text-teal-300 border-teal-700/50 px-3 py-1 text-xs font-mono uppercase tracking-widest">
+            <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
               VERIFIED OUTCOMES
             </Badge>
-            <h2 id="testimonials-heading" className="text-3xl sm:text-4xl font-extrabold text-white font-heading">
+            <h2 id="testimonials-heading" className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-heading">
               Patient Outcomes
             </h2>
-            <p className="text-slate-400 max-w-xl mx-auto text-sm">Real recoveries. Real results.</p>
+            <p className="text-stone-600 max-w-xl mx-auto text-sm font-medium">Real recoveries. Real results.</p>
           </motion.div>
           <motion.div
             initial="hidden"
@@ -530,22 +528,22 @@ export function LandingAnimations({
               <motion.figure
                 key={idx}
                 variants={fadeUp}
-                className="glass-card border border-slate-800/80 rounded-2xl p-6 flex flex-col justify-between gap-4 hover:border-teal-500/30 transition-all duration-300"
+                className="glass-card bg-white border border-[#c89b2a]/30 rounded-2xl p-6 flex flex-col justify-between gap-4 hover:border-[#c89b2a]/60 transition-all duration-300 shadow-sm"
               >
                 <div className="space-y-3">
                   <div className="flex gap-0.5" aria-label={`${t.rating} out of 5 stars`}>
                     {Array.from({ length: t.rating }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" aria-hidden="true" />
+                      <Star key={i} className="h-4 w-4 fill-[#c89b2a] text-[#c89b2a]" aria-hidden="true" />
                     ))}
                   </div>
-                  <blockquote className="text-sm text-slate-300 leading-relaxed">
+                  <blockquote className="text-sm text-stone-700 italic leading-relaxed">
                     &ldquo;{t.quote}&rdquo;
                   </blockquote>
                 </div>
-                <figcaption className="border-t border-slate-800/80 pt-4">
-                  <strong className="text-white text-sm block font-heading">{t.name}</strong>
-                  <span className="text-xs text-slate-400 block">{t.role}</span>
-                  <Badge className="mt-2 bg-teal-950/60 text-teal-300 border-teal-800/60 text-[11px] font-mono">
+                <figcaption className="border-t border-stone-200 pt-4">
+                  <strong className="text-stone-900 text-sm block font-heading">{t.name}</strong>
+                  <span className="text-xs text-stone-500 block font-medium">{t.role}</span>
+                  <Badge className="mt-2 bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 text-[11px] font-mono font-semibold">
                     {t.type}
                   </Badge>
                 </figcaption>
@@ -558,7 +556,7 @@ export function LandingAnimations({
       {/* ?? BOOKING WIZARD ?????????????????????????????????????????????????? */}
       <section
         id="booking"
-        className="py-20 bg-[#102321] border-b border-slate-800/80"
+        className="py-20 bg-[#fcfbf8] border-b border-[#c89b2a]/20"
         aria-labelledby="booking-heading"
       >
         <BookingWizardIsland services={bookingServices} timeSlots={timeSlots} />

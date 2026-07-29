@@ -37,19 +37,19 @@ export function FeedbackWidget() {
         <button
           type="button"
           onClick={() => { setIsOpen(true); trackEvent("feedback_widget_opened"); }}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#d5f14c] text-[#102321] font-bold text-xs shadow-2xl hover:scale-105 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full gold-gradient-btn font-bold text-xs shadow-2xl hover:scale-105 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#c89b2a]"
           aria-label="Give patient feedback"
         >
           <MessageSquare className="h-4 w-4" />
           Give Feedback
         </button>
       ) : (
-        <div className="w-80 bg-[#102321] border border-slate-800 rounded-2xl p-5 shadow-2xl text-slate-200">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
-            <h3 className="text-sm font-bold text-white font-heading">Patient Feedback</h3>
+        <div className="w-80 bg-white border border-[#c89b2a]/40 rounded-2xl p-5 shadow-2xl text-stone-800">
+          <div className="flex items-center justify-between border-b border-stone-200 pb-3 mb-3">
+            <h3 className="text-sm font-bold text-stone-900 font-heading">Patient Feedback</h3>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-slate-400 hover:text-white p-1"
+              className="text-stone-400 hover:text-stone-900 p-1"
               aria-label="Close feedback widget"
             >
               <X className="h-4 w-4" />
@@ -58,15 +58,15 @@ export function FeedbackWidget() {
 
           {isSubmitted ? (
             <div className="text-center py-6 space-y-2">
-              <div className="h-10 w-10 bg-teal-500/20 text-[#d5f14c] rounded-full flex items-center justify-center mx-auto border border-teal-500/40">
+              <div className="h-10 w-10 bg-[#f5e8c7] text-[#c89b2a] rounded-full flex items-center justify-center mx-auto border border-[#c89b2a]/40">
                 <Check className="h-5 w-5" />
               </div>
-              <p className="text-xs font-semibold text-white">Thank you for your feedback!</p>
+              <p className="text-xs font-semibold text-stone-900">Thank you for your feedback!</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label className="block text-[11px] font-mono text-slate-400 mb-1">
+                <label className="block text-[11px] font-mono font-bold text-stone-600 mb-1">
                   How would you rate your experience?
                 </label>
                 <div className="flex gap-1.5 justify-center py-1">
@@ -77,8 +77,8 @@ export function FeedbackWidget() {
                       onClick={() => setRating(num)}
                       className={`h-8 w-8 rounded-lg text-xs font-bold transition-all ${
                         rating === num
-                          ? "bg-[#d5f14c] text-[#102321]"
-                          : "bg-slate-900 text-slate-400 hover:bg-slate-800"
+                          ? "gold-gradient-btn"
+                          : "bg-stone-100 text-stone-600 hover:bg-stone-200"
                       }`}
                     >
                       {num}★
@@ -88,7 +88,7 @@ export function FeedbackWidget() {
               </div>
 
               <div>
-                <label className="block text-[11px] font-mono text-slate-400 mb-1">
+                <label className="block text-[11px] font-mono font-bold text-stone-600 mb-1">
                   Your suggestions or notes
                 </label>
                 <textarea
@@ -97,13 +97,13 @@ export function FeedbackWidget() {
                   value={feedback}
                   onChange={(e) => setFeedback(e.target.value)}
                   placeholder="Tell us what we can improve..."
-                  className="w-full rounded-xl bg-[#0c1a18] border border-slate-800 p-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  className="w-full rounded-xl bg-[#fcfbf8] border border-[#c89b2a]/40 p-2.5 text-xs text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-[#c89b2a]"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full rounded-xl py-2.5 text-xs font-bold bg-[#d5f14c] text-[#102321] hover:bg-[#c4df3b] transition-all"
+                className="w-full rounded-xl py-2.5 text-xs font-bold gold-gradient-btn"
               >
                 Send Feedback
               </button>
