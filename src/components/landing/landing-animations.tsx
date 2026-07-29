@@ -2,21 +2,20 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import {
   Award, Star, CheckCircle2, Activity, MapPin,
   Trophy, Flame, Zap, Dumbbell, Compass, Stethoscope, Bone,
-  ShieldAlert, Users, Target, ShieldCheck, Sparkles, ArrowRight,
+  ShieldAlert, Users, Target, ShieldCheck, ArrowRight,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BodyNavigatorIsland, type BodyPart } from "@/components/landing/body-navigator-island";
-import { BookingWizardIsland, type Service } from "@/components/landing/booking-wizard-island";
+import { type BodyPart } from "@/components/landing/body-navigator-island";
+import { type Service } from "@/components/landing/booking-wizard-island";
 import { BookingModal } from "@/components/Booking/BookingModal";
 import BodySelectorFeature from "@/components/BodySelector3D/BodySelectorFeature";
 import { FeedbackWidget } from "@/components/Feedback/FeedbackWidget";
-import HeroBone from "@/components/HeroBone/HeroBone";
+import SpineNavigator from "@/components/SpineNavigator/SpineNavigator";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Award, Star, CheckCircle2, Activity, MapPin,
@@ -60,7 +59,7 @@ type Props = {
 };
 
 export function LandingAnimations({
-  bodyParts, sportsWeTreat, services, recoveryStages, testimonials, timeSlots,
+  sportsWeTreat, services,
 }: Props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
@@ -70,11 +69,12 @@ export function LandingAnimations({
     setModalOpen(true);
   };
 
-  const bookingServices: Service[] = services.map((s) => ({ id: s.id, title: s.title }));
+  // kept for type compatibility if BookingModal needs service list later
+  void services;
 
   return (
     <>
-      {/* HERO */}
+      {/* HERO — copy left, spine modules right */}
       <section
         id="about"
         className="relative pt-12 pb-20 lg:pt-16 lg:pb-24 overflow-hidden bg-gradient-to-b from-[#fcfbf8] via-[#f8f5ee] to-[#f2ede4] border-b border-[#c89b2a]/20"
@@ -132,16 +132,15 @@ export function LandingAnimations({
               >
                 Book OPD Appointment
               </Button>
-              <a href="#doctor-signature" className="w-full sm:w-auto">
+              <Link href="/services" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
                   className="w-full bg-white border-[#c89b2a]/40 text-stone-800 hover:bg-[#f5e8c7]/50 h-13 px-6 font-bold shadow-sm"
-                  aria-label="View Dr. Amit Jha credentials and qualifications"
                 >
-                  View Credentials
+                  Browse Services
                 </Button>
-              </a>
+              </Link>
             </motion.div>
           </div>
 
@@ -151,7 +150,7 @@ export function LandingAnimations({
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-5"
           >
-            <HeroBone onBook={() => handleOpenBooking()} />
+            <SpineNavigator onBook={() => handleOpenBooking()} />
           </motion.div>
         </div>
       </section>
@@ -275,287 +274,59 @@ export function LandingAnimations({
               );
             })}
           </motion.div>
-        </div>
-      </section>
-
-      {/* SERVICES TEASER → /services */}
-      <section
-        id="services"
-        className="py-20 bg-[#fcfbf8] border-b border-[#c89b2a]/20"
-        aria-labelledby="services-heading"
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="text-center space-y-4 mb-10"
-          >
-            <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
-              CLINICAL SPECTRUM
-            </Badge>
-            <h2 id="services-heading" className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-heading">
-              Our Services
-            </h2>
-            <p className="text-stone-600 max-w-2xl mx-auto text-sm font-medium">
-              Full procedure lists, sports protocols, and body-part pathways live on the dedicated Services page — filtered the way patients actually search.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={stagger}
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10"
-          >
-            {services.slice(0, 3).map((srv) => {
-              const Icon = ICON_MAP[srv.icon];
-              return (
-                <motion.div key={srv.id} variants={fadeUp}>
-                  <div className="glass-card bg-white border border-[#c89b2a]/30 rounded-2xl p-5 h-full shadow-sm">
-                    <Badge className="w-fit text-[10px] font-mono mb-2 bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 font-semibold">
-                      {srv.badge}
-                    </Badge>
-                    <div className="flex items-center gap-2 mb-2">
-                      {Icon && <Icon className="h-4 w-4 text-[#c89b2a]" />}
-                      <h3 className="text-sm text-stone-900 font-bold font-heading leading-snug">{srv.title}</h3>
-                    </div>
-                    <p className="text-xs text-stone-600 line-clamp-2">{srv.desc}</p>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="flex justify-center"
-          >
+          <div className="mt-10 flex justify-center">
             <Link href="/services">
-              <Button size="lg" className="gold-gradient-btn font-black text-base px-8 gap-2">
-                Browse all services by sport &amp; body part
+              <Button className="gold-gradient-btn font-bold gap-2">
+                Filter services by sport
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* RECOVERY JOURNEY */}
-      <section
-        className="py-20 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
-        aria-labelledby="recovery-heading"
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="text-center space-y-4 mb-16"
-          >
-            <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
-              INSTRUMENTED CONTINUUM
-            </Badge>
-            <h2 id="recovery-heading" className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-heading">
-              Your Recovery Journey
-            </h2>
-            <p className="text-stone-600 max-w-xl mx-auto text-sm font-medium">
-              A clear 6-stage pathway from pain to peak performance — fully transparent, evidence-based.
-            </p>
-          </motion.div>
-          <motion.ol
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={stagger}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-            aria-label="6-stage recovery process"
-          >
-            {recoveryStages.map((stage) => (
-              <motion.li
-                key={stage.stage}
-                variants={fadeUp}
-                className="glass-card bg-white border border-[#c89b2a]/30 rounded-2xl p-6 flex gap-4 hover:border-[#c89b2a]/60 transition-all duration-300 shadow-sm"
-              >
-                <span
-                  className="text-3xl sm:text-4xl font-black font-heading gold-text-gradient leading-none shrink-0 select-none"
-                  aria-hidden="true"
-                >
-                  {stage.stage}
-                </span>
-                <div>
-                  <h3 className="font-bold text-stone-900 text-sm font-heading mb-1">{stage.name}</h3>
-                  <p className="text-xs text-stone-600 leading-relaxed">{stage.desc}</p>
-                </div>
-              </motion.li>
-            ))}
-          </motion.ol>
-        </div>
-      </section>
-
-      {/* DOCTOR BIO */}
-      <section
-        id="doctor-signature"
-        className="py-20 lg:py-28 bg-[#fcfbf8] border-b border-[#c89b2a]/20 relative overflow-hidden"
-        aria-labelledby="doctor-heading"
-      >
-        <div className="max-w-7xl mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="lg:col-span-7 space-y-6"
-          >
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#f5e8c7] border border-[#c89b2a]/40 text-[#96721b] text-xs font-mono font-semibold tracking-wider uppercase">
-              <Sparkles className="w-3.5 h-3.5 text-[#c89b2a]" aria-hidden="true" />
-              LEAD PHYSICIAN &amp; SURGEON
-            </div>
-            <h2
-              id="doctor-heading"
-              className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-tight font-heading"
-            >
-              Dr. Amit Kumar Jha
-            </h2>
-            <p className="text-lg sm:text-xl font-bold text-[#96721b] font-mono">
-              FNB Sports Medicine, MS &amp; DNB Orthopaedics — Senior Specialist
-            </p>
-            <p className="text-base text-stone-700 leading-relaxed max-w-3xl font-medium">
-              Committed to providing evidence-based, compassionate care at Dr. Amit Jha Sports Injury Clinic (Krishna Health). Dr. Jha specializes in comprehensive diagnostic evaluations, keyhole arthroscopy, ACL reconstruction, and personalized treatment plans for optimal patient outcomes.
-            </p>
-            <div className="grid sm:grid-cols-2 gap-3 pt-2">
-              {[
-                { title: "FNB Sports Medicine (Ganga Hospital)", desc: "Fellowship trained in sports surgery" },
-                { title: "MS & DNB Orthopaedics", desc: "Post-graduate surgical qualification" },
-                { title: "Keyhole Arthroscopy Specialist", desc: "Minimally invasive joint preservation" },
-                { title: "Ethical & Advanced Diagnostics", desc: "5,000+ successful surgical outcomes" },
-              ].map(({ title, desc }) => (
-                <div
-                  key={title}
-                  className="flex items-start gap-3 glass-card bg-white p-3.5 rounded-xl border border-[#c89b2a]/30 text-xs shadow-sm"
-                >
-                  <Award className="h-5 w-5 text-[#c89b2a] shrink-0 mt-0.5" aria-hidden="true" />
-                  <div>
-                    <strong className="text-stone-900 block font-heading">{title}</strong>
-                    <span className="text-stone-600">{desc}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button
-                size="lg"
-                onClick={() => handleOpenBooking()}
-                className="w-full sm:w-auto gold-gradient-btn font-black text-base px-8"
-              >
-                Request Appointment
-              </Button>
-              <a href="#navigator" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full bg-white border-[#c89b2a]/40 text-stone-800 hover:bg-[#f5e8c7]/50 px-6 font-bold shadow-sm"
-                >
-                  Learn More About Us
-                </Button>
-              </a>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="lg:col-span-5 relative"
-          >
-            <div className="absolute -inset-4 bg-gradient-to-tr from-[#d4af37]/20 to-[#c89b2a]/10 rounded-full blur-3xl opacity-60 -z-10" />
-            <div className="relative overflow-hidden rounded-3xl shadow-2xl border border-[#c89b2a]/40 bg-white p-3 group hover:border-[#c89b2a] transition-all duration-500">
-              <div className="relative rounded-2xl overflow-hidden bg-stone-100 aspect-[4/5]">
-                <Image
-                  src="/dr-amit-jha-cutout.png"
-                  alt="Dr. Amit Kumar Jha — Senior Sports Injury & Orthopedic Specialist, Varanasi"
-                  fill
-                  priority
-                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 560px"
-                  className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section
-        className="py-20 bg-[#f5f2eb] border-b border-[#c89b2a]/20"
-        aria-labelledby="testimonials-heading"
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={fadeUp}
-            className="text-center space-y-4 mb-16"
-          >
-            <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-wider font-semibold">
-              VERIFIED OUTCOMES
-            </Badge>
-            <h2 id="testimonials-heading" className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-heading">
-              Patient Outcomes
-            </h2>
-            <p className="text-stone-600 max-w-xl mx-auto text-sm font-medium">Real recoveries. Real results.</p>
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            variants={stagger}
-            className="grid md:grid-cols-3 gap-6"
-          >
-            {testimonials.map((t, idx) => (
-              <motion.figure
-                key={idx}
-                variants={fadeUp}
-                className="glass-card bg-white border border-[#c89b2a]/30 rounded-2xl p-6 flex flex-col justify-between gap-4 hover:border-[#c89b2a]/60 transition-all duration-300 shadow-sm"
-              >
-                <div className="space-y-3">
-                  <div className="flex gap-0.5" aria-label={`${t.rating} out of 5 stars`}>
-                    {Array.from({ length: t.rating }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-[#c89b2a] text-[#c89b2a]" aria-hidden="true" />
-                    ))}
-                  </div>
-                  <blockquote className="text-sm text-stone-700 italic leading-relaxed">
-                    &ldquo;{t.quote}&rdquo;
-                  </blockquote>
-                </div>
-                <figcaption className="border-t border-stone-200 pt-4">
-                  <strong className="text-stone-900 text-sm block font-heading">{t.name}</strong>
-                  <span className="text-xs text-stone-500 block font-medium">{t.role}</span>
-                  <Badge className="mt-2 bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 text-[11px] font-mono font-semibold">
-                    {t.type}
-                  </Badge>
-                </figcaption>
-              </motion.figure>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* BOOKING */}
+      {/* SINGLE BOOKING ENTRY — opens same BookingModal as hero CTA */}
       <section
         id="booking"
         className="py-20 bg-[#fcfbf8] border-b border-[#c89b2a]/20"
         aria-labelledby="booking-heading"
       >
-        <BookingWizardIsland services={bookingServices} timeSlots={timeSlots} />
+        <div className="max-w-3xl mx-auto px-6 text-center space-y-6">
+          <Badge className="bg-[#f5e8c7] text-[#96721b] border-[#c89b2a]/40 px-3 py-1 text-xs font-mono uppercase tracking-widest font-semibold">
+            DIRECT RESERVATION
+          </Badge>
+          <h2 id="booking-heading" className="text-3xl sm:text-4xl font-extrabold text-stone-900 font-heading">
+            Book Your OPD Slot
+          </h2>
+          <p className="text-stone-600 text-sm font-medium max-w-xl mx-auto">
+            One booking flow for the whole site — same form whether you start from the hero, a spine vertebra, or here.
+            Choose service, slot, and patient details in a single guided modal.
+          </p>
+          <ul className="grid sm:grid-cols-3 gap-4 text-left text-sm text-stone-700">
+            <li className="bg-white border border-[#c89b2a]/25 rounded-xl p-4">
+              <Stethoscope className="h-5 w-5 text-[#c89b2a] mb-2" />
+              <strong className="block text-stone-900">Expert diagnosis</strong>
+              Fellowship-trained specialist consultation.
+            </li>
+            <li className="bg-white border border-[#c89b2a]/25 rounded-xl p-4">
+              <Activity className="h-5 w-5 text-[#c89b2a] mb-2" />
+              <strong className="block text-stone-900">Live OPD queue</strong>
+              Token secures a dedicated time slot.
+            </li>
+            <li className="bg-white border border-[#c89b2a]/25 rounded-xl p-4">
+              <Award className="h-5 w-5 text-[#c89b2a] mb-2" />
+              <strong className="block text-stone-900">Clear plans</strong>
+              Surgical vs non-surgical guidance.
+            </li>
+          </ul>
+          <Button
+            size="lg"
+            onClick={() => handleOpenBooking()}
+            className="gold-gradient-btn font-black text-base px-10"
+          >
+            Book OPD Appointment
+          </Button>
+        </div>
       </section>
 
       <BookingModal
