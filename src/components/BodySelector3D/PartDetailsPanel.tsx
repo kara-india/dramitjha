@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { BodyPart } from "@/data/bodyParts";
+import { trapFocus } from "@/lib/focusTrapHelper";
 
 interface PartDetailsPanelProps {
   open?: boolean;
@@ -39,6 +40,7 @@ export function PartDetailsPanel({ open, isOpen, part, onClose, onBook }: PartDe
         role="dialog"
         aria-modal="true"
         aria-labelledby="part-details-title"
+        onKeyDown={(e) => panelRef.current && trapFocus(panelRef.current, e)}
         initial={{ x: "100%" }}
         animate={{ x: 0 }}
         exit={{ x: "100%" }}

@@ -30,5 +30,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "src/stories", "tests"]
+  "exclude": ["node_modules", "src/stories", "tests", "jest.setup.ts"]
 }

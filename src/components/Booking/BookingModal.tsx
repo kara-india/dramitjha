@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { trapFocus } from "@/lib/focusTrapHelper";
 
 interface BookingModalProps {
   open?: boolean;
@@ -50,6 +51,7 @@ export function BookingModal({ open, isOpen, partId, initialPartId, onClose, onB
         aria-modal="true"
         aria-labelledby="booking-title"
         tabIndex={-1}
+        onKeyDown={(e) => dialogRef.current && trapFocus(dialogRef.current, e)}
         className="relative z-10 w-full max-w-md bg-white rounded-2xl shadow-2xl p-6 text-slate-900"
       >
         <div className="flex items-center justify-between border-b border-slate-200 pb-3 mb-4">
