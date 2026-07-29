@@ -8,7 +8,6 @@ import * as z from "zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
-import { loginAction } from "./actions";
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
@@ -21,7 +20,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address." }),
@@ -30,9 +28,10 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const router = useRouter();
-  const { toast } = useToast();
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [okMsg, setOkMsg] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,38 +42,39 @@ export function LoginForm() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    setErrorMsg(null);
+    setOkMsg(null);
+
     startTransition(async () => {
       try {
-        const formData = new FormData();
-        formData.append("email", values.email);
-        formData.append("password", values.password);
+        // Prefer demo API (no Prisma / server-action side effects)
+        const res = await fetch("/api/auth/demo-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: values.email,
+            password: values.password,
+          }),
+        });
 
-        const result = await loginAction(formData);
+        const data = await res.json().catch(() => ({}));
 
-        if (result?.error) {
-          toast({
-            variant: "destructive",
-            title: "Login Failed",
-            description: result.error,
-          });
+        if (res.ok && data.success) {
+          setOkMsg("Demo session started. Redirecting…");
+          router.push("/doctor");
+          router.refresh();
           return;
         }
 
-        toast({
-          title: "Welcome back!",
-          description: result?.demo
-            ? "Demo session started (Staff ERP preview)."
-            : "You have successfully logged in.",
-        });
-        router.push("/doctor");
-        router.refresh();
-      } catch (e) {
-        console.error(e);
-        toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: "Unexpected error. Try demo: doctor@dramitjha.in / demo1234",
-        });
+        // Non-demo credentials: show clear message (Supabase optional later)
+        setErrorMsg(
+          data.error ||
+            "Login failed. For preview use doctor@dramitjha.in / demo1234"
+        );
+      } catch {
+        setErrorMsg(
+          "Network error. Check connection, then try doctor@dramitjha.in / demo1234"
+        );
       }
     });
   }
@@ -89,6 +89,23 @@ export function LoginForm() {
       <div className="rounded-lg border border-teal-200 bg-teal-50 px-3 py-2 text-xs text-teal-900">
         <strong>Demo login:</strong> doctor@dramitjha.in / demo1234
       </div>
+
+      {errorMsg && (
+        <div
+          role="alert"
+          className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs text-red-800"
+        >
+          {errorMsg}
+        </div>
+      )}
+      {okMsg && (
+        <div
+          role="status"
+          className="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs text-emerald-800"
+        >
+          {okMsg}
+        </div>
+      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -118,9 +135,7 @@ export function LoginForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <div className="flex items-center justify-between">
-                  <FormLabel>Password</FormLabel>
-                </div>
+                <FormLabel>Password</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
