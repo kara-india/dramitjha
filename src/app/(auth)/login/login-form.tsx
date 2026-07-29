@@ -37,32 +37,44 @@ export function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "doctor@dramitjha.in",
+      password: "demo1234",
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      const formData = new FormData();
-      formData.append("email", values.email);
-      formData.append("password", values.password);
+      try {
+        const formData = new FormData();
+        formData.append("email", values.email);
+        formData.append("password", values.password);
 
-      const result = await loginAction(formData);
+        const result = await loginAction(formData);
 
-      if (result?.error) {
-        toast({
-          variant: "destructive",
-          title: "Login Failed",
-          description: result.error,
-        });
-      } else {
+        if (result?.error) {
+          toast({
+            variant: "destructive",
+            title: "Login Failed",
+            description: result.error,
+          });
+          return;
+        }
+
         toast({
           title: "Welcome back!",
-          description: "You have successfully logged in.",
+          description: result?.demo
+            ? "Demo session started (Staff ERP preview)."
+            : "You have successfully logged in.",
         });
         router.push("/doctor");
         router.refresh();
+      } catch (e) {
+        console.error(e);
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: "Unexpected error. Try demo: doctor@dramitjha.in / demo1234",
+        });
       }
     });
   }
@@ -74,6 +86,10 @@ export function LoginForm() {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={cn("grid gap-6")}
     >
+      <div className="rounded-lg border border-teal-200 bg-teal-50 px-3 py-2 text-xs text-teal-900">
+        <strong>Demo login:</strong> doctor@dramitjha.in / demo1234
+      </div>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -84,7 +100,7 @@ export function LoginForm() {
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="name@example.com"
+                    placeholder="doctor@dramitjha.in"
                     type="email"
                     autoCapitalize="none"
                     autoComplete="email"
@@ -104,18 +120,12 @@ export function LoginForm() {
               <FormItem>
                 <div className="flex items-center justify-between">
                   <FormLabel>Password</FormLabel>
-                  <a
-                    href="/forgot-password"
-                    className="text-sm font-medium text-teal-600 hover:text-teal-500 transition-colors"
-                  >
-                    Forgot password?
-                  </a>
                 </div>
                 <FormControl>
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
+                      placeholder="demo1234"
                       autoComplete="current-password"
                       disabled={isPending}
                       {...field}

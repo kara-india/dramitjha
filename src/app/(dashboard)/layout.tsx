@@ -1,27 +1,55 @@
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
 import { UserRole } from "@/lib/auth/rbac";
+import { DEMO_COOKIE, DEMO_USER } from "@/lib/auth/demo";
 
 export default async function DashboardLayoutWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createSupabaseServerClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const jar = await cookies();
+  const isDemo = jar.get(DEMO_COOKIE)?.value === "1";
 
-  if (!session) {
-    redirect("/login");
+  if (isDemo) {
+    return (
+      <DashboardLayout
+        user={{
+          id: DEMO_USER.id,
+          email: DEMO_USER.email,
+          name: DEMO_USER.name,
+          role: DEMO_USER.role as UserRole,
+          avatar: DEMO_USER.avatar,
+        }}
+      >
+        {children}
+      </DashboardLayout>
+    );
   }
 
-  const user = {
-    id: session.user.id,
-    email: session.user.email!,
-    name: session.user.user_metadata?.name || "Dr. User",
-    role: (session.user.user_metadata?.role as UserRole) || "DOCTOR",
-    avatar: session.user.user_metadata?.avatar || "",
-  };
+  try {
+    const supabase = await createSupabaseServerClient();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
 
-  return <DashboardLayout user={user}>{children}</DashboardLayout>;
+    if (!session) {
+      redirect("/login");
+    }
+
+    const user = {
+      id: session.user.id,
+      email: session.user.email ?? "staff@dramitjha.in",
+      name: session.user.user_metadata?.name || "Dr. User",
+      role: (session.user.user_metadata?.role as UserRole) || "DOCTOR",
+      avatar: session.user.user_metadata?.avatar || "",
+    };
+
+    return <DashboardLayout user={user}>{children}</DashboardLayout>;
+  } catch (err) {
+    console.error("Dashboard auth error:", err);
+    redirect("/login");
+  }
 }
