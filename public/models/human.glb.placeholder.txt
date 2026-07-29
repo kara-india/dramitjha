@@ -1,0 +1,14 @@
+﻿# PLACEHOLDER — human.glb
+# Replace this file with a real Draco-compressed GLB before building.
+#
+# Source options (all free / open licence):
+#   • Sketchfab: "Human Anatomy" CC-BY models
+#   • Google Poly Archive mirror
+#   • BodyParts3D (CC-BY-SA, segmented by anatomy)
+#
+# After obtaining model:
+#   1. Segment mesh into named groups matching bodyParts.ts ids:
+#      head, neck, shoulder, elbow, wrist, spine, hip, knee, ankle
+#   2. Compress:
+#      npx gltf-pipeline -i human.glb -o human.glb --draco.compressionLevel 7
+#   3. Verify node names: npx gltfjsx public/models/human.glb --types
